@@ -10,53 +10,100 @@ Task definition:
   Given a mention (ambiguous surface form) and a body image (a photograph that
   appears in multiple Wikipedia articles), identify the correct entity in the KB.
 
+Filtering thresholds live in configs/make_dataset.yaml.
+
 Usage:
     python scripts/make_dataset.py output/dataset.jsonl output/final/
+    python scripts/make_dataset.py output/dataset.jsonl output/final/ --config configs/make_dataset.yaml
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import urllib.parse
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Iterator
 
+import yaml
 from tqdm import tqdm
 
-_MIN_DIM       = 250   # minimum image dimension (px)
-_MAX_N_USED_BY = 10   # maximum Wikipedia image reuse
-_MIN_N_USED_BY = 2    # minimum Wikipedia image reuse
-_KB_FIELDS     = ("qid", "name", "type", "desc", "intro", "infobox_img", "url_wikipedia")
-_IMG_FIELDS    = ("url", "n_used_by", "width", "height", "mime", "license")
+try:
+    import orjson
+
+    def _loads(data: bytes) -> dict:
+        return orjson.loads(data)
+
+    def _dumps(obj: dict) -> bytes:
+        return orjson.dumps(obj)
+
+except ImportError:
+    import json
+
+    def _loads(data: bytes) -> dict:
+        return json.loads(data)
+
+    def _dumps(obj: dict) -> bytes:
+        return json.dumps(obj, ensure_ascii=False).encode("utf-8")
 
 
-def keep_entity(e: dict) -> bool:
+_DEFAULT_CONFIG = Path(__file__).resolve().parent.parent / "configs" / "make_dataset.yaml"
+
+_KB_FIELDS  = ("qid", "name", "type", "desc", "intro", "infobox_img", "url_wikipedia")
+_IMG_FIELDS = ("url", "n_used_by", "width", "height", "mime", "license")
+
+
+@dataclass(frozen=True)
+class Config:
+    entity_types:          frozenset
+    image_mime:            str
+    image_min_dim:         int
+    image_min_used_by:     int
+    image_max_used_by:     int
+    mention_min_len:       int
+    min_visual_candidates: int
+    max_text_candidates:   int
+
+    @classmethod
+    def load(cls, path: Path) -> "Config":
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+        return cls(
+            entity_types          = frozenset(raw["entity"]["types"]),
+            image_mime            = raw["image"]["mime"],
+            image_min_dim         = raw["image"]["min_dim"],
+            image_min_used_by     = raw["image"]["min_used_by"],
+            image_max_used_by     = raw["image"]["max_used_by"],
+            mention_min_len       = raw["mention"]["min_len"],
+            min_visual_candidates = raw["candidates"]["min_visual"],
+            max_text_candidates   = raw["candidates"]["max_text"],
+        )
+
+
+# ============================================================
+# FILTERS
+# ============================================================
+
+def keep_entity(e: dict, cfg: Config) -> bool:
     """Entity qualifies for the KB."""
     if not (e.get("intro") or e.get("infobox_img")):
         return False
+    return (e.get("type") or "OTHER") in cfg.entity_types
 
-    return (e.get("type") or "OTHER") in {"PERS", "ORG", "LOC"}
 
-
-def keep_image(img: dict, n_in_pool: int) -> bool:
+def keep_image(img: dict, n_in_pool: int, cfg: Config) -> bool:
     """Image qualifies as a mention image."""
     return (
-        img.get("mime") == "image/jpeg"
-        and (img.get("width") or 0) >= _MIN_DIM
-        and (img.get("height") or 0) >= _MIN_DIM
-        and  (img.get("n_used_by") or 0) <= _MAX_N_USED_BY
-    and  (img.get("n_used_by") or 0) >= _MIN_N_USED_BY
+        img.get("mime") == cfg.image_mime
+        and (img.get("width") or 0) >= cfg.image_min_dim
+        and (img.get("height") or 0) >= cfg.image_min_dim
+        and cfg.image_min_used_by <= (img.get("n_used_by") or 0) <= cfg.image_max_used_by
         and n_in_pool >= 2
     )
 
 
-_MIN_VISUAL_CANDIDATES = 2  # min KB entities sharing an image (visual ambiguity)
-_MAX_TEXT_CANDIDATES = 50   # max KB entities sharing a mention (drops generic-fragment mentions, e.g. "Cerro")
-
-
-def keep_mention(mention: str) -> bool:
+def keep_mention(mention: str, cfg: Config) -> bool:
     """Mention qualifies as a genuine ambiguous surface form."""
-    if len(mention) <= 2:
+    if len(mention) < cfg.mention_min_len:
         return False
     return any(c.isalpha() for c in mention)
 
@@ -78,47 +125,59 @@ def _normalise_image_name(url_or_filename: str) -> str:
 # PIPELINE
 # ============================================================
 
-def _iter_jsonl(path: Path):
-    with path.open(encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line:
-                yield json.loads(line)
+def _iter_jsonl(path: Path, desc: str) -> Iterator[dict]:
+    """Stream JSONL records, with a byte-accurate progress bar."""
+    with tqdm(total=path.stat().st_size, desc=desc,
+              unit="B", unit_scale=True, unit_divisor=1024) as bar:
+        with path.open("rb") as f:
+            for line in f:
+                bar.update(len(line))
+                if not line.isspace():
+                    yield _loads(line)
 
 
-def build(input_path: Path, output_dir: Path) -> None:
+def build(input_path: Path, output_dir: Path, cfg: Config) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     kb_path        = output_dir / "kb.jsonl"
     instances_path = output_dir / "instances.jsonl"
 
-    # ── Pass 1: build KB and image index ──────────────────────────────────────
-    # kb_entities : QID → output fields (no page_imglist)
-    # image_pool  : image URL → set of QIDs from KB entities that use this image
-    # image_meta  : image URL → output fields
-    kb_entities: dict[str, dict] = {}
-    image_pool:  dict[str, set[str]] = {}
-    image_meta:  dict[str, dict] = {}
+    # ── Single pass: build KB, image index, and a compact mention cache ──────
+    # kb_entities   : QID → output fields (no page_imglist)
+    # image_pool    : image URL → set of QIDs from KB entities that use this image
+    # image_meta    : image URL → output fields
+    # mention_cache : (mention, [(qid, [image URLs])]) for instance generation,
+    #                 so the 25 GB input is parsed only once.
+    kb_entities:   dict[str, dict] = {}
+    image_pool:    dict[str, set[str]] = {}
+    image_meta:    dict[str, dict] = {}
+    mention_cache: list[tuple[str, list[tuple[str, list[str]]]]] = []
 
-    for m in tqdm(_iter_jsonl(input_path), desc="Pass 1/2"):
-        if not keep_mention(m["mention"]):
+    for m in _iter_jsonl(input_path, desc="Scanning"):
+        mention = m["mention"]
+        if not keep_mention(mention, cfg):
             continue
-        pool = [e for e in m["ambiguities"] if keep_entity(e)]
-        if len(pool) < 2 or len(pool) > _MAX_TEXT_CANDIDATES:
+        pool = [e for e in m["ambiguities"] if keep_entity(e, cfg)]
+        if not (2 <= len(pool) <= cfg.max_text_candidates):
             continue
 
+        entity_urls: list[tuple[str, list[str]]] = []
         for e in pool:
             qid = e["qid"]
             if qid not in kb_entities:
                 kb_entities[qid] = {k: e.get(k) for k in _KB_FIELDS}
-            for img in e.get("page_imglist", []):
+            urls: list[str] = []
+            for img in e.get("page_imglist") or ():
                 if img.get("is_infobox", False):
                     continue
                 url = img.get("url")
                 if not url:
                     continue
+                urls.append(url)
                 image_pool.setdefault(url, set()).add(qid)
                 if url not in image_meta:
                     image_meta[url] = {k: img.get(k) for k in _IMG_FIELDS}
+            entity_urls.append((qid, urls))
+        mention_cache.append((mention, entity_urls))
 
     # Images that are themselves another KB entity's reference photo (P18 infobox)
     # are excluded: a query image that IS some entity's canonical portrait lets a
@@ -135,7 +194,7 @@ def build(input_path: Path, output_dir: Path) -> None:
     n_infobox_excluded = 0
     qualifying: set[str] = set()
     for url, img in image_meta.items():
-        if not keep_image(img, len(image_pool[url])):
+        if not keep_image(img, len(image_pool[url]), cfg):
             continue
         if _normalise_image_name(url) in infobox_filenames:
             n_infobox_excluded += 1
@@ -150,12 +209,12 @@ def build(input_path: Path, output_dir: Path) -> None:
     print(f"  excluded as another entity's infobox: {n_infobox_excluded:,}")
 
     # ── Write kb.jsonl ────────────────────────────────────────────────────────
-    with kb_path.open("w", encoding="utf-8") as f:
+    with kb_path.open("wb") as f:
         for entity in kb_entities.values():
-            f.write(json.dumps(entity, ensure_ascii=False) + "\n")
+            f.write(_dumps(entity) + b"\n")
     print(f"KB written:         {len(kb_entities):>10,}  → {kb_path}")
 
-    # ── Pass 2: generate instances ────────────────────────────────────────────
+    # ── Generate instances from the cache ─────────────────────────────────────
     seen_pair:   set[tuple[str, str]] = set()   # (url, mention)
     seen_answer: set[tuple[str, str]] = set()   # (mention, answer_qid)
     n_written          = 0
@@ -163,25 +222,17 @@ def build(input_path: Path, output_dir: Path) -> None:
     n_rej_intersection = 0
     n_rej_answer_dedup = 0
 
-    with instances_path.open("w", encoding="utf-8") as out:
-        for m in tqdm(_iter_jsonl(input_path), desc="Pass 2/2"):
-            if not keep_mention(m["mention"]):
-                continue
-            pool = [e for e in m["ambiguities"] if keep_entity(e)]
-            if len(pool) < 2 or len(pool) > _MAX_TEXT_CANDIDATES:
-                continue
+    with instances_path.open("wb") as out:
+        for mention, entity_urls in tqdm(mention_cache, desc="Instances"):
+            pool_qids = {qid for qid, _ in entity_urls}
+            text_candidates = sorted(pool_qids)
 
-            pool_qids = {e["qid"] for e in pool if e["qid"] in kb_entities}
-
-            for e in pool:
-                for img in e.get("page_imglist", []):
-                    if img.get("is_infobox", False):
-                        continue
-                    url = img.get("url")
-                    if not url or url not in qualifying:
+            for _, urls in entity_urls:
+                for url in urls:
+                    if url not in qualifying:
                         continue
 
-                    pair_key = (url, m["mention"])
+                    pair_key = (url, mention)
                     if pair_key in seen_pair:
                         continue
                     seen_pair.add(pair_key)
@@ -190,8 +241,7 @@ def build(input_path: Path, output_dir: Path) -> None:
                     # has to be shared by >= 2 KB entities, otherwise it identifies the
                     # answer trivially and the instance only tests text disambiguation.
                     visual_qids = image_pool[url]
-                    visual_candidates = sorted(visual_qids & kb_entities.keys())
-                    if len(visual_candidates) < _MIN_VISUAL_CANDIDATES:
+                    if len(visual_qids) < cfg.min_visual_candidates:
                         n_rej_visual_pool += 1
                         continue
 
@@ -203,25 +253,25 @@ def build(input_path: Path, output_dir: Path) -> None:
                         continue
 
                     answer_qid = next(iter(intersection))
-                    answer_key = (m["mention"], answer_qid)
+                    answer_key = (mention, answer_qid)
                     if answer_key in seen_answer:
                         n_rej_answer_dedup += 1
                         continue
                     seen_answer.add(answer_key)
 
-                    out.write(json.dumps({
-                        "mention":          m["mention"],
-                        "image":            image_meta[url],
-                        "answer":           answer_qid,
-                        "text_candidates":  sorted(pool_qids),
-                        "visual_candidates": visual_candidates,
-                    }, ensure_ascii=False) + "\n")
+                    out.write(_dumps({
+                        "mention":           mention,
+                        "image":             image_meta[url],
+                        "answer":            answer_qid,
+                        "text_candidates":   text_candidates,
+                        "visual_candidates": sorted(visual_qids),
+                    }) + b"\n")
                     n_written += 1
 
     total = n_written + n_rej_visual_pool + n_rej_intersection + n_rej_answer_dedup
     print(f"\nInstance generation cascade:")
     print(f"  (mention, image) candidates:      {total:>10,}")
-    print(f"  – visual pool < {_MIN_VISUAL_CANDIDATES}:                {n_rej_visual_pool:>10,}  ({100*n_rej_visual_pool/max(total,1):.1f}%)")
+    print(f"  – visual pool < {cfg.min_visual_candidates}:                {n_rej_visual_pool:>10,}  ({100*n_rej_visual_pool/max(total,1):.1f}%)")
     print(f"  – intersection ≠ 1:               {n_rej_intersection:>10,}  ({100*n_rej_intersection/max(total,1):.1f}%)")
     print(f"  – (mention, answer) duplicate:    {n_rej_answer_dedup:>10,}  ({100*n_rej_answer_dedup/max(total,1):.1f}%)")
     print(f"  ─────────────────────────────────────────────────────")
@@ -233,12 +283,16 @@ def main() -> None:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("input",      type=Path, help="dataset.jsonl (pipeline output)")
     ap.add_argument("output_dir", type=Path, help="output directory (e.g. output/final/)")
+    ap.add_argument("--config",   type=Path, default=_DEFAULT_CONFIG,
+                    help=f"filter thresholds YAML (default: {_DEFAULT_CONFIG})")
     args = ap.parse_args()
 
     if not args.input.exists():
         raise SystemExit(f"Not found: {args.input}")
+    if not args.config.exists():
+        raise SystemExit(f"Config not found: {args.config}")
 
-    build(args.input, args.output_dir)
+    build(args.input, args.output_dir, Config.load(args.config))
 
 
 if __name__ == "__main__":

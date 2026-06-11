@@ -1,0 +1,19 @@
+# Filtering thresholds for scripts/make_dataset.py
+# Input/output paths are given on the command line; this file holds the
+# dataset-shaping values only.
+
+entity:
+  types: [PERS, ORG, LOC]   # KB entity types to keep
+
+image:
+  mime: image/jpeg          # required MIME type
+  min_dim: 250              # minimum width AND height (px)
+  min_used_by: 2            # minimum Wikipedia image reuse
+  max_used_by: 10           # maximum Wikipedia image reuse
+
+mention:
+  min_len: 3                # minimum surface-form length (chars)
+
+candidates:
+  min_visual: 2             # min KB entities sharing an image (visual ambiguity)
+  max_text: 10              # max KB entities sharing a mention (drops generic fragments, e.g. "Cerro")

@@ -1,0 +1,29 @@
+data_dir: ./data
+output_dir: ./output
+
+disam_categories:
+  - "Category:Human name disambiguation pages"
+  - "Category:Disambiguation pages with surname-holder lists"
+  - "Category:Disambiguation pages with given-name-holder lists"
+  - "Category:Place name disambiguation pages"
+  - "Category:Buildings and structures disambiguation pages"
+  - "Category:Airport disambiguation pages"
+  - "Category:Architectural disambiguation pages"
+  - "Category:Educational institution disambiguation pages"
+  - "Category:Hospital disambiguation pages"
+  - "Category:Religious buildings and structures disambiguation pages"
+  - "Category:Buddhist temple disambiguation pages"
+  - "Category:Church building disambiguation pages"
+  - "Category:Mosque disambiguation pages"
+  - "Category:Synagogue disambiguation pages"
+  - "Category:Station disambiguation pages"
+wikipedia_rate_limit: 0.5
+wikidata_rate_limit: 0.5
+
+n_workers: 10
+
+api_batch_size: 50          # pages/titles per Wikipedia or Wikidata REST call
+entity_data_batch_size: 200 # QIDs per combined SPARQL query (entity data + type, S3/S6)
+
+save_every: 200
+log_level: INFO

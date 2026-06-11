@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wikiambig"
+version = "2.0.0"
+description = "Large-scale multimodal named-entity disambiguation dataset builder from Wikipedia"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Thomas Derrien" }]
+keywords = ["wikipedia", "wikidata", "entity-linking", "multimodal", "dataset"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "requests>=2.31",
+    "urllib3>=2.0",
+    "SPARQLWrapper>=2.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "tqdm>=4.0",
+    "typer>=0.12",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+full = [
+    "networkx>=3.0",
+    "datasets>=2.0",
+    "matplotlib>=3.0",
+    "numpy>=1.24",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "types-requests>=2.31",
+    "types-PyYAML>=6.0",
+]
+
+[project.scripts]
+wikiambig = "wikiambig.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["wikiambig"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["B008"]  # typer uses function calls as defaults
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["wikiambig"]
+omit = ["wikiambig/cli.py"]

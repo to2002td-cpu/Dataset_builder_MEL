@@ -22,7 +22,6 @@ Each top-level directory is one stage of the workflow, configured from the match
 | `split_gen/` | Filter the raw dataset into a named split (`instances.jsonl` + `kb.jsonl`) | `configs/split_gen/` |
 | `fig_gen/` | Statistics and paper figures from a split | — |
 | `eval/` | Model evaluation on a split | `configs/eval/` (one file per experiment) |
-| `tools/` | One-off exploration helpers | — |
 
 All generated artifacts go to `output/`: scrape checkpoints in `output/scrape_data/`, the unfiltered assembled dataset in `output/raw_dataset/`, then splits (`output/split_<name>/`) and figures (`output/figures/`); it is never committed. Coding conventions live in [`.code_instructions`](.code_instructions).
 

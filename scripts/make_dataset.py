@@ -63,6 +63,7 @@ class Config:
     mention_min_len:       int
     min_visual_candidates: int
     max_text_candidates:   int
+    banwords:              set[str]
 
     @classmethod
     def load(cls, path: Path) -> "Config":
@@ -76,6 +77,7 @@ class Config:
             mention_min_len       = raw["mention"]["min_len"],
             min_visual_candidates = raw["candidates"]["min_visual"],
             max_text_candidates   = raw["candidates"]["max_text"],
+            banwords              = set(raw["mention"].get("banwords", [])),
         )
 
 
@@ -103,6 +105,8 @@ def keep_image(img: dict, n_in_pool: int, cfg: Config) -> bool:
 
 def keep_mention(mention: str, cfg: Config) -> bool:
     """Mention qualifies as a genuine ambiguous surface form."""
+    if any(b in mention.lower() for b in cfg.banwords):
+        return False
     if len(mention) < cfg.mention_min_len:
         return False
     return any(c.isalpha() for c in mention)

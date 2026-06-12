@@ -1,0 +1,20 @@
+model:
+ - name : "Qwen3VL-2B-Instruct"
+ - temperature : 0.2
+ - max_tokens : 512
+ - top_p : 0.9
+ - batch_size : 1 
+
+ 
+data : 
+ - instances: /home/tderrien/Dataset_builder_MEL/output/split_10_text/instances.jsonl
+ - kb: /home/tderrien/Dataset_builder_MEL/output/split_10_text/kb.jsonl
+ - use_entity_image : True
+ - use_entity_description : True
+ - use_entity_types : True
+ - n_samples: 20 # Number of instances to sample 
+
+prompt: 
+  - template: /home/tderrien/Dataset_builder_MEL/eval/prompts/contrastive.py
+  - answer_none: True # Whether to include "None of the above" as a candidate answer option in the prompt.
+  - shuffle_candidates: True # if false, response on top  (Response number 1)

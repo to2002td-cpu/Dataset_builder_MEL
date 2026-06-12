@@ -1,0 +1,112 @@
+# Code instructions
+
+Conventions for this repository. Follow them for every change; they exist so
+that experiments for the paper stay reproducible and traceable.
+
+## 1. Repository layout
+
+Each top-level directory is one stage of the workflow, in order:
+
+| Directory    | Stage                                                  | Entry point(s)                  |
+|--------------|--------------------------------------------------------|---------------------------------|
+| `wikiambig/` | Scrape Wikipedia/Wikidata → raw dataset (installable)  | `wikiambig scrape` / `build`    |
+| `split_gen/` | Filter raw dataset → a named split (instances + KB)    | `make_split.py`, `view_split.py`|
+| `fig_gen/`   | Statistics and paper figures from a split              | `stats.py`, `stats_extended.py`, `mention_wordcloud.py` |
+| `eval/`      | Model evaluation on a split                            | `run_eval.py`                   |
+| `configs/`   | All run parameters (YAML), one subdirectory per stage  | —                               |
+| `tools/`     | One-off exploration/maintenance helpers                | —                               |
+
+All generated artifacts live under a single `output/` directory (never
+committed, see §4):
+
+- `output/scrape_data/`   — intermediate scrape checkpoints (stages S1–S6)
+- `output/raw_dataset/`   — raw assembled dataset (stage S7): dataset.jsonl,
+  entity_kb.json, manifest.json
+- `output/split_<name>/`  — splits (instances + KB)
+- `output/figures/`       — figures and viewers
+
+New code goes into the stage directory it belongs to. Do not create new
+top-level directories without updating this file and the README.
+
+## 2. Configuration
+
+- **Every parameter lives in a YAML config**, never hardcoded in code.
+  Code may define defaults only as a fallback mirror of the default config.
+- Configs live in `configs/<stage>/`, mirroring the stage directory name:
+  `configs/scrape/`, `configs/split_gen/`, `configs/eval/`.
+- The baseline config of a stage is named `default.yaml`.
+- Eval configs are **one file per experiment**, named
+  `<model>_<prompt>_<split>.yaml` (e.g. `qwen_contrastive_10_text.yaml`).
+- Prompt templates are YAML files in `eval/prompts/`, referenced **by name**
+  from `prompt.template`. All prompt-content switches (descriptions, images,
+  none-option, shuffling) live in the config `prompt:` section; the template
+  wording adapts to them via its `{fields}` slot — never fork a template to
+  change what a flag already controls.
+- A config that has produced results referenced anywhere (paper draft, notes)
+  is **immutable**: to change a parameter, copy the file under a new name.
+- All paths inside configs are **relative to the repository root**. Never
+  commit absolute paths (`/home/...`).
+- YAML style: plain nested mappings (`key: value`), two-space indent, no
+  single-key list items, lowercase `true`/`false`, inline `#` comments for
+  units and semantics.
+
+## 3. Experiment tracking
+
+- Every runnable script takes `--config` (and positional input/output paths
+  where natural); a run must be fully reproducible from its config file.
+- Splits are written to `output/split_<name>/` containing exactly
+  `instances.jsonl` and `kb.jsonl`.
+- Eval results are written to `eval/results/<config_stem>/` containing
+  `predictions.jsonl`, `metrics.json`, and a copy of the config plus a UTC
+  timestamp.
+- The scrape pipeline records provenance in `output/raw_dataset/manifest.json`
+  (timestamp + headline counts) — this is the snapshot identifier of a
+  dataset version.
+- Commit the config of an experiment **before** running it, so the exact
+  code + parameters of a run can be recovered from history.
+
+## 4. Version control
+
+- Never commit generated artifacts: everything under `output/`, caches,
+  viewers (`split_viewer.html`), figures, results. Figures used in the
+  paper are regenerated from configs, not stored here.
+- Commit messages: short imperative summary line (e.g. "Add free-choice
+  prompt template").
+- Rename/move files with `git mv` to preserve history.
+
+## 5. Python style
+
+- Python 3.10+. Lint with `ruff` (settings in `pyproject.toml`,
+  line length 100); type-check `wikiambig/` with `mypy --strict`.
+- `from __future__ import annotations` at the top of every module; type hints
+  on all public functions.
+- Module layout for scripts: shebang + module docstring with a short purpose
+  paragraph and a `Usage:` block showing real commands from the repo root,
+  then imports (stdlib / third-party separated), constants, functions,
+  `main()` parsing args with `argparse`, and an
+  `if __name__ == "__main__": main()` guard.
+- The `wikiambig/` package uses `typer` for its CLI and `pydantic` for
+  config/models; standalone stage scripts use `argparse` + a small frozen
+  `dataclass`/dict config. Keep it that way per stage.
+- Naming: `snake_case` modules and functions, `CapWords` classes,
+  `_leading_underscore` for module-private helpers, `UPPER_CASE` constants.
+- Fail fast on bad inputs with `raise SystemExit(f"...")` in scripts.
+- Figures: every `fig_gen/` script takes its look from `fig_gen/utils.py` —
+  `apply_style()` once before plotting, colors from `COLORS`/`PALETTE`,
+  ticks via `fmt_count`, output via `save_figure`. Never set rcParams or
+  hex colors inline; add new shared colors/helpers to `utils.py` so all
+  paper figures stay consistent.
+- Comments explain *why* (a constraint or design decision), not *what* the
+  next line does. No commented-out code.
+
+## 6. Vocabulary
+
+Use these terms consistently in code, configs, docs, and the paper:
+
+- **mention** — ambiguous surface form (e.g. "John Smith")
+- **entity** — a Wikidata item, identified by its **QID**
+- **KB** — entity knowledge base of a split (`kb.jsonl`)
+- **instance** — one task item: `(mention, image)` → `answer`
+- **split** — a filtered dataset produced by `split_gen/make_split.py`
+- **raw dataset** — unfiltered scrape output (`output/raw_dataset/`)
+- **text/visual candidates** — entities sharing the mention / the image

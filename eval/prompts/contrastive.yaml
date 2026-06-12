@@ -1,0 +1,29 @@
+# Contrastive prompt: numbered candidate list, the model picks a number.
+#
+# Slots filled at runtime:
+#   header         — {mention}, {fields} (auto-worded from the prompt: config
+#                    flags, e.g. "a name, a brief description, and an image")
+#   candidate_line — {number}, {name}; candidate_desc appended when
+#                    use_entity_description, the entity image attached after
+#                    the line when use_entity_image
+#   footer         — verbatim (no escaping needed for JSON braces)
+#   none_hint      — appended after the footer when answer_none
+
+mode: contrastive
+
+header: |
+  What entity does the mention '{mention}' represent in this image?
+  Here is a list with {fields} for each possibility:
+
+candidate_line: "{number}. {name}"
+candidate_desc: " — {desc}"
+
+footer: |
+  Please answer with the number corresponding to the correct entity.
+  Output format:
+  {
+      "number": <integer position of the candidate in the list>
+  }
+
+none_hint: |
+  Answer with -1 if none of the options matches.

@@ -1,0 +1,8 @@
+# Free-choice prompt: mention + query image only (no candidate list),
+# the model must name the entity directly. Scored by gold-name match
+# in the response.
+
+mode: free
+
+header: |
+  What entity does the mention '{mention}' represent in this image?

@@ -1,0 +1,22 @@
+# Ranking prompt: the model orders all candidates from most to least likely,
+# enabling retrieval metrics (hit / precision / recall / nDCG @k, MRR).
+#
+# Same slots as contrastive.yaml (header / candidate_line / candidate_desc /
+# footer); answer_none does not apply to ranking.
+
+mode: ranking
+
+header: |
+  What entity does the mention '{mention}' represent in this image?
+  Here is a list with {fields} for each possibility:
+
+candidate_line: "{number}. {name}"
+candidate_desc: " — {desc}"
+
+footer: |
+  Please rank all the candidates from most likely to least likely to be the
+  correct entity.
+  Output format:
+  {
+      "ranking": [<candidate numbers, most likely first>]
+  }

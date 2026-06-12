@@ -1,4 +1,4 @@
-# Experiment: Qwen3VL-2B-Instruct · contrastive prompt · split_10_text
+# Experiment: Qwen3VL-2B-Instruct · ranking prompt · split_10_text
 # Naming convention: configs/eval/<model>_<prompt>_<split>.yaml
 
 seed: 0
@@ -18,8 +18,7 @@ data:
   image_max_side: 1280           # downscale cached images to this max side (px)
 
 prompt:
-  template: contrastive          # name of eval/prompts/<template>.yaml
+  template: ranking              # name of eval/prompts/<template>.yaml
   use_entity_description: true   # candidate lines include the entity description
   use_entity_image: true         # candidate infobox image attached after each line
-  answer_none: true              # append a "None of the above" option
   shuffle_candidates: true       # if false, the answer is always presented first

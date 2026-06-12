@@ -1,0 +1,22 @@
+# Experiment: Qwen3VL-2B-Instruct · contrastive prompt · split_10_text
+# Naming convention: configs/eval/<model>_<prompt>_<split>.yaml
+
+model:
+  name: Qwen3VL-2B-Instruct
+  temperature: 0.2
+  max_tokens: 512
+  top_p: 0.9
+  batch_size: 1
+
+data:
+  instances: output/split_10_text/instances.jsonl
+  kb: output/split_10_text/kb.jsonl
+  use_entity_image: true
+  use_entity_description: true
+  use_entity_types: true
+  n_samples: 20              # number of instances to sample (null = all)
+
+prompt:
+  template: eval/prompts/contrastive.py
+  answer_none: true          # include "None of the above" as a candidate answer option
+  shuffle_candidates: true   # if false, the answer is always presented first

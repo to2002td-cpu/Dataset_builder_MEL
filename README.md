@@ -12,6 +12,22 @@ The pipeline is fully automatic, reproducible, and resumable. It queries the liv
 
 ---
 
+## Repository Layout
+
+Each top-level directory is one stage of the workflow, configured from the matching subdirectory of `configs/`:
+
+| Directory | Stage | Config |
+|---|---|---|
+| `wikiambig/` | Scrape Wikipedia/Wikidata → raw dataset (installable package, `wikiambig` CLI) | `configs/scrape/` |
+| `split_gen/` | Filter the raw dataset into a named split (`instances.jsonl` + `kb.jsonl`) | `configs/split_gen/` |
+| `fig_gen/` | Statistics and paper figures from a split | — |
+| `eval/` | Model evaluation on a split | `configs/eval/` (one file per experiment) |
+| `tools/` | One-off exploration helpers | — |
+
+All generated artifacts go to `output/`: scrape checkpoints in `output/scrape_data/`, the unfiltered assembled dataset in `output/raw_dataset/`, then splits (`output/split_<name>/`) and figures (`output/figures/`); it is never committed. Coding conventions live in [`.code_instructions`](.code_instructions).
+
+---
+
 ## Task Definition
 
 Each instance presents a model with:
@@ -49,7 +65,7 @@ Formally, the task is: given `(mention, image)`, retrieve `answer` from the know
 
 The following figures are from the June 2026 snapshot.
 
-### Raw pipeline output (`output/`)
+### Raw pipeline output (`output/raw_dataset/`)
 
 | Metric | Count |
 |---|---|
@@ -57,7 +73,7 @@ The following figures are from the June 2026 snapshot.
 | KB entities | 2,198,397 |
 | Unique images | 1,094,733 |
 
-### Final MEL dataset (`output/final/`)
+### Final MEL split (`output/split_<name>/`)
 
 | Metric | Count |
 |---|---|
@@ -78,7 +94,7 @@ The following figures are from the June 2026 snapshot.
 
 ## Pipeline Architecture
 
-The pipeline runs in seven sequential stages. Each stage writes its output atomically to `data/` before the next stage reads it; any stage can be re-run independently.
+The pipeline runs in seven sequential stages. Each stage writes its output atomically to `output/scrape_data/` before the next stage reads it; any stage can be re-run independently.
 
 ```
 Wikipedia categories
@@ -110,7 +126,7 @@ Wikipedia categories
    S7 — Assembly (offline)          dataset.jsonl · entity_kb.json · manifest.json
 ```
 
-After S7, run `scripts/make_dataset.py` to apply quality filters and produce the final `instances.jsonl` and `kb.jsonl`.
+After S7, run `split_gen/make_split.py` to apply quality filters and produce a split's `instances.jsonl` and `kb.jsonl`.
 
 ---
 
@@ -131,50 +147,58 @@ pip install -e ".[full]"
 ### 1. Run the full pipeline
 
 ```bash
-wikiambig scrape
+wikiambig scrape --config configs/scrape/default.yaml
 ```
 
-This runs all stages S1 → S7 using `configs/config.yaml`. Intermediate outputs are written to `data/` and the assembled dataset to `output/`.
+This runs all stages S1 → S7. Intermediate outputs are written to `output/scrape_data/` and the assembled dataset to `output/raw_dataset/`.
 
 ### 2. Run specific stages
 
 ```bash
 # Run only stages 3 and 4
-wikiambig scrape --stages s3,s4
+wikiambig scrape --config configs/scrape/default.yaml --stages s3,s4
 
 # Re-assemble from existing intermediate files
-wikiambig build
+wikiambig build --config configs/scrape/default.yaml
 ```
 
-### 3. Build the final MEL dataset
+### 3. Build a MEL split
 
 ```bash
-python scripts/make_dataset.py output/dataset.jsonl output/final/
+python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ --config configs/split_gen/default.yaml
 ```
 
 ### 4. Inspect statistics
 
 ```bash
-python scripts/stats.py output/final/instances.jsonl
-python scripts/stats.py output/final/instances.jsonl --out figures/stats.pdf
+python fig_gen/stats.py output/split_10_text/instances.jsonl
+python fig_gen/stats.py output/split_10_text/instances.jsonl --out output/figures/stats.pdf
 ```
 
 ### 5. Browse instances visually
 
 ```bash
-python scripts/view_split.py output/final/instances.jsonl --open
+python split_gen/view_split.py output/split_10_text/instances.jsonl --open
 ```
 
 This generates a self-contained HTML viewer showing each disambiguation task with its image, candidate entities, and highlighted answer.
+
+### 6. Evaluate a model on a split
+
+```bash
+python eval/run_eval.py --config configs/eval/qwen_contrastive_10_text.yaml
+```
+
+Each experiment is one YAML file in `configs/eval/`, named `<model>_<prompt>_<split>.yaml`; results land in `eval/results/<config_stem>/`.
 
 ---
 
 ## Configuration
 
-All parameters live in `configs/config.yaml`:
+All parameters live in YAML files under `configs/<stage>/`, mirroring the stage directories (see `.code_instructions`). Scrape parameters in `configs/scrape/default.yaml`:
 
 ```yaml
-data_dir: ./data
+data_dir: ./output/scrape_data
 output_dir: ./output
 
 disam_categories:
@@ -193,8 +217,10 @@ save_every: 200
 Pass a custom config at runtime:
 
 ```bash
-wikiambig scrape --config configs/my_config.yaml
+wikiambig scrape --config configs/scrape/my_config.yaml
 ```
+
+Split filtering thresholds live in `configs/split_gen/default.yaml`, evaluation experiments in `configs/eval/`.
 
 ---
 
@@ -202,22 +228,22 @@ wikiambig scrape --config configs/my_config.yaml
 
 | File | Description |
 |---|---|
-| `data/disam_index.jsonl` | Wikipedia disambiguation page titles and URLs |
-| `data/entity_links.jsonl` | Per-mention QID lists (raw links from wikitext) |
-| `data/entity_data.json` | Wikidata name, description, Wikipedia URL, infobox image per QID |
-| `data/entity_types.json` | Coarse entity type (`PERS` / `ORG` / `LOC` / `null`) per QID |
-| `data/image_lists.json` | Per-entity list of image filenames on their Wikipedia article |
-| `data/image_data.json` | Per-image URL, dimensions, MIME, license, `used_by` QID list |
-| `output/dataset.jsonl` | Assembled dataset (one `MentionEntry` per line) |
-| `output/entity_kb.json` | Full entity knowledge base keyed by QID |
-| `output/manifest.json` | Pipeline version, assembly timestamp, and headline counts |
-| `output/final/instances.jsonl` | Final filtered MEL instances |
-| `output/final/kb.jsonl` | Final filtered entity KB |
+| `output/scrape_data/disam_index.jsonl` | Wikipedia disambiguation page titles and URLs |
+| `output/scrape_data/entity_links.jsonl` | Per-mention QID lists (raw links from wikitext) |
+| `output/scrape_data/entity_data.json` | Wikidata name, description, Wikipedia URL, infobox image per QID |
+| `output/scrape_data/entity_types.json` | Coarse entity type (`PERS` / `ORG` / `LOC` / `null`) per QID |
+| `output/scrape_data/image_lists.json` | Per-entity list of image filenames on their Wikipedia article |
+| `output/scrape_data/image_data.json` | Per-image URL, dimensions, MIME, license, `used_by` QID list |
+| `output/raw_dataset/dataset.jsonl` | Assembled dataset (one `MentionEntry` per line) |
+| `output/raw_dataset/entity_kb.json` | Full entity knowledge base keyed by QID |
+| `output/raw_dataset/manifest.json` | Pipeline version, assembly timestamp, and headline counts |
+| `output/split_<name>/instances.jsonl` | Filtered MEL instances of a split |
+| `output/split_<name>/kb.jsonl` | Filtered entity KB of a split |
 
 ---
 
 ## Reproducibility
 
-Wikipedia and Wikidata are continuously-edited live sources with no fixed dump version. `output/manifest.json` records the exact UTC timestamp at which S7 was run — this is the only stable provenance record for a given dataset snapshot. Re-running the pipeline on a different date will yield a different (typically larger) result.
+Wikipedia and Wikidata are continuously-edited live sources with no fixed dump version. `output/raw_dataset/manifest.json` records the exact UTC timestamp at which S7 was run — this is the only stable provenance record for a given dataset snapshot. Re-running the pipeline on a different date will yield a different (typically larger) result.
 
 ---

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Browse instances.jsonl (output of make_dataset.py) as a self-contained HTML file.
+Browse instances.jsonl (output of make_split.py) as a self-contained HTML file.
 
 Each instance shows the disambiguation task:
   - Mention (ambiguous surface form) + Image → which entity?
@@ -9,9 +9,9 @@ Each instance shows the disambiguation task:
   - The answer entity (text ∩ visual) is highlighted in red.
 
 Usage:
-    python scripts/view_split.py output/final/instances.jsonl
-    python scripts/view_split.py output/final/instances.jsonl --kb output/final/kb.jsonl
-    python scripts/view_split.py output/final/instances.jsonl --sample 300 --open
+    python split_gen/view_split.py output/split_10_text/instances.jsonl
+    python split_gen/view_split.py output/split_10_text/instances.jsonl --kb output/split_10_text/kb.jsonl
+    python split_gen/view_split.py output/split_10_text/instances.jsonl --sample 300 --open
 """
 
 from __future__ import annotations
@@ -286,12 +286,12 @@ def main() -> None:
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    ap.add_argument("input", type=Path, help="instances.jsonl (make_dataset.py output)")
+    ap.add_argument("input", type=Path, help="instances.jsonl (make_split.py output)")
     ap.add_argument("--kb", type=Path, default=None,
                     help="kb.jsonl (default: auto-detect in same directory as input)")
     ap.add_argument("--sample", "-n", type=int, default=500, metavar="N",
                     help="max instances to embed (default: 500; 0 = all)")
-    ap.add_argument("--out", "-o", type=Path, default=Path("split_viewer.html"))
+    ap.add_argument("--out", "-o", type=Path, default=Path("output/split_viewer.html"))
     ap.add_argument("--open", action="store_true",
                     help="open the generated viewer in the default browser")
     args = ap.parse_args()

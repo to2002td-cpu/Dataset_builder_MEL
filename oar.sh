@@ -7,4 +7,4 @@
 
 cd /home/tderrien/Dataset_builder_MEL
 source .venv/bin/activate
-python3.10 wikiambig/cli.py scrape
+wikiambig scrape --config configs/scrape/default.yaml

@@ -36,6 +36,7 @@ full = [
     "datasets>=2.0",
     "matplotlib>=3.0",
     "numpy>=1.24",
+    "wordcloud>=1.9",
 ]
 dev = [
     "pytest>=8.0",

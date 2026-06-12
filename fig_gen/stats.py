@@ -3,14 +3,13 @@
 Dataset statistics for the final MEL dataset.
 
 Usage:
-    python scripts/stats.py output/final/instances.jsonl
-    python scripts/stats.py output/final/instances.jsonl --kb output/final/kb.jsonl
-    python scripts/stats.py output/final/instances.jsonl --out figures/stats.pdf
+    python fig_gen/stats.py output/split_10_text/instances.jsonl
+    python fig_gen/stats.py output/split_10_text/instances.jsonl --kb output/split_10_text/kb.jsonl
+    python fig_gen/stats.py output/split_10_text/instances.jsonl --out output/figures/stats.pdf
 """
 from __future__ import annotations
 
 import argparse
-import json
 from collections import Counter
 from pathlib import Path
 from statistics import mean, median
@@ -19,52 +18,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import numpy as np
 
-
-COLORS = {
-    "blue_face":   "#b7d4ea",
-    "blue_edge":   "#0b3c6d",
-    "pink_face":   "#f7c6d9",
-    "pink_edge":   "#d81b60",
-    "green_face":  "#bfe6dc",
-    "green_edge":  "#00695c",
-    "orange_face": "#fde4c8",
-    "orange_edge": "#b45309",
-    "gray_edge":   "#4d4d4d",
-}
-
-
-def _style():
-    plt.rcParams.update({
-        "figure.dpi": 120,
-        "figure.facecolor": "#ffffff",
-        "savefig.facecolor": "#ffffff",
-        "savefig.bbox": "tight",
-        "font.family": "serif",
-        "font.serif": ["Times New Roman", "STIXGeneral", "DejaVu Serif"],
-        "mathtext.fontset": "stix",
-        "axes.facecolor": "#ececec",
-        "axes.edgecolor": "#666666",
-        "axes.linewidth": 1.6,
-        "axes.labelsize": 13,
-        "axes.grid": True,
-        "axes.axisbelow": True,
-        "grid.color": "#c9c9c9",
-        "grid.linewidth": 1.0,
-        "grid.alpha": 1.0,
-        "xtick.labelsize": 10,
-        "ytick.labelsize": 10,
-        "xtick.major.size": 0,
-        "ytick.major.size": 0,
-        "legend.frameon": False,
-        "legend.fontsize": 10,
-        "hatch.linewidth": 1.5,
-    })
-
-
-def _fmt(x, _=None):
-    if x >= 1000:
-        return f"{x/1000:.0f}k" if x % 1000 == 0 else f"{x/1000:.1f}k"
-    return str(int(x))
+from utils import COLORS, apply_style, ecdf, fmt_count, iter_jsonl, save_figure
 
 
 def _label_bars(ax, bars, total, fontsize=7):
@@ -86,22 +40,8 @@ def _bar(ax, labels, vals, face, edge, title, ylabel=None, total=None):
     ax.set_title(title, fontsize=11, fontweight="bold", pad=6)
     if ylabel:
         ax.set_ylabel(ylabel)
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(_fmt))
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
     return bars
-
-
-def _ecdf(data):
-    x = np.sort(data)
-    y = np.arange(1, len(x) + 1) / len(x)
-    return x, y
-
-
-def _iter_jsonl(path: Path):
-    with path.open(encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line:
-                yield json.loads(line)
 
 
 def main():
@@ -118,8 +58,8 @@ def main():
         raise SystemExit(f"KB not found: {kb_path}")
     out = args.out or args.input.with_name(args.input.stem + "_stats.pdf")
 
-    kb = {e["qid"]: e for e in _iter_jsonl(kb_path)}
-    instances = list(_iter_jsonl(args.input))
+    kb = {e["qid"]: e for e in iter_jsonl(kb_path)}
+    instances = list(iter_jsonl(args.input))
     n_kb, N = len(kb), len(instances)
     if N == 0:
         raise SystemExit("No instances.")
@@ -186,7 +126,7 @@ def main():
 
     # ── Figure ────────────────────────────────────────────────
     # Layout: 3 rows × 2 cols; bottom-left spans full row for top mentions
-    _style()
+    apply_style()
 
     top_n   = min(args.top, len(mention_counts))
     row_h   = [1, 1, max(1.0, top_n * 0.12)]  # taller row for top mentions
@@ -213,7 +153,7 @@ def main():
     ax = fig.add_subplot(gs[0, 1])
     fields = ["Intro", "Desc", "Infobox", "Wiki URL"]
     fvals  = [kb_pct_intro, kb_pct_desc, kb_pct_infobox, kb_pct_wiki]
-    faces  = [COLORS["blue_face"], COLORS["pink_face"], COLORS["green_face"], "#ddd6fe"]
+    faces  = [COLORS["blue_face"], COLORS["pink_face"], COLORS["green_face"], COLORS["purple_face"]]
     bars = ax.bar(fields, fvals, color=faces, edgecolor=COLORS["gray_edge"],
                   linewidth=2.0, hatch="//", zorder=3, width=0.55)
     for b, v in zip(bars, fvals):
@@ -226,8 +166,8 @@ def main():
 
     # ── (C) CDF — text vs. visual candidate set size ──────────
     ax = fig.add_subplot(gs[1, 0])
-    xt, yt = _ecdf(n_text)
-    xv, yv = _ecdf(n_vis)
+    xt, yt = ecdf(n_text)
+    xv, yv = ecdf(n_vis)
     # clip x to 99th percentile for readability
     x_max = int(np.percentile(np.concatenate([xt, xv]), 99)) + 1
 
@@ -269,7 +209,7 @@ def main():
     ax.set_ylabel("Instances")
     ax.set_title(f"Image article reuse  (μ={mean(n_ub):.1f})",
                  fontsize=11, fontweight="bold", pad=6)
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(_fmt))
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
 
     # ── (E) Top surface forms ─────────────────────────────────
     ax = fig.add_subplot(gs[2, 0])
@@ -287,7 +227,7 @@ def main():
     ax.set_xlabel("# instances")
     ax.set_title(f"Top {top_n} surface forms by instance count",
                  fontsize=11, fontweight="bold", pad=6)
-    ax.xaxis.set_major_formatter(plt.FuncFormatter(_fmt))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
     ax.tick_params(axis="y", labelsize=9)
 
     # ── (F) Answer entity types ───────────────────────────────
@@ -297,10 +237,7 @@ def main():
          "Answer entity types", ylabel="Instances", total=N)
     ax.set_ylim(0, max(avals, default=1) * 1.4)
 
-    out.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out)
-    print(f"Saved → {out}")
-    plt.close(fig)
+    save_figure(fig, out)
 
 
 if __name__ == "__main__":

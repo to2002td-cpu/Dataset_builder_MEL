@@ -39,8 +39,8 @@ class PipelineConfig(BaseSettings):
     """
 
     # Paths
-    data_dir: Path = Path("./data")
-    output_dir: Path = Path("./output")
+    data_dir: Path = Path("./output/scrape_data")
+    output_dir: Path = Path("./output/raw_dataset")
 
     # Stage S1
     disam_categories: list[str] = Field(default_factory=lambda: list(_DEFAULT_CATEGORIES))

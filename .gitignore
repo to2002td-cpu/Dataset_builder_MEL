@@ -1,0 +1,8 @@
+output/*
+*__pycache__*
+.*
+!.code_instructions
+!.gitignore
+eval/image_cache/
+eval/results/
+split_viewer.html

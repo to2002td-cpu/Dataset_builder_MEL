@@ -5,10 +5,11 @@ Commands:
   scrape   Run one or more pipeline stages (S1–S7).
   build    Run the offline assembly stage (S7) only.
 
-Downstream analysis, filtering, visualisation, and export live in scripts/:
-  scripts/make_split_v1.py  — create a filtered split from dataset.jsonl
-  scripts/stats.py          — compute corpus statistics
-  scripts/view_split.py     — browse a split as a self-contained HTML page
+Downstream stages live in their own top-level directories:
+  split_gen/make_split.py   — create a filtered split from dataset.jsonl
+  split_gen/view_split.py   — browse a split as a self-contained HTML page
+  fig_gen/stats.py          — compute split statistics and figures
+  eval/run_eval.py          — evaluate a model on a split
 """
 
 from __future__ import annotations

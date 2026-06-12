@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Build the final MEL dataset from the raw pipeline output.
+Build a MEL split (filtered instances + KB) from the raw scrape output.
 
-Produces two files in output/final/:
+Produces two files in the output directory:
   kb.jsonl        — filtered entity KB, one entity per line
   instances.jsonl — MEL instances, candidates as QID lists (not embedded objects)
 
@@ -10,11 +10,11 @@ Task definition:
   Given a mention (ambiguous surface form) and a body image (a photograph that
   appears in multiple Wikipedia articles), identify the correct entity in the KB.
 
-Filtering thresholds live in configs/make_dataset.yaml.
+Filtering thresholds live in configs/split_gen/.
 
 Usage:
-    python scripts/make_dataset.py output/dataset.jsonl output/final/
-    python scripts/make_dataset.py output/dataset.jsonl output/final/ --config configs/make_dataset.yaml
+    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/
+    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ --config configs/split_gen/default.yaml
 """
 
 from __future__ import annotations
@@ -47,7 +47,7 @@ except ImportError:
         return json.dumps(obj, ensure_ascii=False).encode("utf-8")
 
 
-_DEFAULT_CONFIG = Path(__file__).resolve().parent.parent / "configs" / "make_dataset.yaml"
+_DEFAULT_CONFIG = Path(__file__).resolve().parent.parent / "configs" / "split_gen" / "default.yaml"
 
 _KB_FIELDS  = ("qid", "name", "type", "desc", "intro", "infobox_img", "url_wikipedia")
 _IMG_FIELDS = ("url", "n_used_by", "width", "height", "mime", "license")
@@ -285,8 +285,8 @@ def build(input_path: Path, output_dir: Path, cfg: Config) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("input",      type=Path, help="dataset.jsonl (pipeline output)")
-    ap.add_argument("output_dir", type=Path, help="output directory (e.g. output/final/)")
+    ap.add_argument("input",      type=Path, help="dataset.jsonl (scrape output)")
+    ap.add_argument("output_dir", type=Path, help="split output directory (e.g. output/split_10_text/)")
     ap.add_argument("--config",   type=Path, default=_DEFAULT_CONFIG,
                     help=f"filter thresholds YAML (default: {_DEFAULT_CONFIG})")
     args = ap.parse_args()

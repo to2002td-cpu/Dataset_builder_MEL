@@ -1,5 +1,5 @@
-data_dir: ./data
-output_dir: ./output
+data_dir: ./output/scrape_data     # intermediate stage files (S1–S6 checkpoints)
+output_dir: ./output/raw_dataset   # raw assembled dataset (S7)
 
 disam_categories:
   - "Category:Human name disambiguation pages"

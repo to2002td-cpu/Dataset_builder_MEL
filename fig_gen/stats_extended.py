@@ -7,14 +7,13 @@ charts only — no fancy/compound visualisations) covering the KB,
 candidate pools, images, mentions and answer entities.
 
 Usage:
-    python scripts/stats_extended.py output/final/instances.jsonl
-    python scripts/stats_extended.py output/final/instances.jsonl --kb output/final/kb.jsonl
-    python scripts/stats_extended.py output/final/instances.jsonl --out figures/stats_extended.pdf
+    python fig_gen/stats_extended.py output/split_10_text/instances.jsonl
+    python fig_gen/stats_extended.py output/split_10_text/instances.jsonl --kb output/split_10_text/kb.jsonl
+    python fig_gen/stats_extended.py output/split_10_text/instances.jsonl --out output/figures/stats_extended.pdf
 """
 from __future__ import annotations
 
 import argparse
-import json
 from collections import Counter
 from pathlib import Path
 from statistics import mean, median
@@ -23,62 +22,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import numpy as np
 
-
-COLORS = {
-    "blue_face":   "#b7d4ea",
-    "blue_edge":   "#0b3c6d",
-    "pink_face":   "#f7c6d9",
-    "pink_edge":   "#d81b60",
-    "green_face":  "#bfe6dc",
-    "green_edge":  "#00695c",
-    "orange_face": "#fde4c8",
-    "orange_edge": "#b45309",
-    "purple_face": "#ddd6fe",
-    "purple_edge": "#5b21b6",
-    "gray_edge":   "#4d4d4d",
-}
-
-
-def _style():
-    plt.rcParams.update({
-        "figure.dpi": 120,
-        "figure.facecolor": "#ffffff",
-        "savefig.facecolor": "#ffffff",
-        "savefig.bbox": "tight",
-        "font.family": "serif",
-        "font.serif": ["Times New Roman", "STIXGeneral", "DejaVu Serif"],
-        "mathtext.fontset": "stix",
-        "axes.facecolor": "#ececec",
-        "axes.edgecolor": "#666666",
-        "axes.linewidth": 1.6,
-        "axes.labelsize": 11,
-        "axes.grid": True,
-        "axes.axisbelow": True,
-        "grid.color": "#c9c9c9",
-        "grid.linewidth": 1.0,
-        "grid.alpha": 1.0,
-        "xtick.labelsize": 9,
-        "ytick.labelsize": 9,
-        "xtick.major.size": 0,
-        "ytick.major.size": 0,
-        "legend.frameon": False,
-        "legend.fontsize": 8,
-        "hatch.linewidth": 1.5,
-    })
-
-
-def _fmt(x, _=None):
-    if x >= 1000:
-        return f"{x/1000:.0f}k" if x % 1000 == 0 else f"{x/1000:.1f}k"
-    return str(int(x))
-
-
-def _iter_jsonl(path: Path):
-    with path.open(encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line:
-                yield json.loads(line)
+from utils import COLORS, apply_style, fmt_count, iter_jsonl, save_figure
 
 
 def _title(ax, text):
@@ -100,7 +44,7 @@ def _bar_counts(ax, labels, vals, face, edge, title, ylabel="Instances",
                 ha="center", va="bottom", fontsize=7.5, color="#333")
     _title(ax, title)
     ax.set_ylabel(ylabel)
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(_fmt))
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
     return bars
 
 
@@ -117,7 +61,7 @@ def _barh_counts(ax, labels, vals, face, edge, title, xlabel="Instances"):
                 f"{v:,}", va="center", fontsize=7.5, color="#333")
     ax.set_xlabel(xlabel)
     _title(ax, title)
-    ax.xaxis.set_major_formatter(plt.FuncFormatter(_fmt))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
     ax.tick_params(axis="y", labelsize=8)
     return bars
 
@@ -139,7 +83,7 @@ def _hist(ax, data, bins, face, edge, title, xlabel, ylabel="Instances",
         ax.legend(loc="upper right")
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(_fmt))
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
     _title(ax, title)
 
 
@@ -155,8 +99,8 @@ def main():
         raise SystemExit(f"KB not found: {kb_path}")
     out = args.out or args.input.with_name(args.input.stem + "_stats_extended.pdf")
 
-    kb = {e["qid"]: e for e in _iter_jsonl(kb_path)}
-    instances = list(_iter_jsonl(args.input))
+    kb = {e["qid"]: e for e in iter_jsonl(kb_path)}
+    instances = list(iter_jsonl(args.input))
     n_kb, N = len(kb), len(instances)
     if N == 0:
         raise SystemExit("No instances.")
@@ -266,7 +210,7 @@ def main():
     print(f"{'─'*W}\n")
 
     # ── Figure: 4x4 grid ───────────────────────────────────────
-    _style()
+    apply_style()
     fig = plt.figure(figsize=(20, 18.5))
     gs = gridspec.GridSpec(4, 4, figure=fig, hspace=0.5, wspace=0.42, top=0.96)
 
@@ -326,7 +270,7 @@ def main():
     ax.plot(ub_xs, ub_ys, "o-", color=COLORS["green_edge"], linewidth=1.6, markersize=4, zorder=4)
     ax.set_xlabel("Wikipedia article reuse (n_used_by)")
     ax.set_ylabel("Instances")
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(_fmt))
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
     _title(ax, f"Image reuse across articles  (mean = {mean(n_ub):.1f})")
 
     # Row 3 -------------------------------------------------------
@@ -376,10 +320,7 @@ def main():
           title=f"Answer description length  ({pct_answer_infobox:.0f}% have an infobox photo)",
           xlabel="# characters (intro or Wikidata desc)", clip_pct=99)
 
-    out.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out)
-    print(f"Saved → {out}")
-    plt.close(fig)
+    save_figure(fig, out)
 
 
 if __name__ == "__main__":

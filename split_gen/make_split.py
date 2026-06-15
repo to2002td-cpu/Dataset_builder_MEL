@@ -56,6 +56,8 @@ _IMG_FIELDS = ("url", "n_used_by", "width", "height", "mime", "license")
 @dataclass(frozen=True)
 class Config:
     entity_types:          frozenset
+    require_intro:         bool
+    require_image:         bool
     image_mime:            str
     image_min_dim:         int
     image_min_used_by:     int
@@ -70,6 +72,8 @@ class Config:
         raw = yaml.safe_load(path.read_text(encoding="utf-8"))
         return cls(
             entity_types          = frozenset(raw["entity"]["types"]),
+            require_intro         = raw["entity"].get("intro", False),
+            require_image         = raw["entity"].get("image", False),
             image_mime            = raw["image"]["mime"],
             image_min_dim         = raw["image"]["min_dim"],
             image_min_used_by     = raw["image"]["min_used_by"],
@@ -87,7 +91,13 @@ class Config:
 
 def keep_entity(e: dict, cfg: Config) -> bool:
     """Entity qualifies for the KB."""
-    if not (e.get("intro") or e.get("infobox_img")):
+    has_intro = bool(e.get("intro"))
+    has_image = bool(e.get("infobox_img"))
+    if not (has_intro or has_image):
+        return False
+    if cfg.require_intro and not has_intro:
+        return False
+    if cfg.require_image and not has_image:
         return False
     return (e.get("type") or "OTHER") in cfg.entity_types
 

@@ -100,10 +100,15 @@ def wiki_get(params: dict[str, Any], timeout: int = 30) -> dict[str, Any]:
 # S1: category member listing
 # ---------------------------------------------------------------------------
 
-def get_category_members(category: str, limit: int = 500) -> list[dict[str, Any]]:
+def get_category_members(category: str, limit: int = 500, cmtype: str = "page") -> list[dict[str, Any]]:
     """
-    Yield all page members of a Wikipedia category.
-    Returns list of {title, pageid} dicts.
+    Yield all members of a Wikipedia category.
+
+    ``cmtype`` selects member kinds: "page", "subcat", "file", or a
+    "|"-separated combination (e.g. "page|subcat" for a recursive crawl).
+
+    Returns list of {title, pageid, ns} dicts — ``ns`` is 0 for articles
+    and 14 for subcategories, letting callers tell them apart.
     """
     members: list[dict[str, Any]] = []
     params: dict[str, Any] = {
@@ -111,12 +116,12 @@ def get_category_members(category: str, limit: int = 500) -> list[dict[str, Any]
         "list": "categorymembers",
         "cmtitle": category,
         "cmlimit": str(min(limit, 500)),
-        "cmnamespace": "0",  # articles only
+        "cmtype": cmtype,
     }
     while True:
         data = wiki_get(params)
         for m in data.get("query", {}).get("categorymembers", []):
-            members.append({"title": m["title"], "pageid": m["pageid"]})
+            members.append({"title": m["title"], "pageid": m["pageid"], "ns": m["ns"]})
         cont = data.get("continue")
         if not cont:
             break
@@ -312,18 +317,23 @@ def get_wiki_entity_data_batch(page_titles: list[str]) -> dict[str, dict]:
     Titles may be URL-encoded (``%C3%A9`` etc.) — decoded automatically.
     Image continuation is handled internally (rare for pages with >500 images).
 
-    Returns ``{original_title: {"intro": str, "images": [filename, …]}}``.
+    Also fetches each page's PageImages-derived lead/infobox image
+    (``piprop=name``) — the image actually displayed in the en.wikipedia
+    infobox, as opposed to Wikidata's (possibly different) P18 claim.
+
+    Returns ``{original_title: {"intro": str, "images": [filename, …], "infobox_image": str | None}}``.
     """
     decoded: dict[str, str] = {unquote(t).replace("_", " "): t for t in page_titles}
-    result: dict[str, dict] = {t: {"intro": "", "images": []} for t in page_titles}
+    result: dict[str, dict] = {t: {"intro": "", "images": [], "infobox_image": None} for t in page_titles}
 
     base_params: dict[str, Any] = {
         "action": "query",
         "titles": "|".join(decoded),
-        "prop": "extracts|images",
+        "prop": "extracts|images|pageimages",
         "exintro": "1",
         "explaintext": "1",
         "imlimit": "max",
+        "piprop": "name",
         "redirects": "1",
     }
     params = dict(base_params)
@@ -351,6 +361,9 @@ def get_wiki_entity_data_batch(page_titles: list[str]) -> dict[str, dict]:
             if "extract" in page:
                 result[original]["intro"] = (page.get("extract") or "").split("\n\n")[0].strip()
 
+            if "pageimage" in page:
+                result[original]["infobox_image"] = page["pageimage"]
+
             for img in page.get("images", []):
                 fname = img.get("title", "")
                 if fname and not is_non_image_format(fname):
@@ -359,8 +372,11 @@ def get_wiki_entity_data_batch(page_titles: list[str]) -> dict[str, dict]:
         cont = data.get("continue")
         if not cont:
             break
-        # Continuation only yields more images — drop extracts from next call.
-        params = {"action": "query", "titles": "|".join(decoded), "prop": "images", "imlimit": "max"}
+        # Continuation can carry `excontinue` as well as `imcontinue` — a 50-title
+        # batch routinely needs more than one page of extracts (exlimit defaults
+        # to 20), so keep requesting both props or later titles' intros are
+        # silently dropped.
+        params = dict(base_params)
         params.update(cont)
 
     return result

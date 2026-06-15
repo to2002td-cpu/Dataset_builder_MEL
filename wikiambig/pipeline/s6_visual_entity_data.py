@@ -4,12 +4,13 @@ S6 — Visual entity data collection.
 For every QID that appears in image_data.json's used_by lists but was never
 fully enriched in S3 (no entry in entity_types.json — entity_types.json gets
 one for every QID it ever processes, even untyped ones, so its keys are a
-reliable "already enriched" marker), fetch name, description, Wikipedia URL,
-infobox image AND coarse type in a single combined SPARQL query per batch
-(the same get_entities_data_and_types call S3 uses).
+reliable "already enriched" marker), fetch name, description, Wikipedia URL
+AND coarse type in a single combined SPARQL query per batch (the same
+get_entities_data_and_types call S3 uses).
 
 Results are merged into entity_data.json and entity_types.json so the viewer
-can display names, descriptions, and infobox thumbnails for visual candidates.
+can display names and descriptions for visual candidates. Run S4 again
+afterwards to fetch intros/infobox images for these newly-added entities.
 
 Runs after S5 and before S7.
 Input:  image_data.json, entity_data.json, entity_types.json
@@ -101,7 +102,6 @@ def run(config: PipelineConfig) -> None:
                             "name": sparql.get("name") or qid,
                             "desc": sparql.get("desc", ""),
                             "url_wikipedia": url,
-                            "infobox_img": sparql.get("infobox_img"),
                         }
                     entity_types[qid] = sparql.get("type")
                     cp.mark_done(qid)

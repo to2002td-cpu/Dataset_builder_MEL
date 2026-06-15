@@ -6,27 +6,8 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from pydantic import Field, field_validator
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource
-
-_DEFAULT_CATEGORIES = [
-"Category:Human name disambiguation pages",
-"Category:Disambiguation pages with surname-holder lists",
-"Category:Disambiguation pages with given-name-holder lists",
-"Category:Place name disambiguation pages",
-"Category:Buildings and structures disambiguation pages",
-"Category:Airport disambiguation pages",
-"Category:Architectural disambiguation pages",
-"Category:Educational institution disambiguation pages",
-"Category:Hospital disambiguation pages",
-"Category:Religious buildings and structures disambiguation pages",
-"Category:Buddhist temple disambiguation pages",
-"Category:Church building disambiguation pages",
-"Category:Mosque disambiguation pages",
-"Category:Synagogue disambiguation pages",
-"Category:Station disambiguation pages"
-]
-
 
 class PipelineConfig(BaseSettings):
     """
@@ -41,9 +22,6 @@ class PipelineConfig(BaseSettings):
     # Paths
     data_dir: Path = Path("./output/scrape_data")
     output_dir: Path = Path("./output/raw_dataset")
-
-    # Stage S1
-    disam_categories: list[str] = Field(default_factory=lambda: list(_DEFAULT_CATEGORIES))
 
     # Rate limiting (seconds between batch calls, per worker)
     wikipedia_rate_limit: float = 1.0

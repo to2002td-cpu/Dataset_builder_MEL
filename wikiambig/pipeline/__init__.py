@@ -37,7 +37,11 @@ STAGES: dict[str, object] = {
     "s7": s7_assemble,
 }
 
-ALL_STAGES = ["s1", "s2", "s3", "s4", "s5", "s6", "s7"]
+# s4 runs twice: once for S3's candidates, and again after S6 adds
+# visual-only entities to entity_data.json (so they also get intros and
+# infobox images — S4 skips QIDs already in its checkpoint, so the second
+# pass only fetches the newly-added ones).
+ALL_STAGES = ["s1", "s2", "s3", "s4", "s5", "s6", "s4", "s7"]
 
 
 def run_stages(config: PipelineConfig, stages: list[str] | None = None) -> None:

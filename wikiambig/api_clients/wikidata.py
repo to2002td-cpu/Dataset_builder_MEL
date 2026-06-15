@@ -110,11 +110,11 @@ def sparql_get(query: str, timeout: int = 60) -> list[dict[str, Any]]:
 
 def get_entities_data_and_types(qids: list[str]) -> dict[str, dict[str, Any]]:
     """
-    Fetch name, English description, Wikipedia URL, infobox image AND coarse
-    type (PERS/ORG/LOC) for a batch of QIDs in a single SPARQL query.
+    Fetch name, English description, Wikipedia URL AND coarse type
+    (PERS/ORG/LOC) for a batch of QIDs in a single SPARQL query.
 
-    Returns {QID: {name, desc, url_wikipedia, infobox_img, type}}, where
-    ``type`` is "PERS", "ORG", "LOC", or None (no root match).
+    Returns {QID: {name, desc, url_wikipedia, type}}, where ``type`` is
+    "PERS", "ORG", "LOC", or None (no root match).
 
     Replaces what used to be two separate round-trips (entity data, then
     entity type) over the same QID batch — halving Wikidata SPARQL traffic,
@@ -122,7 +122,6 @@ def get_entities_data_and_types(qids: list[str]) -> dict[str, dict[str, Any]]:
 
     SERVICE wikibase:label automatically binds ?itemLabel and ?itemDescription.
     ?article gives the full enwiki URL directly — no separate sitelinks call needed.
-    P18 (image) takes priority over P154 (logo) for infobox_img.
     The type root match (P31/P279* traversal, PERS > ORG > LOC priority,
     disambiguation pages excluded) is scoped inside its own OPTIONAL so that
     entity data is still returned for QIDs that match no root.
@@ -130,14 +129,12 @@ def get_entities_data_and_types(qids: list[str]) -> dict[str, dict[str, Any]]:
     qids_str = " ".join(f"wd:{q}" for q in qids)
     roots_str = " ".join(f"wd:{r}" for r in ROOT_MAP)
     query = f"""
-    SELECT ?item ?itemLabel ?itemDescription ?article ?image ?logo ?root WHERE {{
+    SELECT ?item ?itemLabel ?itemDescription ?article ?root WHERE {{
       VALUES ?item {{ {qids_str} }}
       OPTIONAL {{
         ?article schema:about ?item ;
                  schema:isPartOf <https://en.wikipedia.org/> .
       }}
-      OPTIONAL {{ ?item wdt:P18 ?image . }}
-      OPTIONAL {{ ?item wdt:P154 ?logo . }}
       OPTIONAL {{
         VALUES ?root {{ {roots_str} }}
         ?item wdt:P31/wdt:P279* ?root .
@@ -156,7 +153,7 @@ def get_entities_data_and_types(qids: list[str]) -> dict[str, dict[str, Any]]:
                 time.sleep(5 * (attempt + 1))
             else:
                 return {q: {"name": None, "desc": "", "url_wikipedia": None,
-                            "infobox_img": None, "type": None} for q in qids}
+                            "type": None} for q in qids}
 
     data: dict[str, dict[str, Any]] = {}
     roots: dict[str, set[str]] = {}
@@ -167,7 +164,6 @@ def get_entities_data_and_types(qids: list[str]) -> dict[str, dict[str, Any]]:
                 "name": None,
                 "desc": "",
                 "url_wikipedia": None,
-                "infobox_img": None,
             }
             roots[qid] = set()
 
@@ -179,11 +175,6 @@ def get_entities_data_and_types(qids: list[str]) -> dict[str, dict[str, Any]]:
 
         if "article" in row and data[qid]["url_wikipedia"] is None:
             data[qid]["url_wikipedia"] = row["article"]["value"]
-
-        if "image" in row and data[qid]["infobox_img"] is None:
-            data[qid]["infobox_img"] = row["image"]["value"]
-        elif "logo" in row and data[qid]["infobox_img"] is None:
-            data[qid]["infobox_img"] = row["logo"]["value"]
 
         if "root" in row:
             roots[qid].add(ROOT_MAP[row["root"]["value"].split("/")[-1]])

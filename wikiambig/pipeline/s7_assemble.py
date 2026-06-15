@@ -10,7 +10,8 @@ Assembly algorithm:
   3. For each Entity, populate page_imglist:
        - Resolve each filename → Image(url, used_by, n_used_by, is_infobox,
          width, height, mime, license).
-       - is_infobox: True when the image filename matches the entity's P18 infobox image.
+       - is_infobox: True when the image filename matches the entity's Wikipedia infobox image
+         (entity_infobox_images.json from S4, derived from PageImages).
   4. For each disambiguation page entry in entity_links.jsonl, build a MentionEntry:
        - Populate ambiguities with Entity objects (in original link order).
        - Compute n_entities and n_visual_ambiguities.
@@ -159,6 +160,16 @@ def run(config: PipelineConfig) -> None:
         except json.JSONDecodeError:
             pass
 
+    # Load Wikipedia infobox images if S4 has been run (optional).
+    entity_infobox_images: dict[str, str | None] = {}
+    infobox_images_path = config.stage_path("entity_infobox_images.json")
+    if infobox_images_path.exists():
+        try:
+            entity_infobox_images = json.loads(infobox_images_path.read_text(encoding="utf-8"))
+            logger.info("S7: loaded %d Wikipedia infobox images from S4", len(entity_infobox_images))
+        except json.JSONDecodeError:
+            pass
+
     logger.info(
         "S7: assembling — %d mentions, %d entities, %d images",
         len(entity_links),
@@ -186,7 +197,7 @@ def run(config: PipelineConfig) -> None:
     # --- Build Entity KB ---
     kb: dict[str, Entity] = {}
     for qid, data in tqdm(entity_data.items(), desc="S7 build KB"):
-        infobox_img = data.get("infobox_img")
+        infobox_img = entity_infobox_images.get(qid)
         filenames = image_lists.get(qid, [])
 
         page_imglist: list[Image] = []

@@ -2,12 +2,12 @@
 S3 — Wikidata entity enrichment.
 
 A single combined SPARQL query per batch (200 QIDs) fetches entity data
-(name, description, Wikipedia URL, infobox image) AND coarse type
-(PERS / ORG / LOC via P31/P279* root traversal) in one round-trip —
-half the Wikidata SPARQL traffic of running the two as separate passes.
+(name, description, Wikipedia URL) AND coarse type (PERS / ORG / LOC via
+P31/P279* root traversal) in one round-trip — half the Wikidata SPARQL
+traffic of running the two as separate passes.
 
 Inputs:  entity_links.jsonl
-Outputs: entity_data.json   {QID: {name, desc, url_wikipedia, infobox_img}}
+Outputs: entity_data.json   {QID: {name, desc, url_wikipedia}}
          entity_types.json  {QID: "PERS"|"ORG"|"LOC"|None}
 """
 
@@ -95,7 +95,6 @@ def run(config: PipelineConfig) -> None:
                             "name": sparql.get("name") or qid,
                             "desc": sparql.get("desc", ""),
                             "url_wikipedia": url,
-                            "infobox_img": sparql.get("infobox_img"),
                         }
                     entity_types[qid] = sparql.get("type")
                     cp.mark_done(qid)

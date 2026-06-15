@@ -17,7 +17,7 @@ class Image(BaseModel):
     """QIDs of all entities whose Wikipedia articles embed this image."""
     n_used_by: int = 0
     is_infobox: bool = False
-    """True when this image is the P18 (image) Wikidata claim of its parent entity."""
+    """True when this image is the Wikipedia infobox image of its parent entity."""
     width: Optional[int] = None
     height: Optional[int] = None
     mime: str = ""
@@ -42,7 +42,8 @@ class Entity(BaseModel):
     type: str = "OTHER"
     """Coarse semantic type: PERS | ORG | LOC | OTHER."""
     infobox_img: Optional[str] = None
-    """Direct URL of the P18 Wikidata image claim; None when absent."""
+    """Special:FilePath URL of the image shown in the en.wikipedia infobox
+    (PageImages-derived); None when absent."""
     url_wikipedia: str
     page_imglist: list[Image] = Field(default_factory=list)
     """All images appearing in the entity's Wikipedia article body."""

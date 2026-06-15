@@ -11,7 +11,7 @@ image:
 
 mention:
   min_len: 3               # minimum surface-form length (chars)
-  banwords: ["and"] #if and -> two entities
+  banwords: ["and"]        #if and -> two entities
 
 candidates:
   min_visual: 2             # min KB entities sharing an image (visual ambiguity)

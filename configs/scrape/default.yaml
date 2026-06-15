@@ -1,22 +1,6 @@
 data_dir: ./output/scrape_data     # intermediate stage files (S1–S6 checkpoints)
 output_dir: ./output/raw_dataset   # raw assembled dataset (S7)
 
-disam_categories:
-  - "Category:Human name disambiguation pages"
-  - "Category:Disambiguation pages with surname-holder lists"
-  - "Category:Disambiguation pages with given-name-holder lists"
-  - "Category:Place name disambiguation pages"
-  - "Category:Buildings and structures disambiguation pages"
-  - "Category:Airport disambiguation pages"
-  - "Category:Architectural disambiguation pages"
-  - "Category:Educational institution disambiguation pages"
-  - "Category:Hospital disambiguation pages"
-  - "Category:Religious buildings and structures disambiguation pages"
-  - "Category:Buddhist temple disambiguation pages"
-  - "Category:Church building disambiguation pages"
-  - "Category:Mosque disambiguation pages"
-  - "Category:Synagogue disambiguation pages"
-  - "Category:Station disambiguation pages"
 wikipedia_rate_limit: 0.5
 wikidata_rate_limit: 0.5
 

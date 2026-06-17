@@ -14,6 +14,7 @@ Assembly algorithm:
          (entity_infobox_images.json from S4, derived from PageImages).
   4. For each disambiguation page entry in entity_links.jsonl, build a MentionEntry:
        - Populate ambiguities with Entity objects (in original link order).
+       - Carry over the page's categories (from S1, via S2) for offline filtering.
        - Compute n_entities and n_visual_ambiguities.
   5. Write dataset.json, dataset.jsonl, entity_kb.json, manifest.json (all atomic).
 
@@ -259,6 +260,7 @@ def run(config: PipelineConfig) -> None:
 
         entry = MentionEntry(
             mention=mention,
+            categories=link_entry.get("categories", []),
             ambiguities=ambiguities,
             n_entities=len(ambiguities),
             n_visual_ambiguities=n_visual,

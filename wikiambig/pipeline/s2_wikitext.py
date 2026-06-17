@@ -7,7 +7,8 @@ For each disambiguation page from disam_index.jsonl:
   3. Resolve entity titles to Wikidata QIDs (batch_size titles per call, threaded).
 
 Output: entity_links.jsonl — one JSON object per line:
-    {"mention": "Barack", "disam_title": "Barack (disambiguation)", "qids": ["Q76", ...]}
+    {"mention": "Barack", "disam_title": "Barack (disambiguation)", "qids": ["Q76", ...],
+     "categories": ["Category:Disambiguation pages", ...]}
 """
 
 from __future__ import annotations
@@ -121,6 +122,7 @@ def run(config: PipelineConfig) -> None:
                 "mention": _clean_mention(disam_title),
                 "disam_title": disam_title,
                 "qids": qids,
+                "categories": page.get("categories", []),
             }
         )
 

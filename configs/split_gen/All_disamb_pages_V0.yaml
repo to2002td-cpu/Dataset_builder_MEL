@@ -11,7 +11,8 @@ image:
 
 mention:
   min_len: 3               # minimum surface-form length (chars)
-  banwords: ["and"]        #if and -> two entities
+  banwords: ["and"] #if and -> two entities
+  start_with_num: true          # if true, drop mentions starting with a number
 
 categories:
   include: []              # if non-empty, page must be in at least one of these categories

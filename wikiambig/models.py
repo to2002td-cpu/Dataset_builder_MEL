@@ -54,6 +54,9 @@ class MentionEntry(BaseModel):
 
     mention: str
     """Clean surface form (disambiguation page title with ' (disambiguation)' stripped)."""
+    categories: list[str] = Field(default_factory=list)
+    """Wikipedia categories (and subcategories) the disambiguation page belongs to,
+    as logged by S1 — used for offline category-based filtering in split_gen."""
     ambiguities: list[Entity] = Field(default_factory=list)
     n_entities: int = 0
     n_visual_ambiguities: int = 0

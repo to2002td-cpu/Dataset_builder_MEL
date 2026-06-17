@@ -1,0 +1,213 @@
+\documentclass[tikz, border=16pt]{standalone}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usetikzlibrary{arrows.meta, positioning, calc, backgrounds}
+\usepackage[most]{tcolorbox}
+
+% ── Palette ──────────────────────────────────────────────────
+\definecolor{Cw}{RGB}{20,  90, 185}   % Wikipedia blue
+\definecolor{Cd}{RGB}{10, 140,  70}   % Wikidata green
+\definecolor{Ct}{RGB}{0,  130, 130}   % Teal  (S4 ×2)
+\definecolor{Co}{RGB}{195, 80,   0}   % Orange (offline)
+\definecolor{Cs}{RGB}{90,  90,  90}   % Slate  (make_split)
+
+% ── File artifact node style ──────────────────────────────────
+%   Usage: \node[fnode={<color>}, below=Xmm of <stage>] (<name>) {<content>};
+\tikzset{
+  fnode/.style n args={1}{
+    rounded corners=4pt,
+    draw=#1!45, fill=#1!7,
+    font=\tiny\ttfamily, text=black!72,
+    align=left,
+    inner xsep=5pt, inner ysep=4pt,
+    line width=0.65pt,
+    text width=3.1cm
+  },
+  fnarr/.style={
+    -{Latex[length=1.5mm,width=1.1mm]},
+    line width=0.6pt, draw=black!28
+  }
+}
+
+% ── API badge ─────────────────────────────────────────────────
+\newcommand{\apibadge}[2]{%
+  \tikz[baseline=(n.base)]\node[
+    rounded corners=2pt,
+    fill=#1!12, draw=#1!50, line width=0.6pt,
+    font=\bfseries\scriptsize, text=#1!80!black,
+    inner xsep=4pt, inner ysep=2pt
+  ](n){#2};%
+}
+
+% ── Stage box (compact: title + description + badge, no files) ─
+%   #1 (optional, default {}): extra tcolorbox options
+%   #2 (mandatory)           : colour key
+\newtcolorbox{stagebox}[2][]{%
+  enhanced,
+  width=3.5cm,
+  equal height group=stage,
+  colback=#2!5,
+  colframe=#2!80,
+  arc=6pt,
+  boxrule=1.2pt,
+  top=5pt, bottom=6pt, left=5pt, right=5pt,
+  boxsep=0pt,
+  fontupper=\scriptsize,
+  valign=top,
+  halign=flush left,
+  #1,%
+}
+
+\begin{document}
+\begin{tikzpicture}[
+  node distance=6mm,
+  arr/.style={
+    -{Latex[length=2.5mm,width=1.8mm]},
+    line width=1pt, draw=black!40
+  },
+  cfg/.style={
+    rounded corners=3pt,
+    draw=black!30, fill=gray!6,
+    line width=0.7pt, dashed,
+    font=\tiny\ttfamily,
+    align=center,
+    inner xsep=3mm, inner ysep=1.8mm,
+    text=black!55
+  },
+  cfgarr/.style={
+    -{Latex[length=1.8mm,width=1.3mm]},
+    line width=0.7pt, draw=black!35, dashed
+  },
+]
+
+% ═══════════════════════════════════════════════════════════════
+%  STAGES  (title + description + API badge — no files inside)
+% ═══════════════════════════════════════════════════════════════
+
+\node (s1) {\begin{stagebox}{Cw}
+  \textbf{S1 — disam\_index}\\[3pt]
+  Disambiguation index\\
+  BFS récursif complet\\[4pt]
+  \apibadge{Cw}{Wikipedia API}%
+\end{stagebox}};
+
+\node[right=of s1] (s2) {\begin{stagebox}{Cw}
+  \textbf{S2 — entity\_links}\\[3pt]
+  Wikitext $\to$ liens $\to$ QIDs\\[4pt]
+  \apibadge{Cw}{Wikipedia API}%
+\end{stagebox}};
+
+\node[right=of s2] (s3) {\begin{stagebox}{Cd}
+  \textbf{S3 — wikidata}\\[3pt]
+  Types \& descriptions\\
+  PERS\,/\,ORG\,/\,LOC\\[4pt]
+  \apibadge{Cd}{Wikidata SPARQL}%
+\end{stagebox}};
+
+\node[right=of s3] (s4) {\begin{stagebox}{Ct}
+  \textbf{S4 — wikipedia $\times$2}\\[3pt]
+  Intros + images\\
+  + infobox (PageImages)\\[4pt]
+  \apibadge{Cw}{Wikipedia API}%
+\end{stagebox}};
+
+\node[right=of s4] (s5) {\begin{stagebox}{Cw}
+  \textbf{S5 — image\_data}\\[3pt]
+  Métadonnées image\\
+  + réutilisation par article\\[4pt]
+  \apibadge{Cw}{Wikipedia API}%
+\end{stagebox}};
+
+\node[right=of s5] (s6) {\begin{stagebox}{Cd}
+  \textbf{S6 — visual\_entity\_data}\\[3pt]
+  Enrichissement Wikidata\\
+  entités visuelles seules\\[4pt]
+  \apibadge{Cd}{Wikidata SPARQL}%
+\end{stagebox}};
+
+\node[right=of s6] (s7) {\begin{stagebox}{Co}
+  \textbf{S7 — assemble}\\[3pt]
+  Offline join\\
+  + stats ambiguïté visuelle\\[4pt]
+  \apibadge{Co}{hors ligne}%
+\end{stagebox}};
+
+\node[right=of s7] (ms) {\begin{stagebox}[frame style={dashed}]{Cs}
+  \textbf{make\_split.py}\\[3pt]
+  Filtrage \& génération split\\
+  (configurable)\\[4pt]
+  \apibadge{Cs}{hors ligne}%
+\end{stagebox}};
+
+% ═══════════════════════════════════════════════════════════════
+%  FILE ARTIFACT NODES  (below each stage, colour-matched)
+% ═══════════════════════════════════════════════════════════════
+
+\node[fnode={Cw}, below=8mm of s1] (f1)
+  {disam\_index.jsonl\\\{title,~url,~categories[]\}};
+
+\node[fnode={Cw}, below=8mm of s2] (f2)
+  {entity\_links.jsonl\\\{mention,~qids[],\\categories[]\}};
+
+\node[fnode={Cd}, below=8mm of s3] (f3)
+  {entity\_data.json\\entity\_types.json};
+
+\node[fnode={Ct}, below=8mm of s4] (f4)
+  {entity\_intros.json\\image\_lists.json\\entity\_infobox\_images.json};
+
+\node[fnode={Cw}, below=8mm of s5] (f5)
+  {image\_data.json\\\{url,~dims,~license,\\used\_by[]\}};
+
+\node[fnode={Cd}, below=8mm of s6] (f6)
+  {entity\_data.json\\(enrichi)};
+
+\node[fnode={Co}, below=8mm of s7] (f7)
+  {dataset.jsonl\\entity\_kb.json\\manifest.json};
+
+\node[fnode={Cs}, below=8mm of ms] (fms)
+  {instances.jsonl\\kb.jsonl};
+
+% Stage → file arrows (thin, downward)
+\foreach \s/\f in {s1/f1, s2/f2, s3/f3, s4/f4, s5/f5, s6/f6, s7/f7, ms/fms}
+  \draw[fnarr] (\s.south) -- (\f.north);
+
+% ═══════════════════════════════════════════════════════════════
+%  MAIN ARROWS  (stage to stage)
+% ═══════════════════════════════════════════════════════════════
+\foreach \a/\b in {s1/s2, s2/s3, s3/s4, s4/s5, s5/s6, s6/s7, s7/ms}
+  \draw[arr] (\a.east) -- (\b.west);
+
+% ═══════════════════════════════════════════════════════════════
+%  CONFIG NODES  (dashed, above stages that read config)
+% ═══════════════════════════════════════════════════════════════
+\node[cfg, above=10mm of s1] (cscrape) {configs/scrape/\\default.yaml};
+\draw[cfgarr] (cscrape.south) -- (s1.north);
+
+\node[cfg, above=10mm of ms] (csplit) {configs/split\_gen/\\Edits\_V2.yaml};
+\draw[cfgarr] (csplit.south) -- (ms.north);
+
+% ═══════════════════════════════════════════════════════════════
+%  PHASE LABELS  (inside the background zones, below file nodes)
+% ═══════════════════════════════════════════════════════════════
+\node[font=\tiny\bfseries, text=Cw!70!black, anchor=north west, inner sep=1.5pt]
+  at ($(s1.south west)+(-1mm,-24mm)$) {En ligne — API Wikipédia / Wikidata};
+\node[font=\tiny\bfseries, text=Co!70!black, anchor=north west, inner sep=1.5pt]
+  at ($(s7.south west)+(0mm,-24mm)$) {Hors ligne};
+
+% ═══════════════════════════════════════════════════════════════
+%  PHASE BACKGROUND ZONES  (behind everything else)
+% ═══════════════════════════════════════════════════════════════
+\begin{scope}[on background layer]
+  % Online zone: S1–S6 + their file nodes + phase label
+  \fill[Cw!6, rounded corners=8pt]
+    ($(s1.north west)+(-3mm,+5mm)$) rectangle
+    ($(s6.south east)+(+0mm,-30mm)$);
+  % Offline zone: S7–make_split + their file nodes + phase label
+  \fill[Co!6, rounded corners=8pt]
+    ($(s7.north west)+(+0mm,+5mm)$) rectangle
+    ($(ms.south east)+(+3mm,-30mm)$);
+\end{scope}
+
+\end{tikzpicture}
+\end{document}

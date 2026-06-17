@@ -66,10 +66,14 @@ class Config:
     min_visual_candidates: int
     max_text_candidates:   int
     banwords:              set[str]
+    category_include:      frozenset
+    category_exclude:      frozenset
+    start_with_num:        bool
 
     @classmethod
     def load(cls, path: Path) -> "Config":
         raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+        categories = raw.get("categories", {})
         return cls(
             entity_types          = frozenset(raw["entity"]["types"]),
             require_intro         = raw["entity"].get("intro", False),
@@ -82,6 +86,9 @@ class Config:
             min_visual_candidates = raw["candidates"]["min_visual"],
             max_text_candidates   = raw["candidates"]["max_text"],
             banwords              = set(raw["mention"].get("banwords", [])),
+            category_include      = frozenset(categories.get("include", [])),
+            category_exclude      = frozenset(categories.get("exclude", [])),
+            start_with_num        = raw.get("start_with_num", False)
         )
 
 
@@ -119,7 +126,19 @@ def keep_mention(mention: str, cfg: Config) -> bool:
         return False
     if len(mention) < cfg.mention_min_len:
         return False
+    if cfg.start_with_num and mention[0].isdigit():
+        return False
     return any(c.isalpha() for c in mention)
+
+
+def keep_categories(categories: list[str], cfg: Config) -> bool:
+    """Disambiguation page's categories pass the include/exclude filters."""
+    cats = set(categories)
+    if cfg.category_include and not (cats & cfg.category_include):
+        return False
+    if cfg.category_exclude and (cats & cfg.category_exclude):
+        return False
+    return True
 
 
 def _normalise_image_name(url_or_filename: str) -> str:
@@ -169,6 +188,8 @@ def build(input_path: Path, output_dir: Path, cfg: Config) -> None:
     for m in _iter_jsonl(input_path, desc="Scanning"):
         mention = m["mention"]
         if not keep_mention(mention, cfg):
+            continue
+        if not keep_categories(m.get("categories", []), cfg):
             continue
         pool = [e for e in m["ambiguities"] if keep_entity(e, cfg)]
         if not (2 <= len(pool) <= cfg.max_text_candidates):

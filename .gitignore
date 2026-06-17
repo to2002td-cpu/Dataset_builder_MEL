@@ -6,3 +6,4 @@ output/*
 eval/image_cache/
 eval/results/
 split_viewer.html
+backups/*

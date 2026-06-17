@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 import webbrowser
 from pathlib import Path
 
@@ -303,16 +304,18 @@ def main() -> None:
     if not kb_path.exists():
         raise SystemExit(f"KB not found at {kb_path}. Pass --kb to specify its location.")
 
-    # Load instances
+    # Load all instances, shuffle with fixed seed, then take --sample
     instances: list[dict] = []
-    limit = args.sample if args.sample > 0 else None
     with args.input.open(encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if line:
                 instances.append(json.loads(line))
-                if limit and len(instances) >= limit:
-                    break
+
+    rng = random.Random(42)
+    rng.shuffle(instances)
+    if args.sample > 0:
+        instances = instances[: args.sample]
 
     # Load only KB entries referenced by the sampled instances
     referenced: set[str] = set()

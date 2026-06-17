@@ -12,12 +12,15 @@ image:
 mention:
   min_len: 3               # minimum surface-form length (chars)
   banwords: ["and"] #if and -> two entities
-  start_with_num: true          # if true, drop mentions starting with a number
+  drop_if_start_with_num: true  # drop mentions starting with a number (e.g. "1st", "2nd", "3rd")
 
 categories:
-  include: []              # if non-empty, page must be in at least one of these categories
+  include:                  # page must be in at least one of these categories
+    - "Category:Human name disambiguation pages"
+    - "Category:Disambiguation pages with surname-holder lists"
+    - "Category:Place name disambiguation pages"       
   exclude: []               # page is dropped if it's in any of these categories
 
 candidates:
   min_visual: 2             # min KB entities sharing an image (visual ambiguity)
-  max_text: 10              # max KB entities sharing a mention (drops generic fragments, e.g. "Cerro")
+  max_text: 5              # max KB entities sharing a mention (drops generic fragments, e.g. "Cerro")

@@ -15,12 +15,16 @@ Filtering thresholds live in configs/split_gen/.
 Usage:
     python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/
     python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ --config configs/split_gen/default.yaml
+    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ --workers 8
 """
 
 from __future__ import annotations
 
 import argparse
+import os
+import re
 import urllib.parse
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterator
@@ -51,44 +55,45 @@ _DEFAULT_CONFIG = Path(__file__).resolve().parent.parent / "configs" / "split_ge
 
 _KB_FIELDS  = ("qid", "name", "type", "desc", "intro", "infobox_img", "url_wikipedia")
 _IMG_FIELDS = ("url", "n_used_by", "width", "height", "mime", "license")
+_RE_STARTS_NUM = re.compile(r"^\s*\d")
 
 
 @dataclass(frozen=True)
 class Config:
-    entity_types:          frozenset
-    require_intro:         bool
-    require_image:         bool
-    image_mime:            str
-    image_min_dim:         int
-    image_min_used_by:     int
-    image_max_used_by:     int
-    mention_min_len:       int
-    min_visual_candidates: int
-    max_text_candidates:   int
-    banwords:              set[str]
-    category_include:      frozenset
-    category_exclude:      frozenset
-    start_with_num:        bool
+    entity_types:           frozenset
+    require_intro:          bool
+    require_image:          bool
+    image_mime:             str
+    image_min_dim:          int
+    image_min_used_by:      int
+    image_max_used_by:      int
+    mention_min_len:        int
+    min_visual_candidates:  int
+    max_text_candidates:    int
+    banwords:               set[str]
+    category_include:       frozenset
+    category_exclude:       frozenset
+    drop_if_start_with_num: bool
 
     @classmethod
     def load(cls, path: Path) -> "Config":
         raw = yaml.safe_load(path.read_text(encoding="utf-8"))
         categories = raw.get("categories", {})
         return cls(
-            entity_types          = frozenset(raw["entity"]["types"]),
-            require_intro         = raw["entity"].get("intro", False),
-            require_image         = raw["entity"].get("image", False),
-            image_mime            = raw["image"]["mime"],
-            image_min_dim         = raw["image"]["min_dim"],
-            image_min_used_by     = raw["image"]["min_used_by"],
-            image_max_used_by     = raw["image"]["max_used_by"],
-            mention_min_len       = raw["mention"]["min_len"],
-            min_visual_candidates = raw["candidates"]["min_visual"],
-            max_text_candidates   = raw["candidates"]["max_text"],
-            banwords              = set(raw["mention"].get("banwords", [])),
-            category_include      = frozenset(categories.get("include", [])),
-            category_exclude      = frozenset(categories.get("exclude", [])),
-            start_with_num        = raw.get("start_with_num", False)
+            entity_types           = frozenset(raw["entity"]["types"]),
+            require_intro          = raw["entity"].get("intro", False),
+            require_image          = raw["entity"].get("image", False),
+            image_mime             = raw["image"]["mime"],
+            image_min_dim          = raw["image"]["min_dim"],
+            image_min_used_by      = raw["image"]["min_used_by"],
+            image_max_used_by      = raw["image"]["max_used_by"],
+            mention_min_len        = raw["mention"]["min_len"],
+            min_visual_candidates  = raw["candidates"]["min_visual"],
+            max_text_candidates    = raw["candidates"]["max_text"],
+            banwords               = set(raw["mention"].get("banwords", [])),
+            category_include       = frozenset(categories.get("include", [])),
+            category_exclude       = frozenset(categories.get("exclude", [])),
+            drop_if_start_with_num = raw["mention"].get("drop_if_start_with_num", False),
         )
 
 
@@ -126,7 +131,7 @@ def keep_mention(mention: str, cfg: Config) -> bool:
         return False
     if len(mention) < cfg.mention_min_len:
         return False
-    if cfg.start_with_num and mention[0].isdigit():
+    if cfg.drop_if_start_with_num and _RE_STARTS_NUM.match(mention):
         return False
     return any(c.isalpha() for c in mention)
 
@@ -155,64 +160,184 @@ def _normalise_image_name(url_or_filename: str) -> str:
 
 
 # ============================================================
+# PARALLEL SCAN
+# ============================================================
+
+def _chunk_file(path: Path, n: int) -> list[tuple[int, int]]:
+    """Split path into n byte ranges aligned to newline boundaries."""
+    size = path.stat().st_size
+    approx = size // n
+    offsets: list[tuple[int, int]] = []
+    with path.open("rb") as f:
+        start = 0
+        for _ in range(n - 1):
+            f.seek(start + approx)
+            f.readline()  # advance to the next newline so records stay whole
+            end = f.tell()
+            if end >= size:
+                break
+            offsets.append((start, end))
+            start = end
+        offsets.append((start, size))
+    return offsets
+
+
+def _scan_chunk(
+    path_str: str, byte_start: int, byte_end: int, cfg: Config
+) -> tuple[dict, dict, dict, list]:
+    """
+    Parse and filter one byte range of a JSONL file.
+    Returns (kb_entities, image_pool, image_meta, mention_cache).
+    Must be a module-level function to be picklable by ProcessPoolExecutor.
+    """
+    kb_entities:   dict[str, dict]      = {}
+    image_pool:    dict[str, set[str]]  = {}
+    image_meta:    dict[str, dict]      = {}
+    mention_cache: list                  = []
+
+    with open(path_str, "rb", buffering=1 << 23) as f:  # 8 MB read buffer
+        f.seek(byte_start)
+        while f.tell() < byte_end:
+            line = f.readline()
+            if not line or line.isspace():
+                continue
+            try:
+                m = _loads(line)
+            except Exception:
+                continue
+
+            mention = m.get("mention", "")
+            if not keep_mention(mention, cfg):
+                continue
+            if not keep_categories(m.get("categories", []), cfg):
+                continue
+            pool = [e for e in m.get("ambiguities", []) if keep_entity(e, cfg)]
+            if not (2 <= len(pool) <= cfg.max_text_candidates):
+                continue
+
+            entity_urls: list[tuple[str, list[str]]] = []
+            for e in pool:
+                qid = e["qid"]
+                if qid not in kb_entities:
+                    kb_entities[qid] = {k: e.get(k) for k in _KB_FIELDS}
+                urls: list[str] = []
+                for img in e.get("page_imglist") or ():
+                    if img.get("is_infobox", False):
+                        continue
+                    url = img.get("url")
+                    if not url:
+                        continue
+                    urls.append(url)
+                    s = image_pool.get(url)
+                    if s is None:
+                        image_pool[url] = {qid}
+                    else:
+                        s.add(qid)
+                    if url not in image_meta:
+                        image_meta[url] = {k: img.get(k) for k in _IMG_FIELDS}
+                entity_urls.append((qid, urls))
+            mention_cache.append((mention, entity_urls))
+
+    return kb_entities, image_pool, image_meta, mention_cache
+
+
+def _scan_sequential(input_path: Path, cfg: Config) -> tuple[dict, dict, dict, list]:
+    """Single-threaded scan with a byte-accurate progress bar."""
+    kb_entities:   dict[str, dict]      = {}
+    image_pool:    dict[str, set[str]]  = {}
+    image_meta:    dict[str, dict]      = {}
+    mention_cache: list                  = []
+
+    with tqdm(total=input_path.stat().st_size, desc="Scanning",
+              unit="B", unit_scale=True, unit_divisor=1024) as bar:
+        with input_path.open("rb") as f:
+            for line in f:
+                bar.update(len(line))
+                if line.isspace():
+                    continue
+                m = _loads(line)
+                mention = m["mention"]
+                if not keep_mention(mention, cfg):
+                    continue
+                if not keep_categories(m.get("categories", []), cfg):
+                    continue
+                pool = [e for e in m["ambiguities"] if keep_entity(e, cfg)]
+                if not (2 <= len(pool) <= cfg.max_text_candidates):
+                    continue
+
+                entity_urls: list[tuple[str, list[str]]] = []
+                for e in pool:
+                    qid = e["qid"]
+                    if qid not in kb_entities:
+                        kb_entities[qid] = {k: e.get(k) for k in _KB_FIELDS}
+                    urls: list[str] = []
+                    for img in e.get("page_imglist") or ():
+                        if img.get("is_infobox", False):
+                            continue
+                        url = img.get("url")
+                        if not url:
+                            continue
+                        urls.append(url)
+                        image_pool.setdefault(url, set()).add(qid)
+                        if url not in image_meta:
+                            image_meta[url] = {k: img.get(k) for k in _IMG_FIELDS}
+                    entity_urls.append((qid, urls))
+                mention_cache.append((mention, entity_urls))
+
+    return kb_entities, image_pool, image_meta, mention_cache
+
+
+def _scan_parallel(input_path: Path, cfg: Config, n_workers: int) -> tuple[dict, dict, dict, list]:
+    """Parallel scan: split file into n_workers chunks, parse each in a subprocess."""
+    offsets = _chunk_file(input_path, n_workers)
+    print(f"Scanning {input_path.stat().st_size / 1e9:.1f} GB with {len(offsets)} workers…")
+
+    kb_entities:   dict[str, dict]      = {}
+    image_pool:    dict[str, set[str]]  = {}
+    image_meta:    dict[str, dict]      = {}
+    mention_cache: list                  = []
+
+    with ProcessPoolExecutor(max_workers=n_workers) as ex:
+        futs = [
+            ex.submit(_scan_chunk, str(input_path), s, e, cfg)
+            for s, e in offsets
+        ]
+        for fut in tqdm(as_completed(futs), total=len(futs), desc="Chunks done"):
+            pk, pp, pm, pc = fut.result()
+            # merge kb_entities: same QID → same data across chunks
+            kb_entities.update(pk)
+            # merge image_pool: union QID sets per URL
+            for url, qids in pp.items():
+                s = image_pool.get(url)
+                if s is None:
+                    image_pool[url] = set(qids)
+                else:
+                    s |= qids
+            # merge image_meta: same URL → same metadata
+            image_meta.update(pm)
+            mention_cache.extend(pc)
+
+    return kb_entities, image_pool, image_meta, mention_cache
+
+
+# ============================================================
 # PIPELINE
 # ============================================================
 
-def _iter_jsonl(path: Path, desc: str) -> Iterator[dict]:
-    """Stream JSONL records, with a byte-accurate progress bar."""
-    with tqdm(total=path.stat().st_size, desc=desc,
-              unit="B", unit_scale=True, unit_divisor=1024) as bar:
-        with path.open("rb") as f:
-            for line in f:
-                bar.update(len(line))
-                if not line.isspace():
-                    yield _loads(line)
-
-
-def build(input_path: Path, output_dir: Path, cfg: Config) -> None:
+def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     kb_path        = output_dir / "kb.jsonl"
     instances_path = output_dir / "instances.jsonl"
 
-    # ── Single pass: build KB, image index, and a compact mention cache ──────
-    # kb_entities   : QID → output fields (no page_imglist)
-    # image_pool    : image URL → set of QIDs from KB entities that use this image
-    # image_meta    : image URL → output fields
-    # mention_cache : (mention, [(qid, [image URLs])]) for instance generation,
-    #                 so the 25 GB input is parsed only once.
-    kb_entities:   dict[str, dict] = {}
-    image_pool:    dict[str, set[str]] = {}
-    image_meta:    dict[str, dict] = {}
-    mention_cache: list[tuple[str, list[tuple[str, list[str]]]]] = []
-
-    for m in _iter_jsonl(input_path, desc="Scanning"):
-        mention = m["mention"]
-        if not keep_mention(mention, cfg):
-            continue
-        if not keep_categories(m.get("categories", []), cfg):
-            continue
-        pool = [e for e in m["ambiguities"] if keep_entity(e, cfg)]
-        if not (2 <= len(pool) <= cfg.max_text_candidates):
-            continue
-
-        entity_urls: list[tuple[str, list[str]]] = []
-        for e in pool:
-            qid = e["qid"]
-            if qid not in kb_entities:
-                kb_entities[qid] = {k: e.get(k) for k in _KB_FIELDS}
-            urls: list[str] = []
-            for img in e.get("page_imglist") or ():
-                if img.get("is_infobox", False):
-                    continue
-                url = img.get("url")
-                if not url:
-                    continue
-                urls.append(url)
-                image_pool.setdefault(url, set()).add(qid)
-                if url not in image_meta:
-                    image_meta[url] = {k: img.get(k) for k in _IMG_FIELDS}
-            entity_urls.append((qid, urls))
-        mention_cache.append((mention, entity_urls))
+    # ── Scan phase ───────────────────────────────────────────────────────────
+    if n_workers > 1:
+        kb_entities, image_pool, image_meta, mention_cache = _scan_parallel(
+            input_path, cfg, n_workers
+        )
+    else:
+        kb_entities, image_pool, image_meta, mention_cache = _scan_sequential(
+            input_path, cfg
+        )
 
     # Images that are themselves another KB entity's reference photo (P18 infobox)
     # are excluded: a query image that IS some entity's canonical portrait lets a
@@ -224,7 +349,7 @@ def build(input_path: Path, output_dir: Path, cfg: Config) -> None:
         if e.get("infobox_img")
     }
 
-    # Filter images
+    # ── Filter images ────────────────────────────────────────────────────────
     n_images_total = len(image_meta)
     n_infobox_excluded = 0
     qualifying: set[str] = set()
@@ -243,13 +368,13 @@ def build(input_path: Path, output_dir: Path, cfg: Config) -> None:
     print(f"Qualifying images:  {len(qualifying):>10,}  (of {n_images_total:,} total)")
     print(f"  excluded as another entity's infobox: {n_infobox_excluded:,}")
 
-    # ── Write kb.jsonl ────────────────────────────────────────────────────────
+    # ── Write kb.jsonl ───────────────────────────────────────────────────────
     with kb_path.open("wb") as f:
         for entity in kb_entities.values():
             f.write(_dumps(entity) + b"\n")
     print(f"KB written:         {len(kb_entities):>10,}  → {kb_path}")
 
-    # ── Generate instances from the cache ─────────────────────────────────────
+    # ── Generate instances from the cache ────────────────────────────────────
     seen_pair:   set[tuple[str, str]] = set()   # (url, mention)
     seen_answer: set[tuple[str, str]] = set()   # (mention, answer_qid)
     n_written          = 0
@@ -320,6 +445,8 @@ def main() -> None:
     ap.add_argument("output_dir", type=Path, help="split output directory (e.g. output/split_10_text/)")
     ap.add_argument("--config",   type=Path, default=_DEFAULT_CONFIG,
                     help=f"filter thresholds YAML (default: {_DEFAULT_CONFIG})")
+    ap.add_argument("--workers",  type=int, default=None,
+                    help="parallel scan workers (default: cpu_count; use 1 for sequential with progress bar)")
     args = ap.parse_args()
 
     if not args.input.exists():
@@ -327,7 +454,8 @@ def main() -> None:
     if not args.config.exists():
         raise SystemExit(f"Config not found: {args.config}")
 
-    build(args.input, args.output_dir, Config.load(args.config))
+    n_workers = args.workers if args.workers is not None else (os.cpu_count() or 4)
+    build(args.input, args.output_dir, Config.load(args.config), n_workers=n_workers)
 
 
 if __name__ == "__main__":

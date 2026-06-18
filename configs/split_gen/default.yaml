@@ -18,5 +18,11 @@ categories:
   exclude: []               # page is dropped if it's in any of these categories
 
 candidates:
-  min_visual: 2             # min KB entities sharing an image (visual ambiguity)
-  max_text: 10              # max KB entities sharing a mention (drops generic fragments, e.g. "Cerro")
+  min_text: 2               # min KB entities sharing the mention
+  max_text: 10              # max KB entities sharing the mention (drops generic fragments, e.g. "Cerro")
+  min_visual: 2             # min KB entities sharing the body image
+  max_visual: 0             # max KB entities sharing the body image (0 = no limit)
+  require_answer_type_shared: false
+  require_unique_candidate_infoboxes: false
+  max_instances_per_answer: 0             # 0 = no cap
+  max_instances_per_image: 0             # 0 = no cap

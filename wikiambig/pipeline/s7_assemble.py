@@ -1,7 +1,7 @@
 """
 S7 — Dataset assembly (offline, deterministic).
 
-Joins all intermediate stage outputs into the final dataset.json and entity_kb.json.
+Joins all intermediate stage outputs into the final dataset.jsonl and entity_kb.jsonl.
 
 Assembly algorithm:
   1. Load entity_links.jsonl, entity_data.json, entity_types.json,
@@ -16,7 +16,7 @@ Assembly algorithm:
        - Populate ambiguities with Entity objects (in original link order).
        - Carry over the page's categories (from S1, via S2) for offline filtering.
        - Compute n_entities and n_visual_ambiguities.
-  5. Write dataset.json, dataset.jsonl, entity_kb.json, manifest.json (all atomic).
+  5. Write dataset.jsonl, entity_kb.jsonl, manifest.json (all atomic).
 
 manifest.json records what produced the dataset and when — package version,
 UTC assembly timestamp, the resolved config, and headline counts. Wikipedia
@@ -32,6 +32,18 @@ import logging
 import re
 import urllib.parse
 from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+try:
+    import orjson as _json_lib
+
+    def _load_json(path: Path) -> Any:
+        return _json_lib.loads(path.read_bytes())
+
+except ImportError:
+    def _load_json(path: Path) -> Any:  # type: ignore[misc]
+        return json.loads(path.read_text(encoding="utf-8"))
 
 from tqdm import tqdm
 
@@ -138,27 +150,19 @@ def run(config: PipelineConfig) -> None:
             if line:
                 entity_links.append(json.loads(line))
 
-    entity_data: dict[str, dict] = json.loads(
-        entity_data_path.read_text(encoding="utf-8")
-    )
-    entity_types: dict[str, str | None] = json.loads(
-        entity_types_path.read_text(encoding="utf-8")
-    )
-    image_lists: dict[str, list[str]] = json.loads(
-        image_lists_path.read_text(encoding="utf-8")
-    )
-    image_data: dict[str, dict] = json.loads(
-        image_data_path.read_text(encoding="utf-8")
-    )
+    entity_data: dict[str, dict]       = _load_json(entity_data_path)
+    entity_types: dict[str, str | None] = _load_json(entity_types_path)
+    image_lists: dict[str, list[str]]   = _load_json(image_lists_path)
+    image_data: dict[str, dict]         = _load_json(image_data_path)
 
     # Load Wikipedia intro paragraphs if S4 has been run (optional).
     entity_intros: dict[str, str] = {}
     intros_path = config.stage_path("entity_intros.json")
     if intros_path.exists():
         try:
-            entity_intros = json.loads(intros_path.read_text(encoding="utf-8"))
+            entity_intros = _load_json(intros_path)
             logger.info("S7: loaded %d Wikipedia intros from S4", len(entity_intros))
-        except json.JSONDecodeError:
+        except (ValueError, KeyError):
             pass
 
     # Load Wikipedia infobox images if S4 has been run (optional).
@@ -166,9 +170,9 @@ def run(config: PipelineConfig) -> None:
     infobox_images_path = config.stage_path("entity_infobox_images.json")
     if infobox_images_path.exists():
         try:
-            entity_infobox_images = json.loads(infobox_images_path.read_text(encoding="utf-8"))
+            entity_infobox_images = _load_json(infobox_images_path)
             logger.info("S7: loaded %d Wikipedia infobox images from S4", len(entity_infobox_images))
-        except json.JSONDecodeError:
+        except (ValueError, KeyError):
             pass
 
     logger.info(
@@ -277,8 +281,8 @@ def run(config: PipelineConfig) -> None:
     # --- Write outputs ---
     config.output_dir.mkdir(parents=True, exist_ok=True)
     dataset = Dataset(entries=entries, kb=kb)
-    dataset.save(config.output_path("dataset.json"))
-    dataset.save_kb(config.output_path("entity_kb.json"))
+    dataset.save(config.output_path("dataset.jsonl"))
+    dataset.save_kb(config.output_path("entity_kb.jsonl"))
 
     manifest = {
         "wikiambig_version": __version__,
@@ -299,7 +303,7 @@ def run(config: PipelineConfig) -> None:
     atomic_write(config.output_path("manifest.json"), manifest)
 
     logger.info(
-        "S7 done: dataset.json (%d mentions), entity_kb.json (%d entities)",
+        "S7 done: dataset.jsonl (%d mentions), entity_kb.jsonl (%d entities)",
         len(entries),
         len(kb),
     )

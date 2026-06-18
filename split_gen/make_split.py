@@ -60,40 +60,53 @@ _RE_STARTS_NUM = re.compile(r"^\s*\d")
 
 @dataclass(frozen=True)
 class Config:
-    entity_types:           frozenset
-    require_intro:          bool
-    require_image:          bool
-    image_mime:             str
-    image_min_dim:          int
-    image_min_used_by:      int
-    image_max_used_by:      int
-    mention_min_len:        int
-    min_visual_candidates:  int
-    max_text_candidates:    int
-    banwords:               set[str]
-    category_include:       frozenset
-    category_exclude:       frozenset
-    drop_if_start_with_num: bool
+    entity_types:              frozenset
+    require_intro:             bool
+    require_image:             bool
+    image_mime:                str
+    image_min_dim:             int
+    image_min_used_by:         int
+    image_max_used_by:         int
+    mention_min_len:           int
+    min_text_candidates:       int   # min entities sharing the mention (default 2)
+    max_text_candidates:       int   # max entities sharing the mention
+    min_visual_candidates:     int   # min KB entities sharing the body image
+    max_visual_candidates:     int   # max KB entities sharing the body image (0 = unlimited)
+    require_answer_type_shared: bool  # answer's type must appear ≥1× among other text candidates
+    require_unique_candidate_infoboxes: bool  # no two text candidates may share the same infobox portrait
+    max_instances_per_answer:  int            # cap instances per answer entity (0 = unlimited)
+    max_instances_per_image:   int            # cap instances per body image URL (0 = unlimited)
+    banwords:                  set[str]
+    category_include:          frozenset
+    category_exclude:          frozenset
+    drop_if_start_with_num:    bool
 
     @classmethod
     def load(cls, path: Path) -> "Config":
         raw = yaml.safe_load(path.read_text(encoding="utf-8"))
         categories = raw.get("categories", {})
+        cands = raw["candidates"]
         return cls(
-            entity_types           = frozenset(raw["entity"]["types"]),
-            require_intro          = raw["entity"].get("intro", False),
-            require_image          = raw["entity"].get("image", False),
-            image_mime             = raw["image"]["mime"],
-            image_min_dim          = raw["image"]["min_dim"],
-            image_min_used_by      = raw["image"]["min_used_by"],
-            image_max_used_by      = raw["image"]["max_used_by"],
-            mention_min_len        = raw["mention"]["min_len"],
-            min_visual_candidates  = raw["candidates"]["min_visual"],
-            max_text_candidates    = raw["candidates"]["max_text"],
-            banwords               = set(raw["mention"].get("banwords", [])),
-            category_include       = frozenset(categories.get("include", [])),
-            category_exclude       = frozenset(categories.get("exclude", [])),
-            drop_if_start_with_num = raw["mention"].get("drop_if_start_with_num", False),
+            entity_types               = frozenset(raw["entity"]["types"]),
+            require_intro              = raw["entity"].get("intro", False),
+            require_image              = raw["entity"].get("image", False),
+            image_mime                 = raw["image"]["mime"],
+            image_min_dim              = raw["image"]["min_dim"],
+            image_min_used_by          = raw["image"]["min_used_by"],
+            image_max_used_by          = raw["image"]["max_used_by"],
+            mention_min_len            = raw["mention"]["min_len"],
+            min_text_candidates        = cands.get("min_text", 2),
+            max_text_candidates        = cands["max_text"],
+            min_visual_candidates      = cands["min_visual"],
+            max_visual_candidates      = cands.get("max_visual", 0),
+            require_answer_type_shared      = cands.get("require_answer_type_shared", False),
+            require_unique_candidate_infoboxes = cands.get("require_unique_candidate_infoboxes", False),
+            max_instances_per_answer        = cands.get("max_instances_per_answer", 0),
+            max_instances_per_image         = cands.get("max_instances_per_image", 0),
+            banwords                        = set(raw["mention"].get("banwords", [])),
+            category_include           = frozenset(categories.get("include", [])),
+            category_exclude           = frozenset(categories.get("exclude", [])),
+            drop_if_start_with_num     = raw["mention"].get("drop_if_start_with_num", False),
         )
 
 
@@ -212,7 +225,7 @@ def _scan_chunk(
             if not keep_categories(m.get("categories", []), cfg):
                 continue
             pool = [e for e in m.get("ambiguities", []) if keep_entity(e, cfg)]
-            if not (2 <= len(pool) <= cfg.max_text_candidates):
+            if not (cfg.min_text_candidates <= len(pool) <= cfg.max_text_candidates):
                 continue
 
             entity_urls: list[tuple[str, list[str]]] = []
@@ -262,7 +275,7 @@ def _scan_sequential(input_path: Path, cfg: Config) -> tuple[dict, dict, dict, l
                 if not keep_categories(m.get("categories", []), cfg):
                     continue
                 pool = [e for e in m["ambiguities"] if keep_entity(e, cfg)]
-                if not (2 <= len(pool) <= cfg.max_text_candidates):
+                if not (cfg.min_text_candidates <= len(pool) <= cfg.max_text_candidates):
                     continue
 
                 entity_urls: list[tuple[str, list[str]]] = []
@@ -375,16 +388,42 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
     print(f"KB written:         {len(kb_entities):>10,}  → {kb_path}")
 
     # ── Generate instances from the cache ────────────────────────────────────
-    seen_pair:   set[tuple[str, str]] = set()   # (url, mention)
-    seen_answer: set[tuple[str, str]] = set()   # (mention, answer_qid)
-    n_written          = 0
-    n_rej_visual_pool  = 0
-    n_rej_intersection = 0
-    n_rej_answer_dedup = 0
+    seen_pair:    set[tuple[str, str]] = set()   # (url, mention)
+    seen_answer:  set[tuple[str, str]] = set()   # (mention, answer_qid)
+    answer_counts: dict[str, int]      = {}      # answer_qid → instance count
+    image_counts:  dict[str, int]      = {}      # body image url → instance count
+    n_written             = 0
+    n_rej_visual_min      = 0
+    n_rej_visual_max      = 0
+    n_rej_intersection    = 0
+    n_rej_type_not_shared = 0
+    n_rej_shared_infobox  = 0
+    n_rej_answer_dedup    = 0
+    n_rej_answer_cap      = 0
+    n_rej_image_cap       = 0
 
     with instances_path.open("wb") as out:
         for mention, entity_urls in tqdm(mention_cache, desc="Instances"):
             pool_qids = {qid for qid, _ in entity_urls}
+
+            # If any two text candidates share the same infobox portrait, the KB
+            # is visually degenerate for this mention: two entities would look
+            # identical, making visual disambiguation impossible.
+            if cfg.require_unique_candidate_infoboxes:
+                seen_imgs: set[str] = set()
+                collision = False
+                for qid in pool_qids:
+                    img = (kb_entities.get(qid) or {}).get("infobox_img")
+                    if img:
+                        norm = _normalise_image_name(img)
+                        if norm in seen_imgs:
+                            collision = True
+                            break
+                        seen_imgs.add(norm)
+                if collision:
+                    n_rej_shared_infobox += 1
+                    continue
+
             text_candidates = sorted(pool_qids)
 
             for _, urls in entity_urls:
@@ -397,12 +436,18 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
                         continue
                     seen_pair.add(pair_key)
 
-                    # Visual ambiguity must be symmetric to text ambiguity: the image
-                    # has to be shared by >= 2 KB entities, otherwise it identifies the
-                    # answer trivially and the instance only tests text disambiguation.
+                    # Image must be shared by enough KB entities that vision alone
+                    # cannot trivially identify the answer.
                     visual_qids = image_pool[url]
-                    if len(visual_qids) < cfg.min_visual_candidates:
-                        n_rej_visual_pool += 1
+                    n_vis = len(visual_qids)
+                    if n_vis < cfg.min_visual_candidates:
+                        n_rej_visual_min += 1
+                        continue
+
+                    # Cap the visual pool: images shared by too many entities are
+                    # generic (maps, flags, stock photos) and carry no identity signal.
+                    if cfg.max_visual_candidates > 0 and n_vis > cfg.max_visual_candidates:
+                        n_rej_visual_max += 1
                         continue
 
                     # The answer is the unique entity that is both a text candidate
@@ -413,11 +458,40 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
                         continue
 
                     answer_qid = next(iter(intersection))
+
+                    # The answer entity's semantic type must not be unique among the
+                    # text candidates: if it were, a model could resolve the instance
+                    # using type information alone (e.g., the only LOC in a list of
+                    # PERS entities), bypassing the need for cross-modal reasoning.
+                    if cfg.require_answer_type_shared:
+                        answer_type = (kb_entities.get(answer_qid) or {}).get("type") or "OTHER"
+                        type_shared = any(
+                            ((kb_entities.get(q) or {}).get("type") or "OTHER") == answer_type
+                            for q in pool_qids if q != answer_qid
+                        )
+                        if not type_shared:
+                            n_rej_type_not_shared += 1
+                            continue
+
                     answer_key = (mention, answer_qid)
                     if answer_key in seen_answer:
                         n_rej_answer_dedup += 1
                         continue
                     seen_answer.add(answer_key)
+
+                    # Cap: prevent a single answer entity from dominating the
+                    # dataset (the model would over-learn its visual signature).
+                    if cfg.max_instances_per_answer > 0:
+                        if answer_counts.get(answer_qid, 0) >= cfg.max_instances_per_answer:
+                            n_rej_answer_cap += 1
+                            continue
+
+                    # Cap: prevent a single body image from appearing in too many
+                    # instances (the model would memorise image→entity clusters).
+                    if cfg.max_instances_per_image > 0:
+                        if image_counts.get(url, 0) >= cfg.max_instances_per_image:
+                            n_rej_image_cap += 1
+                            continue
 
                     out.write(_dumps({
                         "mention":           mention,
@@ -427,13 +501,32 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
                         "visual_candidates": sorted(visual_qids),
                     }) + b"\n")
                     n_written += 1
+                    if cfg.max_instances_per_answer > 0:
+                        answer_counts[answer_qid] = answer_counts.get(answer_qid, 0) + 1
+                    if cfg.max_instances_per_image > 0:
+                        image_counts[url] = image_counts.get(url, 0) + 1
 
-    total = n_written + n_rej_visual_pool + n_rej_intersection + n_rej_answer_dedup
+    # n_rej_shared_infobox is counted per MENTION (not per url-mention pair),
+    # so we exclude it from the url-level cascade total.
+    total = (n_written + n_rej_visual_min + n_rej_visual_max + n_rej_intersection
+             + n_rej_type_not_shared + n_rej_answer_dedup
+             + n_rej_answer_cap + n_rej_image_cap)
+    w = max(total, 1)
     print(f"\nInstance generation cascade:")
     print(f"  (mention, image) candidates:      {total:>10,}")
-    print(f"  – visual pool < {cfg.min_visual_candidates}:                {n_rej_visual_pool:>10,}  ({100*n_rej_visual_pool/max(total,1):.1f}%)")
-    print(f"  – intersection ≠ 1:               {n_rej_intersection:>10,}  ({100*n_rej_intersection/max(total,1):.1f}%)")
-    print(f"  – (mention, answer) duplicate:    {n_rej_answer_dedup:>10,}  ({100*n_rej_answer_dedup/max(total,1):.1f}%)")
+    if cfg.require_unique_candidate_infoboxes:
+        print(f"  – shared infobox (mentions):      {n_rej_shared_infobox:>10,}  (mention-level)")
+    print(f"  – visual pool < {cfg.min_visual_candidates}:                {n_rej_visual_min:>10,}  ({100*n_rej_visual_min/w:.1f}%)")
+    if cfg.max_visual_candidates > 0:
+        print(f"  – visual pool > {cfg.max_visual_candidates}:               {n_rej_visual_max:>10,}  ({100*n_rej_visual_max/w:.1f}%)")
+    print(f"  – intersection ≠ 1:               {n_rej_intersection:>10,}  ({100*n_rej_intersection/w:.1f}%)")
+    if cfg.require_answer_type_shared:
+        print(f"  – answer type unique in text:     {n_rej_type_not_shared:>10,}  ({100*n_rej_type_not_shared/w:.1f}%)")
+    print(f"  – (mention, answer) duplicate:    {n_rej_answer_dedup:>10,}  ({100*n_rej_answer_dedup/w:.1f}%)")
+    if cfg.max_instances_per_answer > 0:
+        print(f"  – answer cap (>{cfg.max_instances_per_answer}/entity):       {n_rej_answer_cap:>10,}  ({100*n_rej_answer_cap/w:.1f}%)")
+    if cfg.max_instances_per_image > 0:
+        print(f"  – image cap (>{cfg.max_instances_per_image}/image):         {n_rej_image_cap:>10,}  ({100*n_rej_image_cap/w:.1f}%)")
     print(f"  ─────────────────────────────────────────────────────")
     print(f"  Instances written:                {n_written:>10,}  → {instances_path}")
 

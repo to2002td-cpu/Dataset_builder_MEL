@@ -7,7 +7,7 @@ Stage overview:
   S4  wikipedia        — intro paragraphs + image lists in one API call (Wikipedia)
   S5  image_data       — image URL + used_by QIDs (Wikipedia imageinfo + fileusage)
   S6  visual_entity_data — Wikidata enrichment for used_by QIDs not in S3
-  S7  assemble         — offline join → dataset.json + entity_kb.json
+  S7  assemble         — offline join → dataset.jsonl + entity_kb.jsonl
 """
 
 from __future__ import annotations

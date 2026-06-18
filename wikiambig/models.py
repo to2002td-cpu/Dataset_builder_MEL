@@ -6,6 +6,16 @@ import json
 from pathlib import Path
 from typing import Any, Optional
 
+try:
+    import orjson as _json
+
+    def _loads(data: bytes) -> Any:
+        return _json.loads(data)
+
+except ImportError:
+    def _loads(data: bytes) -> Any:  # type: ignore[misc]
+        return json.loads(data)
+
 from pydantic import BaseModel, Field, model_validator
 
 
@@ -93,73 +103,69 @@ class Dataset:
     # ------------------------------------------------------------------
 
     def save(self, path: str | Path) -> None:
-        """Write dataset.json and dataset.jsonl, streaming entry-by-entry."""
+        """Write dataset.jsonl, streaming one entry per line (atomic)."""
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        n = len(self.entries)
-
-        # dataset.jsonl — one JSON object per line
-        jsonl_path = path.with_suffix(".jsonl")
-        tmp_jsonl = jsonl_path.with_suffix(".tmp")
-        with tmp_jsonl.open("w", encoding="utf-8") as f:
-            for e in self.entries:
-                f.write(e.model_dump_json() + "\n")
-        tmp_jsonl.rename(jsonl_path)
-
-        # dataset.json — valid JSON array written entry-by-entry to avoid a
-        # full-dataset intermediate dict + json.dumps string in RAM
         tmp = path.with_suffix(".tmp")
         with tmp.open("w", encoding="utf-8") as f:
-            f.write("[\n")
-            for i, e in enumerate(self.entries):
-                comma = "," if i < n - 1 else ""
-                f.write(e.model_dump_json() + comma + "\n")
-            f.write("]\n")
+            for e in self.entries:
+                f.write(e.model_dump_json() + "\n")
         tmp.rename(path)
 
     def save_kb(self, path: str | Path) -> None:
-        """Write entity_kb.json keyed by QID, streaming entry-by-entry."""
+        """Write entity_kb.jsonl, one entity per line (atomic).
+
+        Each line is a self-contained JSON object — qid is embedded so the file
+        can be read without any surrounding dict structure.
+        """
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        n = len(self.kb)
         tmp = path.with_suffix(".tmp")
         with tmp.open("w", encoding="utf-8") as f:
-            f.write("{\n")
-            for i, (qid, e) in enumerate(self.kb.items()):
-                comma = "," if i < n - 1 else ""
-                f.write(f"  {json.dumps(qid)}: {e.model_dump_json()}{comma}\n")
-            f.write("}\n")
+            for e in self.kb.values():
+                f.write(e.model_dump_json() + "\n")
         tmp.rename(path)
 
     @classmethod
     def load(cls, path: str | Path, kb_path: str | Path | None = None) -> "Dataset":
         """
-        Load from dataset.json or dataset.jsonl (and optionally entity_kb.json).
+        Load from dataset.jsonl (or dataset.json for legacy files).
 
-        Prefers the .jsonl sidecar when it exists — line-by-line parsing avoids
-        loading a multi-GB JSON array as a single string. Falls back to
-        json.loads on the .json file for compatibility.
+        Prefers .jsonl — line-by-line parsing avoids loading a multi-GB JSON
+        array as a single string. Falls back to json.loads on .json for compat.
+        entity_kb.jsonl (new) and entity_kb.json (legacy) are both supported.
         """
         path = Path(path)
-        jsonl_path = path.with_suffix(".jsonl")
+        jsonl_path = path if path.suffix == ".jsonl" else path.with_suffix(".jsonl")
 
         if jsonl_path.exists():
             entries: list[MentionEntry] = []
-            with jsonl_path.open("r", encoding="utf-8") as f:
+            with jsonl_path.open("rb") as f:
                 for line in f:
                     line = line.strip()
                     if line:
-                        entries.append(MentionEntry.model_validate_json(line))
+                        entries.append(MentionEntry.model_validate(_loads(line)))
         else:
-            raw = json.loads(path.read_text(encoding="utf-8"))
-            entries = [MentionEntry.model_validate(e) for e in raw]
+            entries = [
+                MentionEntry.model_validate(e)
+                for e in _loads(path.read_bytes())
+            ]
 
         kb: dict[str, Entity] = {}
         if kb_path is not None:
             kb_path = Path(kb_path)
-            with kb_path.open("r", encoding="utf-8") as f:
-                kb_raw = json.load(f)
-            kb = {qid: Entity.model_validate(e) for qid, e in kb_raw.items()}
+            # prefer .jsonl (new format), fall back to .json dict (legacy)
+            jsonl_kb = kb_path if kb_path.suffix == ".jsonl" else kb_path.with_suffix(".jsonl")
+            if jsonl_kb.exists():
+                with jsonl_kb.open("rb") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            e = Entity.model_validate(_loads(line))
+                            kb[e.qid] = e
+            else:
+                for qid, raw_e in _loads(kb_path.read_bytes()).items():
+                    kb[qid] = Entity.model_validate(raw_e)
 
         return cls(entries=entries, kb=kb)
 

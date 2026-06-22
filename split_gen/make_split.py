@@ -32,6 +32,8 @@ from typing import Iterator
 import yaml
 from tqdm import tqdm
 
+from p_scrapping import fetch_related_qids, prefetch_qids, get_stats as get_sparql_stats
+
 try:
     import orjson
 
@@ -76,6 +78,7 @@ class Config:
     require_unique_candidate_infoboxes: bool  # no two text candidates may share the same infobox portrait
     max_instances_per_answer:  int            # cap instances per answer entity (0 = unlimited)
     max_instances_per_image:   int            # cap instances per body image URL (0 = unlimited)
+    forbidden_properties:      list[str]
     banwords:                  set[str]
     category_include:          frozenset
     category_exclude:          frozenset
@@ -103,6 +106,7 @@ class Config:
             require_unique_candidate_infoboxes = cands.get("require_unique_candidate_infoboxes", False),
             max_instances_per_answer        = cands.get("max_instances_per_answer", 0),
             max_instances_per_image         = cands.get("max_instances_per_image", 0),
+            forbidden_properties           = raw.get("candidates", {}).get("forbidden_properties", []),
             banwords                        = set(raw["mention"].get("banwords", [])),
             category_include           = frozenset(categories.get("include", [])),
             category_exclude           = frozenset(categories.get("exclude", [])),
@@ -156,6 +160,20 @@ def keep_categories(categories: list[str], cfg: Config) -> bool:
         return False
     if cfg.category_exclude and (cats & cfg.category_exclude):
         return False
+    return True
+
+
+def keep_forbidden_properties(qids: list[str], cfg: Config) -> bool:
+    """Return False if any pair of QIDs is linked by a forbidden property. Cache must be warm."""
+    if not cfg.forbidden_properties:
+        return True
+    qid_set = set(qids)
+    for qid in qids:
+        related = fetch_related_qids(qid, cfg.forbidden_properties)
+        matche = related&(qid_set- {qid})
+        if related & (qid_set - {qid}):
+            print(f"le qid vérifier {qid} en lien avec {matche} (les autres : {qid_set})")
+            return False
     return True
 
 
@@ -351,6 +369,26 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
         kb_entities, image_pool, image_meta, mention_cache = _scan_sequential(
             input_path, cfg
         )
+
+    # ── Forbidden-property filter ───────────────────────────────────────────
+    if cfg.forbidden_properties and mention_cache:
+        all_qids = list({qid for _, eurls in mention_cache for qid, _ in eurls})
+        print(f"\nForbidden-property prefetch: {len(all_qids):,} unique QIDs, "
+              f"properties: {cfg.forbidden_properties}")
+        prefetch_qids(all_qids, cfg.forbidden_properties, max_workers=30)
+        stats = get_sparql_stats()
+        print(f"  SPARQL requests:      {stats['requests']:>10,}")
+        print(f"  Errors:               {stats['errors']:>10,}")
+
+        before = len(mention_cache)
+        mention_cache = [
+            (mention, eurls) for mention, eurls in mention_cache
+            if keep_forbidden_properties([qid for qid, _ in eurls], cfg)
+        ]
+        after = len(mention_cache)
+        print(f"  Mentions checked:     {before:>10,}")
+        print(f"  Mentions dropped:     {before - after:>10,}")
+        print(f"  Mentions remaining:   {after:>10,}")
 
     # Images that are themselves another KB entity's reference photo (P18 infobox)
     # are excluded: a query image that IS some entity's canonical portrait lets a

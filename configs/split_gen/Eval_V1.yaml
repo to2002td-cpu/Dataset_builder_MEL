@@ -36,3 +36,4 @@ candidates:
   require_unique_candidate_infoboxes: true  # no two text candidates may share the same infobox portrait
   max_instances_per_answer: 2             # prevents model from memorising frequent entities' visual signature
   max_instances_per_image: 2              # prevents model from memorising body-image → entity-cluster mapping
+  forbidden_properties: [P131, P361, P206, P706, P974, P403, P885]                # Wikidata P-IDs — drop mention if any entity pair is linked (e.g. [P22, P25, P40])

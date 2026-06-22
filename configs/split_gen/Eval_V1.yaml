@@ -7,7 +7,7 @@ entity:
 image:
   mime: image/jpeg           # JPEG only (PNG tends to be logos/diagrams)
   min_dim: 300               # ≥300×300 px — sufficient visual content
-  min_used_by: 2             # reused in ≥2 articles → not entity-specific
+  min_used_by: 3             # reused in ≥2 articles → not entity-specific
   max_used_by: 10            # not a generic icon / map / flag
 
 mention:
@@ -36,4 +36,4 @@ candidates:
   require_unique_candidate_infoboxes: true  # no two text candidates may share the same infobox portrait
   max_instances_per_answer: 2             # prevents model from memorising frequent entities' visual signature
   max_instances_per_image: 2              # prevents model from memorising body-image → entity-cluster mapping
-  forbidden_properties: [P131, P361, P206, P706, P974, P403, P885]                # Wikidata P-IDs — drop mention if any entity pair is linked (e.g. [P22, P25, P40])
+  forbidden_properties: [P131, P361, P206, P706, P974, P403, P885,P610, P4552]                # Wikidata P-IDs — drop mention if any entity pair is linked (e.g. [P22, P25, P40])

@@ -120,6 +120,9 @@ class Config:
 
 def keep_entity(e: dict, cfg: Config) -> bool:
     """Entity qualifies for the KB."""
+    name = e.get("name") or ""
+    if re.fullmatch(r"Q\d+", name):
+        return False
     has_intro = bool(e.get("intro"))
     has_image = bool(e.get("infobox_img"))
     if not (has_intro or has_image):
@@ -144,7 +147,7 @@ def keep_image(img: dict, n_in_pool: int, cfg: Config) -> bool:
 
 def keep_mention(mention: str, cfg: Config) -> bool:
     """Mention qualifies as a genuine ambiguous surface form."""
-    if any(b in mention.lower() for b in cfg.banwords):
+    if any(re.search(rf"\b{re.escape(b)}\b", mention, re.IGNORECASE) for b in cfg.banwords):        
         return False
     if len(mention) < cfg.mention_min_len:
         return False
@@ -170,9 +173,7 @@ def keep_forbidden_properties(qids: list[str], cfg: Config) -> bool:
     qid_set = set(qids)
     for qid in qids:
         related = fetch_related_qids(qid, cfg.forbidden_properties)
-        matche = related&(qid_set- {qid})
         if related & (qid_set - {qid}):
-            print(f"le qid vérifier {qid} en lien avec {matche} (les autres : {qid_set})")
             return False
     return True
 

@@ -32,8 +32,6 @@ from typing import Iterator
 import yaml
 from tqdm import tqdm
 
-from p_scrapping import fetch_related_qids, prefetch_qids, get_stats as get_sparql_stats
-
 try:
     import orjson
 
@@ -70,15 +68,10 @@ class Config:
     image_min_used_by:         int
     image_max_used_by:         int
     mention_min_len:           int
-    min_text_candidates:       int   # min entities sharing the mention (default 2)
-    max_text_candidates:       int   # max entities sharing the mention
-    min_visual_candidates:     int   # min KB entities sharing the body image
-    max_visual_candidates:     int   # max KB entities sharing the body image (0 = unlimited)
+    mention_min_used_by:       int   # min entities sharing the mention (text candidate pool size)
+    mention_max_used_by:       int   # max entities sharing the mention (0 = unlimited)
     require_answer_type_shared: bool  # answer's type must appear ≥1× among other text candidates
     require_unique_candidate_infoboxes: bool  # no two text candidates may share the same infobox portrait
-    max_instances_per_answer:  int            # cap instances per answer entity (0 = unlimited)
-    max_instances_per_image:   int            # cap instances per body image URL (0 = unlimited)
-    forbidden_properties:      list[str]
     banwords:                  set[str]
     category_include:          frozenset
     category_exclude:          frozenset
@@ -98,15 +91,10 @@ class Config:
             image_min_used_by          = raw["image"]["min_used_by"],
             image_max_used_by          = raw["image"]["max_used_by"],
             mention_min_len            = raw["mention"]["min_len"],
-            min_text_candidates        = cands.get("min_text", 2),
-            max_text_candidates        = cands["max_text"],
-            min_visual_candidates      = cands["min_visual"],
-            max_visual_candidates      = cands.get("max_visual", 0),
+            mention_min_used_by        = raw["mention"].get("min_used_by", 2),
+            mention_max_used_by        = raw["mention"].get("max_used_by", 0),
             require_answer_type_shared      = cands.get("require_answer_type_shared", False),
             require_unique_candidate_infoboxes = cands.get("require_unique_candidate_infoboxes", False),
-            max_instances_per_answer        = cands.get("max_instances_per_answer", 0),
-            max_instances_per_image         = cands.get("max_instances_per_image", 0),
-            forbidden_properties           = raw.get("candidates", {}).get("forbidden_properties", []),
             banwords                        = set(raw["mention"].get("banwords", [])),
             category_include           = frozenset(categories.get("include", [])),
             category_exclude           = frozenset(categories.get("exclude", [])),
@@ -134,14 +122,13 @@ def keep_entity(e: dict, cfg: Config) -> bool:
     return (e.get("type") or "OTHER") in cfg.entity_types
 
 
-def keep_image(img: dict, n_in_pool: int, cfg: Config) -> bool:
-    """Image qualifies as a mention image."""
+def keep_image(img: dict, cfg: Config) -> bool:
+    """Image qualifies as a mention image (quality only — no candidate-count gate)."""
     return (
         img.get("mime") == cfg.image_mime
         and (img.get("width") or 0) >= cfg.image_min_dim
         and (img.get("height") or 0) >= cfg.image_min_dim
         and cfg.image_min_used_by <= (img.get("n_used_by") or 0) <= cfg.image_max_used_by
-        and n_in_pool >= 2
     )
 
 
@@ -156,6 +143,13 @@ def keep_mention(mention: str, cfg: Config) -> bool:
     return any(c.isalpha() for c in mention)
 
 
+def keep_candidate_count(n: int, cfg: Config) -> bool:
+    """Mention kept only if its number of text candidates is within bounds."""
+    if n < cfg.mention_min_used_by:
+        return False
+    return not (cfg.mention_max_used_by > 0 and n > cfg.mention_max_used_by)
+
+
 def keep_categories(categories: list[str], cfg: Config) -> bool:
     """Disambiguation page's categories pass the include/exclude filters."""
     cats = set(categories)
@@ -163,18 +157,6 @@ def keep_categories(categories: list[str], cfg: Config) -> bool:
         return False
     if cfg.category_exclude and (cats & cfg.category_exclude):
         return False
-    return True
-
-
-def keep_forbidden_properties(qids: list[str], cfg: Config) -> bool:
-    """Return False if any pair of QIDs is linked by a forbidden property. Cache must be warm."""
-    if not cfg.forbidden_properties:
-        return True
-    qid_set = set(qids)
-    for qid in qids:
-        related = fetch_related_qids(qid, cfg.forbidden_properties)
-        if related & (qid_set - {qid}):
-            return False
     return True
 
 
@@ -244,7 +226,7 @@ def _scan_chunk(
             if not keep_categories(m.get("categories", []), cfg):
                 continue
             pool = [e for e in m.get("ambiguities", []) if keep_entity(e, cfg)]
-            if not (cfg.min_text_candidates <= len(pool) <= cfg.max_text_candidates):
+            if not keep_candidate_count(len(pool), cfg):
                 continue
 
             entity_urls: list[tuple[str, list[str]]] = []
@@ -294,7 +276,7 @@ def _scan_sequential(input_path: Path, cfg: Config) -> tuple[dict, dict, dict, l
                 if not keep_categories(m.get("categories", []), cfg):
                     continue
                 pool = [e for e in m["ambiguities"] if keep_entity(e, cfg)]
-                if not (cfg.min_text_candidates <= len(pool) <= cfg.max_text_candidates):
+                if not keep_candidate_count(len(pool), cfg):
                     continue
 
                 entity_urls: list[tuple[str, list[str]]] = []
@@ -371,26 +353,6 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
             input_path, cfg
         )
 
-    # ── Forbidden-property filter ───────────────────────────────────────────
-    if cfg.forbidden_properties and mention_cache:
-        all_qids = list({qid for _, eurls in mention_cache for qid, _ in eurls})
-        print(f"\nForbidden-property prefetch: {len(all_qids):,} unique QIDs, "
-              f"properties: {cfg.forbidden_properties}")
-        prefetch_qids(all_qids, cfg.forbidden_properties, max_workers=30)
-        stats = get_sparql_stats()
-        print(f"  SPARQL requests:      {stats['requests']:>10,}")
-        print(f"  Errors:               {stats['errors']:>10,}")
-
-        before = len(mention_cache)
-        mention_cache = [
-            (mention, eurls) for mention, eurls in mention_cache
-            if keep_forbidden_properties([qid for qid, _ in eurls], cfg)
-        ]
-        after = len(mention_cache)
-        print(f"  Mentions checked:     {before:>10,}")
-        print(f"  Mentions dropped:     {before - after:>10,}")
-        print(f"  Mentions remaining:   {after:>10,}")
-
     # Images that are themselves another KB entity's reference photo (P18 infobox)
     # are excluded: a query image that IS some entity's canonical portrait lets a
     # model "recognise" that entity directly, bypassing the cooccurrence signal
@@ -406,7 +368,7 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
     n_infobox_excluded = 0
     qualifying: set[str] = set()
     for url, img in image_meta.items():
-        if not keep_image(img, len(image_pool[url]), cfg):
+        if not keep_image(img, cfg):
             continue
         if _normalise_image_name(url) in infobox_filenames:
             n_infobox_excluded += 1
@@ -429,17 +391,11 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
     # ── Generate instances from the cache ────────────────────────────────────
     seen_pair:    set[tuple[str, str]] = set()   # (url, mention)
     seen_answer:  set[tuple[str, str]] = set()   # (mention, answer_qid)
-    answer_counts: dict[str, int]      = {}      # answer_qid → instance count
-    image_counts:  dict[str, int]      = {}      # body image url → instance count
     n_written             = 0
-    n_rej_visual_min      = 0
-    n_rej_visual_max      = 0
     n_rej_intersection    = 0
     n_rej_type_not_shared = 0
     n_rej_shared_infobox  = 0
     n_rej_answer_dedup    = 0
-    n_rej_answer_cap      = 0
-    n_rej_image_cap       = 0
 
     with instances_path.open("wb") as out:
         for mention, entity_urls in tqdm(mention_cache, desc="Instances"):
@@ -475,22 +431,9 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
                         continue
                     seen_pair.add(pair_key)
 
-                    # Image must be shared by enough KB entities that vision alone
-                    # cannot trivially identify the answer.
-                    visual_qids = image_pool[url]
-                    n_vis = len(visual_qids)
-                    if n_vis < cfg.min_visual_candidates:
-                        n_rej_visual_min += 1
-                        continue
-
-                    # Cap the visual pool: images shared by too many entities are
-                    # generic (maps, flags, stock photos) and carry no identity signal.
-                    if cfg.max_visual_candidates > 0 and n_vis > cfg.max_visual_candidates:
-                        n_rej_visual_max += 1
-                        continue
-
                     # The answer is the unique entity that is both a text candidate
                     # AND uses this image — combining both modalities is required.
+                    visual_qids = image_pool[url]
                     intersection = pool_qids & visual_qids
                     if len(intersection) != 1:
                         n_rej_intersection += 1
@@ -518,20 +461,6 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
                         continue
                     seen_answer.add(answer_key)
 
-                    # Cap: prevent a single answer entity from dominating the
-                    # dataset (the model would over-learn its visual signature).
-                    if cfg.max_instances_per_answer > 0:
-                        if answer_counts.get(answer_qid, 0) >= cfg.max_instances_per_answer:
-                            n_rej_answer_cap += 1
-                            continue
-
-                    # Cap: prevent a single body image from appearing in too many
-                    # instances (the model would memorise image→entity clusters).
-                    if cfg.max_instances_per_image > 0:
-                        if image_counts.get(url, 0) >= cfg.max_instances_per_image:
-                            n_rej_image_cap += 1
-                            continue
-
                     out.write(_dumps({
                         "mention":           mention,
                         "image":             image_meta[url],
@@ -540,32 +469,19 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
                         "visual_candidates": sorted(visual_qids),
                     }) + b"\n")
                     n_written += 1
-                    if cfg.max_instances_per_answer > 0:
-                        answer_counts[answer_qid] = answer_counts.get(answer_qid, 0) + 1
-                    if cfg.max_instances_per_image > 0:
-                        image_counts[url] = image_counts.get(url, 0) + 1
 
     # n_rej_shared_infobox is counted per MENTION (not per url-mention pair),
     # so we exclude it from the url-level cascade total.
-    total = (n_written + n_rej_visual_min + n_rej_visual_max + n_rej_intersection
-             + n_rej_type_not_shared + n_rej_answer_dedup
-             + n_rej_answer_cap + n_rej_image_cap)
+    total = n_written + n_rej_intersection + n_rej_type_not_shared + n_rej_answer_dedup
     w = max(total, 1)
     print(f"\nInstance generation cascade:")
     print(f"  (mention, image) candidates:      {total:>10,}")
     if cfg.require_unique_candidate_infoboxes:
         print(f"  – shared infobox (mentions):      {n_rej_shared_infobox:>10,}  (mention-level)")
-    print(f"  – visual pool < {cfg.min_visual_candidates}:                {n_rej_visual_min:>10,}  ({100*n_rej_visual_min/w:.1f}%)")
-    if cfg.max_visual_candidates > 0:
-        print(f"  – visual pool > {cfg.max_visual_candidates}:               {n_rej_visual_max:>10,}  ({100*n_rej_visual_max/w:.1f}%)")
     print(f"  – intersection ≠ 1:               {n_rej_intersection:>10,}  ({100*n_rej_intersection/w:.1f}%)")
     if cfg.require_answer_type_shared:
         print(f"  – answer type unique in text:     {n_rej_type_not_shared:>10,}  ({100*n_rej_type_not_shared/w:.1f}%)")
     print(f"  – (mention, answer) duplicate:    {n_rej_answer_dedup:>10,}  ({100*n_rej_answer_dedup/w:.1f}%)")
-    if cfg.max_instances_per_answer > 0:
-        print(f"  – answer cap (>{cfg.max_instances_per_answer}/entity):       {n_rej_answer_cap:>10,}  ({100*n_rej_answer_cap/w:.1f}%)")
-    if cfg.max_instances_per_image > 0:
-        print(f"  – image cap (>{cfg.max_instances_per_image}/image):         {n_rej_image_cap:>10,}  ({100*n_rej_image_cap/w:.1f}%)")
     print(f"  ─────────────────────────────────────────────────────")
     print(f"  Instances written:                {n_written:>10,}  → {instances_path}")
 

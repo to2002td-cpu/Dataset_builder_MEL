@@ -1,39 +1,35 @@
-
+# ── Scope ──────────────────────────────────────────────────────────────────
 entity:
   types: [PERS, ORG, LOC]
   intro: true               # every KB entity must have a text description
   image: true               # every KB entity must have an infobox portrait
 
-image:
-  mime: image/jpeg           # JPEG only (PNG tends to be logos/diagrams)
-  min_dim: 300               # ≥300×300 px — sufficient visual content
-  min_used_by: 3             # reused in ≥2 articles → not entity-specific
-  max_used_by: 10            # not a generic icon / map / flag
-
-mention:
-  min_len: 3
-  banwords:
-    - "and"                  # co-mentions ("Romeo and Juliet")
-    - "or"                   # co-mentions ("Romeo or Juliet")
-    - "Empire"
-    - "A"
-    - "An"
-  drop_if_start_with_num: true   # excludes temporal / ordinal surface forms
-
 categories:
-  include: 
+  include:
   - "Category:Human name disambiguation pages"
   - "Category:Place name disambiguation pages"
   - "Category:Disambiguation pages with surname-holder lists"
   exclude: []
 
+# ── Quality (noise removal) ──────────────────────────────────────────────────
+image:
+  mime: image/jpeg          # JPEG only (PNG tends to be logos / diagrams)
+  min_dim: 1000              # ≥500×500 px — sufficient visual content
+  min_used_by: 2            # reused in ≥2 articles → not entity-specific
+  max_used_by: 5            # used by ≤5 articles → excludes generic icons / maps / flags
+
+mention:
+  min_len: 8
+  banwords:
+    - "and"                 # co-mentions ("Romeo and Juliet")
+    - "or"                  # co-mentions ("Romeo or Juliet")
+    - "A"
+    - "An"
+  drop_if_start_with_num: true   # excludes temporal / ordinal surface forms
+  min_used_by: 2            # ≥2 entities share the mention (genuinely ambiguous)
+  max_used_by: 5           # ≤10 entities (drops over-loaded generic surface forms)
+
+# ── Validity ─────────────────────────────────────────────────────────────────
 candidates:
-  min_text: 2                          # ≥2 entities share the mention
-  max_text: 5                         # drop over-loaded surface forms
-  min_visual: 2                        # body image shared by ≥3 KB entities
-  max_visual: 5                       # cap to avoid degenerate images
-  require_answer_type_shared: false          # answer type must not be unique in text pool
-  require_unique_candidate_infoboxes: true  # no two text candidates may share the same infobox portrait
-  max_instances_per_answer: 2             # prevents model from memorising frequent entities' visual signature
-  max_instances_per_image: 2              # prevents model from memorising body-image → entity-cluster mapping
-  forbidden_properties: [P131, P361, P206, P706, P974, P403, P885,P610, P4552]                # Wikidata P-IDs — drop mention if any entity pair is linked (e.g. [P22, P25, P40])
+  require_answer_type_shared: false          # answer's type must not be unique among text candidates
+  require_unique_candidate_infoboxes: true   # no two text candidates may share the same infobox portrait

@@ -1,28 +1,34 @@
+# Baseline split filters — local only, no network lookups. Parameters fall into
+# three jobs: scope (entity, categories), quality/noise removal (image, mention),
+# and validity (candidates).
+
+# ── Scope ──────────────────────────────────────────────────────────────────
 entity:
-  types: [PERS, ORG, LOC]   # KB entity types to keep
-  intro: true               # only keep entities with an intro paragraph
-  image: true               # only keep entities with an image
-
-image:
-  mime: image/jpeg          # required MIME type
-  min_dim: 250              # minimum width AND height (px)
-  min_used_by: 2            # minimum Wikipedia image reuse
-  max_used_by: 10           # maximum Wikipedia image reuse
-
-mention:
-  min_len: 3               # minimum surface-form length (chars)
-  banwords: ["and"] #if and -> two entities
+  types: [PERS, ORG, LOC]
+  intro: true               # every KB entity must have a text description
+  image: true               # every KB entity must have an infobox portrait
 
 categories:
-  include: []              # if non-empty, page must be in at least one of these categories
+  include: []               # if non-empty, page must be in at least one of these categories
   exclude: []               # page is dropped if it's in any of these categories
 
+# ── Quality (noise removal) ──────────────────────────────────────────────────
+image:
+  mime: image/jpeg          # JPEG only (PNG tends to be logos / diagrams)
+  min_dim: 250              # minimum width AND height (px) — enough visual content
+  min_used_by: 2            # reused in ≥2 articles → not entity-specific
+  max_used_by: 10           # capped → not a generic icon / map / flag
+
+mention:
+  min_len: 3                # minimum surface-form length (chars)
+  banwords: ["and"]         # "and" → co-mention of two entities, not one surface form
+  drop_if_start_with_num: true   # excludes temporal / ordinal surface forms
+  min_used_by: 2            # min entities sharing the mention (text candidate pool size)
+  max_used_by: 0            # max entities sharing the mention (0 = unlimited)
+
+# ── Validity ─────────────────────────────────────────────────────────────────
 candidates:
-  min_text: 2               # min KB entities sharing the mention
-  max_text: 10              # max KB entities sharing the mention (drops generic fragments, e.g. "Cerro")
-  min_visual: 2             # min KB entities sharing the body image
-  max_visual: 0             # max KB entities sharing the body image (0 = no limit)
-  require_answer_type_shared: false
-  require_unique_candidate_infoboxes: false
-  max_instances_per_answer: 0             # 0 = no cap
-  max_instances_per_image: 0             # 0 = no cap
+  require_answer_type_shared: false          # answer's type must not be unique among text candidates
+  require_unique_candidate_infoboxes: false  # no two text candidates may share the same infobox portrait
+  excluded_classes: []
+  containment_properties: []

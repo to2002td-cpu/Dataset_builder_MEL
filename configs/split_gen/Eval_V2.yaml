@@ -1,0 +1,38 @@
+entity:
+  types: [PERS, ORG, LOC]
+  intro: true                # every KB entity must have a text description
+  image: true                # every KB entity must have an infobox portrait
+
+categories:
+  include:                   # page must be in at least one of these categories
+    - "Category:Human name disambiguation pages"
+    - "Category:Disambiguation pages with surname-holder lists"
+    - "Category:Disambiguation pages with given-name-holder lists"
+    - "Category:Place name disambiguation pages"
+  exclude: []
+
+# ── Quality (noise removal) ──────────────────────────────────────────────────
+image:
+  mime: image/jpeg           # JPEG only (PNG/SVG skew to logos & diagrams)
+  min_dim: 500               # ≥250×250 px — enough visual content
+  min_used_by: 2             # reused in ≥2 articles → genuinely shared body image
+  max_used_by: 3           # cap stock/generic reuse (maps, flags, icons)
+
+mention:
+  min_len: 4
+  banwords: 
+    - "and"
+    - "or"
+    - "a"
+    - "an"   # co-mention surface forms ("Romeo and Juliet")
+  drop_if_start_with_num: true         # excludes ordinal/temporal forms ("55th Regiment")
+  min_used_by: 2             # ≥2 entities share the mention (genuinely ambiguous)
+  max_used_by: 5             # 0 = unlimited — no cap on candidate-pool size
+
+# ── Validity (inter-candidate rules) ─────────────────────────────────────────
+candidates:
+  min_visual: 2                              # query image shared by ≥2 KB entities (visual ambiguity)
+  max_visual: 3                              # cap degenerate over-shared images
+  require_answer_type_shared: false          # answer's type must not be unique among text candidates
+  require_unique_candidate_infoboxes: true   # no two text candidates may share the same infobox portrait
+  forbidden_properties: [P131, P361, P706, P974, P403, P885,P610, P4552,P138]

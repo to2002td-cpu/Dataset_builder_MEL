@@ -290,8 +290,8 @@ def main() -> None:
     ap.add_argument("input", type=Path, help="instances.jsonl (make_split.py output)")
     ap.add_argument("--kb", type=Path, default=None,
                     help="kb.jsonl (default: auto-detect in same directory as input)")
-    ap.add_argument("--sample", "-n", type=int, default=500, metavar="N",
-                    help="max instances to embed (default: 500; 0 = all)")
+    ap.add_argument("--sample", "-n", type=int, default=5000, metavar="N",
+                    help="max instances to embed (default: 5000; 0 = all)")
     ap.add_argument("--out", "-o", type=Path, default=Path("output/split_viewer.html"))
     ap.add_argument("--open", action="store_true",
                     help="open the generated viewer in the default browser")

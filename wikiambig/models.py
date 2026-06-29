@@ -57,6 +57,10 @@ class Entity(BaseModel):
     url_wikipedia: str
     page_imglist: list[Image] = Field(default_factory=list)
     """All images appearing in the entity's Wikipedia article body."""
+    commons_imglist: list[Image] = Field(default_factory=list)
+    """Second image source (S4b): all images on the entity's Commons gallery
+    page (the commonswiki sitelink). Empty when the entity has no gallery.
+    Kept alongside page_imglist so the two sources can be compared."""
 
 
 class MentionEntry(BaseModel):

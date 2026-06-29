@@ -138,7 +138,23 @@ def run(config: PipelineConfig) -> None:
     image_lists: dict[str, list[str]] = json.loads(
         image_lists_path.read_text(encoding="utf-8")
     )
-    all_filenames = sorted({f for fnames in image_lists.values() for f in fnames})
+
+    # Second image source (S4b): files on each entity's Commons gallery page.
+    # Resolve URL + fileusage for these too, so "is this image used elsewhere?"
+    # works identically for both sources. The global dedup below means files
+    # shared with the Wikipedia side cost nothing extra.
+    commons_lists_path = config.stage_path("image_lists_commons.json")
+    commons_lists: dict[str, list[str]] = {}
+    if commons_lists_path.exists():
+        try:
+            commons_lists = json.loads(commons_lists_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+
+    all_filenames = sorted(
+        {f for fnames in image_lists.values() for f in fnames}
+        | {f for fnames in commons_lists.values() for f in fnames}
+    )
     pending = cp.pending(all_filenames)
 
     logger.info(

@@ -155,6 +155,18 @@ def run(config: PipelineConfig) -> None:
     image_lists: dict[str, list[str]]   = _load_json(image_lists_path)
     image_data: dict[str, dict]         = _load_json(image_data_path)
 
+    # Second image source (S4b): files on each entity's Commons gallery page.
+    # Optional — absent when S4b hasn't been run. Resolved against the same
+    # image_data (S5 collects both sources' files into one pool).
+    commons_lists: dict[str, list[str]] = {}
+    commons_lists_path = config.stage_path("image_lists_commons.json")
+    if commons_lists_path.exists():
+        try:
+            commons_lists = _load_json(commons_lists_path)
+            logger.info("S7: loaded Commons gallery image lists for %d entities", len(commons_lists))
+        except (ValueError, KeyError):
+            pass
+
     # Load Wikipedia intro paragraphs if S4 has been run (optional).
     entity_intros: dict[str, str] = {}
     intros_path = config.stage_path("entity_intros.json")
@@ -199,13 +211,8 @@ def run(config: PipelineConfig) -> None:
             special_qids.add(qid)
     logger.info("S7: %d special-page QIDs will be excluded from used_by", len(special_qids))
 
-    # --- Build Entity KB ---
-    kb: dict[str, Entity] = {}
-    for qid, data in tqdm(entity_data.items(), desc="S7 build KB"):
-        infobox_img = entity_infobox_images.get(qid)
-        filenames = image_lists.get(qid, [])
-
-        page_imglist: list[Image] = []
+    def _build_imglist(filenames: list[str], infobox_img: str | None) -> list[Image]:
+        imglist: list[Image] = []
         for fname in filenames:
             img_info = image_data.get(fname)
             if not img_info:
@@ -214,7 +221,7 @@ def run(config: PipelineConfig) -> None:
             # Strip disambiguation pages and other special pages from used_by so they
             # don't falsely count as "external entity" usages in the anchor criterion.
             used_by = [q for q in raw_used_by if q not in special_qids]
-            img = Image(
+            imglist.append(Image(
                 url=img_info["url"],
                 used_by=used_by,
                 n_used_by=len(used_by),
@@ -223,8 +230,13 @@ def run(config: PipelineConfig) -> None:
                 height=img_info.get("height"),
                 mime=img_info.get("mime", ""),
                 license=img_info.get("license", ""),
-            )
-            page_imglist.append(img)
+            ))
+        return imglist
+
+    # --- Build Entity KB ---
+    kb: dict[str, Entity] = {}
+    for qid, data in tqdm(entity_data.items(), desc="S7 build KB"):
+        infobox_img = entity_infobox_images.get(qid)
 
         entity = Entity(
             qid=qid,
@@ -234,7 +246,8 @@ def run(config: PipelineConfig) -> None:
             type=entity_types.get(qid) or "OTHER",
             infobox_img=infobox_img,
             url_wikipedia=data.get("url_wikipedia", ""),
-            page_imglist=page_imglist,
+            page_imglist=_build_imglist(image_lists.get(qid, []), infobox_img),
+            commons_imglist=_build_imglist(commons_lists.get(qid, []), infobox_img),
         )
         kb[qid] = entity
 

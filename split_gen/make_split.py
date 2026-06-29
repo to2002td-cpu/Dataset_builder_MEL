@@ -32,6 +32,8 @@ from typing import Iterator
 import yaml
 from tqdm import tqdm
 
+from p_scrapping import fetch_related_qids, prefetch_qids, get_stats as get_sparql_stats
+
 try:
     import orjson
 
@@ -72,6 +74,9 @@ class Config:
     mention_max_used_by:       int   # max entities sharing the mention (0 = unlimited)
     require_answer_type_shared: bool  # answer's type must appear ≥1× among other text candidates
     require_unique_candidate_infoboxes: bool  # no two text candidates may share the same infobox portrait
+    visual_min:                int    # min KB entities sharing the query image (visual candidate pool size)
+    visual_max:                int    # max KB entities sharing the query image (0 = unlimited)
+    forbidden_properties:      list[str]  # drop mention if any candidate pair is linked by these Wikidata P-IDs
     banwords:                  set[str]
     category_include:          frozenset
     category_exclude:          frozenset
@@ -95,6 +100,9 @@ class Config:
             mention_max_used_by        = raw["mention"].get("max_used_by", 0),
             require_answer_type_shared      = cands.get("require_answer_type_shared", False),
             require_unique_candidate_infoboxes = cands.get("require_unique_candidate_infoboxes", False),
+            visual_min                      = cands.get("min_visual", 2),
+            visual_max                      = cands.get("max_visual", 0),
+            forbidden_properties            = cands.get("forbidden_properties", []),
             banwords                        = set(raw["mention"].get("banwords", [])),
             category_include           = frozenset(categories.get("include", [])),
             category_exclude           = frozenset(categories.get("exclude", [])),
@@ -134,7 +142,7 @@ def keep_image(img: dict, cfg: Config) -> bool:
 
 def keep_mention(mention: str, cfg: Config) -> bool:
     """Mention qualifies as a genuine ambiguous surface form."""
-    if any(re.search(rf"\b{re.escape(b)}\b", mention, re.IGNORECASE) for b in cfg.banwords):        
+    if any(re.search(rf"\b{re.escape(b)}\b", mention, re.IGNORECASE) for b in cfg.banwords):
         return False
     if len(mention) < cfg.mention_min_len:
         return False
@@ -160,6 +168,24 @@ def keep_categories(categories: list[str], cfg: Config) -> bool:
     return True
 
 
+def keep_forbidden_properties(qids: list[str], cfg: Config) -> bool:
+    """
+    Return False if any candidate is linked to another candidate by a forbidden
+    Wikidata property (e.g. P131 "located in" — "New York City" → "New York"
+    state). Such a pair is nested/irresolvable, so the whole mention is dropped.
+
+    The SPARQL cache must already be warm (see prefetch_qids in build()).
+    """
+    if not cfg.forbidden_properties:
+        return True
+    others = set(qids)
+    for qid in qids:
+        related = fetch_related_qids(qid, cfg.forbidden_properties)
+        if related & (others - {qid}):
+            return False
+    return True
+
+
 def _normalise_image_name(url_or_filename: str) -> str:
     """Extract and normalise a filename from a Wikimedia URL or 'File:...' string."""
     s = url_or_filename
@@ -171,6 +197,20 @@ def _normalise_image_name(url_or_filename: str) -> str:
         s = s.rstrip("/").split("/")[-1]
     s = urllib.parse.unquote(s)
     return s.replace("_", " ").strip().lower()
+
+
+def _has_shared_infobox(qids, kb_entities: dict) -> bool:
+    """True if any two of the given entities share the same (normalised) infobox
+    portrait — i.e. the set is visually degenerate (two entities look identical)."""
+    seen: set[str] = set()
+    for qid in qids:
+        img = (kb_entities.get(qid) or {}).get("infobox_img")
+        if img:
+            norm = _normalise_image_name(img)
+            if norm in seen:
+                return True
+            seen.add(norm)
+    return False
 
 
 # ============================================================
@@ -353,6 +393,30 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
             input_path, cfg
         )
 
+    # ── Forbidden-property filter ────────────────────────────────────────────
+    # Drop a mention if any two of its candidates are linked by a located-in /
+    # part-of property: the pair is nested ("New York City" inside "New York"
+    # state) and so irresolvable. One batched SPARQL prefetch warms the cache,
+    # then the check is a set-intersection per mention.
+    if cfg.forbidden_properties and mention_cache:
+        all_qids = list({qid for _, eurls in mention_cache for qid, _ in eurls})
+        print(f"\nForbidden-property prefetch: {len(all_qids):,} unique QIDs, "
+              f"properties: {cfg.forbidden_properties}")
+        prefetch_qids(all_qids, cfg.forbidden_properties, max_workers=30)
+        stats = get_sparql_stats()
+        print(f"  SPARQL requests:      {stats['requests']:>10,}")
+        print(f"  Errors:               {stats['errors']:>10,}")
+
+        before = len(mention_cache)
+        mention_cache = [
+            (mention, eurls) for mention, eurls in mention_cache
+            if keep_forbidden_properties([qid for qid, _ in eurls], cfg)
+        ]
+        after = len(mention_cache)
+        print(f"  Mentions checked:     {before:>10,}")
+        print(f"  Mentions dropped:     {before - after:>10,}")
+        print(f"  Mentions remaining:   {after:>10,}")
+
     # Images that are themselves another KB entity's reference photo (P18 infobox)
     # are excluded: a query image that IS some entity's canonical portrait lets a
     # model "recognise" that entity directly, bypassing the cooccurrence signal
@@ -389,13 +453,16 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
     print(f"KB written:         {len(kb_entities):>10,}  → {kb_path}")
 
     # ── Generate instances from the cache ────────────────────────────────────
+    # Every distinct qualifying (image, mention) couple becomes its own instance:
+    # the same answer may appear with several body images. seen_pair only guards
+    # against emitting the exact same (image, mention) twice.
     seen_pair:    set[tuple[str, str]] = set()   # (url, mention)
-    seen_answer:  set[tuple[str, str]] = set()   # (mention, answer_qid)
     n_written             = 0
+    n_rej_visual          = 0
     n_rej_intersection    = 0
     n_rej_type_not_shared = 0
     n_rej_shared_infobox  = 0
-    n_rej_answer_dedup    = 0
+    n_rej_shared_infobox_visual = 0
 
     with instances_path.open("wb") as out:
         for mention, entity_urls in tqdm(mention_cache, desc="Instances"):
@@ -404,20 +471,9 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
             # If any two text candidates share the same infobox portrait, the KB
             # is visually degenerate for this mention: two entities would look
             # identical, making visual disambiguation impossible.
-            if cfg.require_unique_candidate_infoboxes:
-                seen_imgs: set[str] = set()
-                collision = False
-                for qid in pool_qids:
-                    img = (kb_entities.get(qid) or {}).get("infobox_img")
-                    if img:
-                        norm = _normalise_image_name(img)
-                        if norm in seen_imgs:
-                            collision = True
-                            break
-                        seen_imgs.add(norm)
-                if collision:
-                    n_rej_shared_infobox += 1
-                    continue
+            if cfg.require_unique_candidate_infoboxes and _has_shared_infobox(pool_qids, kb_entities):
+                n_rej_shared_infobox += 1
+                continue
 
             text_candidates = sorted(pool_qids)
 
@@ -431,9 +487,24 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
                         continue
                     seen_pair.add(pair_key)
 
+                    # Visual candidate pool = every KB entity using this image.
+                    # Require it to be genuinely ambiguous (≥ visual_min) and not
+                    # degenerate/over-shared (≤ visual_max, 0 = unlimited).
+                    visual_qids = image_pool[url]
+                    n_vis = len(visual_qids)
+                    if n_vis < cfg.visual_min or (cfg.visual_max > 0 and n_vis > cfg.visual_max):
+                        n_rej_visual += 1
+                        continue
+
+                    # Same rule as for text candidates, applied to the visual pool:
+                    # if two entities sharing this image also share an infobox
+                    # portrait, they are visually indistinguishable here.
+                    if cfg.require_unique_candidate_infoboxes and _has_shared_infobox(visual_qids, kb_entities):
+                        n_rej_shared_infobox_visual += 1
+                        continue
+
                     # The answer is the unique entity that is both a text candidate
                     # AND uses this image — combining both modalities is required.
-                    visual_qids = image_pool[url]
                     intersection = pool_qids & visual_qids
                     if len(intersection) != 1:
                         n_rej_intersection += 1
@@ -455,12 +526,6 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
                             n_rej_type_not_shared += 1
                             continue
 
-                    answer_key = (mention, answer_qid)
-                    if answer_key in seen_answer:
-                        n_rej_answer_dedup += 1
-                        continue
-                    seen_answer.add(answer_key)
-
                     out.write(_dumps({
                         "mention":           mention,
                         "image":             image_meta[url],
@@ -472,16 +537,19 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
 
     # n_rej_shared_infobox is counted per MENTION (not per url-mention pair),
     # so we exclude it from the url-level cascade total.
-    total = n_written + n_rej_intersection + n_rej_type_not_shared + n_rej_answer_dedup
+    total = (n_written + n_rej_visual + n_rej_shared_infobox_visual
+             + n_rej_intersection + n_rej_type_not_shared)
     w = max(total, 1)
     print(f"\nInstance generation cascade:")
     print(f"  (mention, image) candidates:      {total:>10,}")
     if cfg.require_unique_candidate_infoboxes:
         print(f"  – shared infobox (mentions):      {n_rej_shared_infobox:>10,}  (mention-level)")
+    print(f"  – visual pool out of [{cfg.visual_min},{cfg.visual_max or '∞'}]:        {n_rej_visual:>10,}  ({100*n_rej_visual/w:.1f}%)")
+    if cfg.require_unique_candidate_infoboxes:
+        print(f"  – shared infobox (visual pool):   {n_rej_shared_infobox_visual:>10,}  ({100*n_rej_shared_infobox_visual/w:.1f}%)")
     print(f"  – intersection ≠ 1:               {n_rej_intersection:>10,}  ({100*n_rej_intersection/w:.1f}%)")
     if cfg.require_answer_type_shared:
         print(f"  – answer type unique in text:     {n_rej_type_not_shared:>10,}  ({100*n_rej_type_not_shared/w:.1f}%)")
-    print(f"  – (mention, answer) duplicate:    {n_rej_answer_dedup:>10,}  ({100*n_rej_answer_dedup/w:.1f}%)")
     print(f"  ─────────────────────────────────────────────────────")
     print(f"  Instances written:                {n_written:>10,}  → {instances_path}")
 

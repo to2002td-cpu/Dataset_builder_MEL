@@ -11,7 +11,7 @@ from itertools import combinations
 import numpy as np
 from sklearn.metrics import cohen_kappa_score
 
-from loader import AnnotatorData
+from annotation.state.loader import AnnotatorData
 
 
 # Landis & Koch (1977) interpretation scale for Cohen's kappa.

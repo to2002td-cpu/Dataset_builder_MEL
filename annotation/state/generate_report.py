@@ -11,9 +11,9 @@ each with a user_state.json file produced by the annotation tool.
 import argparse
 from pathlib import Path
 
-import html_report
-import loader
-import stats
+import annotation.state.html_report as html_report
+import annotation.state.loader as loader
+import annotation.state.stats as stats
 
 
 def parse_args() -> argparse.Namespace:

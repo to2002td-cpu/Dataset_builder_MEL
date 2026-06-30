@@ -7,8 +7,8 @@ It knows nothing about file paths or argument parsing.
 import json
 from collections import Counter
 
-from loader import AnnotatorData
-from stats import AnnotationStats, interpret_kappa
+from annotation.state.loader import AnnotatorData
+from annotation.state.stats import AnnotationStats, interpret_kappa
 
 
 def render(annotators: dict[str, AnnotatorData], s: AnnotationStats) -> str:

@@ -1,0 +1,6938 @@
+{
+  "user_id": "VS-2",
+  "instance_id_ordering": [
+    "10649",
+    "627",
+    "5463",
+    "10296",
+    "11755",
+    "3065",
+    "5218",
+    "2446",
+    "10236",
+    "8113",
+    "6867",
+    "11641",
+    "4761",
+    "297",
+    "11383",
+    "3972",
+    "7564",
+    "7274",
+    "9988",
+    "4565",
+    "11214",
+    "12606",
+    "6649",
+    "4600",
+    "9089",
+    "4824",
+    "10254",
+    "9991",
+    "4539",
+    "12043",
+    "8130",
+    "5525",
+    "6192",
+    "5596",
+    "5755",
+    "2388",
+    "422",
+    "3010",
+    "2550",
+    "7701",
+    "3886",
+    "6323",
+    "11549",
+    "2108",
+    "1649",
+    "5604",
+    "3774",
+    "4042",
+    "7786",
+    "1631"
+  ],
+  "current_instance_index": 47,
+  "current_phase_and_page": [
+    "done",
+    null
+  ],
+  "completed_phase_and_pages": [],
+  "max_assignments": 50,
+  "instance_id_to_behavioral_data": {
+    "10649": {
+      "instance_id": "10649",
+      "session_start": 1778140874.8476803,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778140869.807,
+          "target": "instance_load",
+          "instance_id": "10649",
+          "client_timestamp": 1778140869807,
+          "metadata": {
+            "instance_id": "10649",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778140888.71,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "10649",
+          "client_timestamp": 1778140888710,
+          "metadata": {
+            "x": 812,
+            "y": 1001
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778140888.712,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "10649",
+          "client_timestamp": 1778140888712,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778140889.213,
+          "target": "instance:10649",
+          "instance_id": "10649",
+          "client_timestamp": 1778140889213,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778140890.327,
+          "target": "next",
+          "instance_id": "10649",
+          "client_timestamp": 1778140890327,
+          "metadata": {
+            "from_instance": "10649",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778140890.327,
+          "target": "instance:10649",
+          "instance_id": "10649",
+          "client_timestamp": 1778140890327,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778140888.7453773,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "627": {
+      "instance_id": "627",
+      "session_start": 1778140895.888451,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778140890.856,
+          "target": "instance_load",
+          "instance_id": "627",
+          "client_timestamp": 1778140890856,
+          "metadata": {
+            "instance_id": "627",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778140921.223,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "627",
+          "client_timestamp": 1778140921223,
+          "metadata": {
+            "x": 800,
+            "y": 1010
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778140921.223,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "627",
+          "client_timestamp": 1778140921223,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778140921.726,
+          "target": "instance:627",
+          "instance_id": "627",
+          "client_timestamp": 1778140921726,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778140923.541,
+          "target": "next",
+          "instance_id": "627",
+          "client_timestamp": 1778140923541,
+          "metadata": {
+            "from_instance": "627",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778140923.541,
+          "target": "instance:627",
+          "instance_id": "627",
+          "client_timestamp": 1778140923541,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778140921.251751,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "5463": {
+      "instance_id": "5463",
+      "session_start": 1778140929.1971838,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778140924.167,
+          "target": "instance_load",
+          "instance_id": "5463",
+          "client_timestamp": 1778140924167,
+          "metadata": {
+            "instance_id": "5463",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778140957.058,
+          "target": "label:entity_is_illustrated:u",
+          "instance_id": "5463",
+          "client_timestamp": 1778140957058,
+          "metadata": {
+            "x": 790,
+            "y": 996
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778140957.058,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "5463",
+          "client_timestamp": 1778140957058,
+          "metadata": {
+            "label": "UNCERTAIN",
+            "action": "select",
+            "old_value": null,
+            "new_value": "u",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778140957.585,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140957585,
+          "metadata": {}
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778140957.587,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778140957587,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778140957.671,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140957671,
+          "metadata": {
+            "x": 934,
+            "y": 1002
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778140968.262,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140968262,
+          "metadata": {
+            "x": 934,
+            "y": 997
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778140975.145,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140975145,
+          "metadata": {
+            "duration_ms": 17560
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778140975.845,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140975845,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "D\u00e9duction indirecte.",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778140976.352,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778140976352,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778140976.407,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140976407,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778140976.496,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140976496,
+          "metadata": {
+            "x": 1153,
+            "y": 985
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778140976.848,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140976848,
+          "metadata": {
+            "x": 1147,
+            "y": 999
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778140979.297,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140979297,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "D\u00e9duction indirecte.",
+            "new_value": "D\u00e9duction indirecte. Si ",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778140979.798,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778140979798,
+          "metadata": {}
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778140981.632,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140981632,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "D\u00e9duction indirecte. Si ",
+            "new_value": "D\u00e9duction indirecte.",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778140982.137,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778140982137,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778140985.119,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140985119,
+          "metadata": {
+            "x": 971,
+            "y": 999
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778140985.801,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778140985801,
+          "metadata": {
+            "x": 811,
+            "y": 1000
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141005.209,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141005209,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "D\u00e9duction indirecte.",
+            "new_value": "",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141005.712,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778141005712,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141008.079,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141008079,
+          "metadata": {
+            "x": 922,
+            "y": 997
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141017.753,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141017753,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "",
+            "new_value": "",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141018.258,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778141018258,
+          "metadata": {}
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141019.366,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141019366,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "S",
+            "new_value": "Si ",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141019.869,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778141019869,
+          "metadata": {}
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141020.746,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141020746,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "Si ",
+            "new_value": "",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141020.785,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141020785,
+          "metadata": {
+            "duration_ms": 44378
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141020.834,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "5463",
+          "client_timestamp": 1778141020834,
+          "metadata": {
+            "x": 606,
+            "y": 1002
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141020.835,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "5463",
+          "client_timestamp": 1778141020835,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141021.336,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778141021336,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141021.874,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141021874,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141021.969,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141021969,
+          "metadata": {
+            "x": 1027,
+            "y": 997
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141029.487,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141029487,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "",
+            "new_value": "Pas s\u00fbr, ",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141029.989,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778141029989,
+          "metadata": {}
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141031.69,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141031690,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "Pas s\u00fbr, ",
+            "new_value": "Pas s\u00fbr, si RA ",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141032.195,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778141032195,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141034.96,
+          "target": "textbox:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141034960,
+          "metadata": {
+            "duration_ms": 13086
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141035.006,
+          "target": "schema:comment",
+          "instance_id": "5463",
+          "client_timestamp": 1778141035006,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "Pas s\u00fbr, si R",
+            "new_value": "",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141035.024,
+          "target": "next",
+          "instance_id": "5463",
+          "client_timestamp": 1778141035024,
+          "metadata": {
+            "from_instance": "5463",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141035.024,
+          "target": "instance:5463",
+          "instance_id": "5463",
+          "client_timestamp": 1778141035024,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778140957.09395,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "UNCERTAIN",
+          "action": "select",
+          "old_value": null,
+          "new_value": "u",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778140975.8782141,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "D\u00e9duction indirecte.",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778140979.3277063,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "D\u00e9duction indirecte.",
+          "new_value": "D\u00e9duction indirecte. Si ",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778140981.6633208,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "D\u00e9duction indirecte. Si ",
+          "new_value": "D\u00e9duction indirecte.",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141005.2407687,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "D\u00e9duction indirecte.",
+          "new_value": "",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141017.785526,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "",
+          "new_value": "",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141019.396815,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "S",
+          "new_value": "Si ",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141020.7787607,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "Si ",
+          "new_value": "",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141020.8635705,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141029.525603,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "",
+          "new_value": "Pas s\u00fbr, ",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141031.7224762,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "Pas s\u00fbr, ",
+          "new_value": "Pas s\u00fbr, si RA ",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141035.03631,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "Pas s\u00fbr, si R",
+          "new_value": "",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 75024
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "10296": {
+      "instance_id": "10296",
+      "session_start": 1778141040.672805,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141035.642,
+          "target": "instance_load",
+          "instance_id": "10296",
+          "client_timestamp": 1778141035642,
+          "metadata": {
+            "instance_id": "10296",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141044.631,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "10296",
+          "client_timestamp": 1778141044631,
+          "metadata": {
+            "x": 653,
+            "y": 993
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141044.633,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "10296",
+          "client_timestamp": 1778141044633,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141045.136,
+          "target": "instance:10296",
+          "instance_id": "10296",
+          "client_timestamp": 1778141045136,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141046.864,
+          "target": "next",
+          "instance_id": "10296",
+          "client_timestamp": 1778141046864,
+          "metadata": {
+            "from_instance": "10296",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141046.864,
+          "target": "instance:10296",
+          "instance_id": "10296",
+          "client_timestamp": 1778141046864,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141044.6632187,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "11755": {
+      "instance_id": "11755",
+      "session_start": 1778141052.4688783,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141047.43,
+          "target": "instance_load",
+          "instance_id": "11755",
+          "client_timestamp": 1778141047430,
+          "metadata": {
+            "instance_id": "11755",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141054.786,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "11755",
+          "client_timestamp": 1778141054786,
+          "metadata": {
+            "x": 661,
+            "y": 1004
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141054.787,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "11755",
+          "client_timestamp": 1778141054787,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141055.291,
+          "target": "instance:11755",
+          "instance_id": "11755",
+          "client_timestamp": 1778141055291,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141056.035,
+          "target": "next",
+          "instance_id": "11755",
+          "client_timestamp": 1778141056035,
+          "metadata": {
+            "from_instance": "11755",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141056.036,
+          "target": "instance:11755",
+          "instance_id": "11755",
+          "client_timestamp": 1778141056036,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141054.8181148,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "3065": {
+      "instance_id": "3065",
+      "session_start": 1778141061.6247363,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141056.593,
+          "target": "instance_load",
+          "instance_id": "3065",
+          "client_timestamp": 1778141056593,
+          "metadata": {
+            "instance_id": "3065",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141071.499,
+          "target": "textbox:comment",
+          "instance_id": "3065",
+          "client_timestamp": 1778141071499,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141071.674,
+          "target": "textbox:comment",
+          "instance_id": "3065",
+          "client_timestamp": 1778141071674,
+          "metadata": {
+            "x": 971,
+            "y": 1013
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141082.061,
+          "target": "schema:comment",
+          "instance_id": "3065",
+          "client_timestamp": 1778141082061,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "D\u00e9duction indirecte",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141082.286,
+          "target": "textbox:comment",
+          "instance_id": "3065",
+          "client_timestamp": 1778141082286,
+          "metadata": {
+            "duration_ms": 10786
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141082.329,
+          "target": "label:entity_is_illustrated:u",
+          "instance_id": "3065",
+          "client_timestamp": 1778141082329,
+          "metadata": {
+            "x": 772,
+            "y": 1005
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141082.33,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "3065",
+          "client_timestamp": 1778141082330,
+          "metadata": {
+            "label": "UNCERTAIN",
+            "action": "select",
+            "old_value": null,
+            "new_value": "u",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141082.833,
+          "target": "instance:3065",
+          "instance_id": "3065",
+          "client_timestamp": 1778141082833,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141083.182,
+          "target": "next",
+          "instance_id": "3065",
+          "client_timestamp": 1778141083182,
+          "metadata": {
+            "from_instance": "3065",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141083.182,
+          "target": "instance:3065",
+          "instance_id": "3065",
+          "client_timestamp": 1778141083182,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141082.0932875,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "D\u00e9duction indirecte",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141082.3584342,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "UNCERTAIN",
+          "action": "select",
+          "old_value": null,
+          "new_value": "u",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 10786
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "5218": {
+      "instance_id": "5218",
+      "session_start": 1778141088.814003,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141083.783,
+          "target": "instance_load",
+          "instance_id": "5218",
+          "client_timestamp": 1778141083783,
+          "metadata": {
+            "instance_id": "5218",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141093.12,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "5218",
+          "client_timestamp": 1778141093120,
+          "metadata": {
+            "x": 701,
+            "y": 996
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141093.121,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "5218",
+          "client_timestamp": 1778141093121,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141093.63,
+          "target": "instance:5218",
+          "instance_id": "5218",
+          "client_timestamp": 1778141093630,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141097.457,
+          "target": "textbox:comment",
+          "instance_id": "5218",
+          "client_timestamp": 1778141097457,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141097.552,
+          "target": "textbox:comment",
+          "instance_id": "5218",
+          "client_timestamp": 1778141097552,
+          "metadata": {
+            "x": 1169,
+            "y": 997
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141100.742,
+          "target": "schema:comment",
+          "instance_id": "5218",
+          "client_timestamp": 1778141100742,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "D\u00e9duction ",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141101.246,
+          "target": "instance:5218",
+          "instance_id": "5218",
+          "client_timestamp": 1778141101246,
+          "metadata": {}
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141103.001,
+          "target": "schema:comment",
+          "instance_id": "5218",
+          "client_timestamp": 1778141103001,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "D\u00e9duction contr",
+            "new_value": "D\u00e9duction contrastive",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141103.022,
+          "target": "textbox:comment",
+          "instance_id": "5218",
+          "client_timestamp": 1778141103022,
+          "metadata": {
+            "duration_ms": 5565
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141103.105,
+          "target": "next",
+          "instance_id": "5218",
+          "client_timestamp": 1778141103105,
+          "metadata": {
+            "from_instance": "5218",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141103.105,
+          "target": "instance:5218",
+          "instance_id": "5218",
+          "client_timestamp": 1778141103105,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141093.1579573,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141100.7737544,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "D\u00e9duction ",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141103.0316098,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "D\u00e9duction contr",
+          "new_value": "D\u00e9duction contrastive",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 5565
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "2446": {
+      "instance_id": "2446",
+      "session_start": 1778141108.6897316,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141103.661,
+          "target": "instance_load",
+          "instance_id": "2446",
+          "client_timestamp": 1778141103661,
+          "metadata": {
+            "instance_id": "2446",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141117.098,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "2446",
+          "client_timestamp": 1778141117098,
+          "metadata": {
+            "x": 721,
+            "y": 1001
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141117.1,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "2446",
+          "client_timestamp": 1778141117100,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141117.605,
+          "target": "instance:2446",
+          "instance_id": "2446",
+          "client_timestamp": 1778141117605,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141118.045,
+          "target": "textbox:comment",
+          "instance_id": "2446",
+          "client_timestamp": 1778141118045,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141118.162,
+          "target": "textbox:comment",
+          "instance_id": "2446",
+          "client_timestamp": 1778141118162,
+          "metadata": {
+            "x": 967,
+            "y": 1004
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141122.914,
+          "target": "schema:comment",
+          "instance_id": "2446",
+          "client_timestamp": 1778141122914,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "D\u00e9duction contrastive",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141123.148,
+          "target": "textbox:comment",
+          "instance_id": "2446",
+          "client_timestamp": 1778141123148,
+          "metadata": {
+            "duration_ms": 5103
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141123.215,
+          "target": "next",
+          "instance_id": "2446",
+          "client_timestamp": 1778141123215,
+          "metadata": {
+            "from_instance": "2446",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141123.215,
+          "target": "instance:2446",
+          "instance_id": "2446",
+          "client_timestamp": 1778141123215,
+          "metadata": {}
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141123.419,
+          "target": "instance:2446",
+          "instance_id": "2446",
+          "client_timestamp": 1778141123419,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141117.1305702,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141123.0113807,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "D\u00e9duction contrastive",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 5103
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "10236": {
+      "instance_id": "10236",
+      "session_start": 1778141128.7961185,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141123.758,
+          "target": "instance_load",
+          "instance_id": "10236",
+          "client_timestamp": 1778141123758,
+          "metadata": {
+            "instance_id": "10236",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141130.871,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "10236",
+          "client_timestamp": 1778141130871,
+          "metadata": {
+            "x": 747,
+            "y": 1010
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141130.873,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "10236",
+          "client_timestamp": 1778141130873,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141131.376,
+          "target": "instance:10236",
+          "instance_id": "10236",
+          "client_timestamp": 1778141131376,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141131.786,
+          "target": "next",
+          "instance_id": "10236",
+          "client_timestamp": 1778141131786,
+          "metadata": {
+            "from_instance": "10236",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141131.786,
+          "target": "instance:10236",
+          "instance_id": "10236",
+          "client_timestamp": 1778141131786,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141130.9017448,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "8113": {
+      "instance_id": "8113",
+      "session_start": 1778141137.4125245,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141132.312,
+          "target": "instance_load",
+          "instance_id": "8113",
+          "client_timestamp": 1778141132312,
+          "metadata": {
+            "instance_id": "8113",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141155.299,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "8113",
+          "client_timestamp": 1778141155299,
+          "metadata": {
+            "x": 678,
+            "y": 998
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141155.299,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "8113",
+          "client_timestamp": 1778141155299,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141155.802,
+          "target": "instance:8113",
+          "instance_id": "8113",
+          "client_timestamp": 1778141155802,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141160.699,
+          "target": "next",
+          "instance_id": "8113",
+          "client_timestamp": 1778141160699,
+          "metadata": {
+            "from_instance": "8113",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141160.699,
+          "target": "instance:8113",
+          "instance_id": "8113",
+          "client_timestamp": 1778141160699,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141155.330752,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "6867": {
+      "instance_id": "6867",
+      "session_start": 1778141166.2964544,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141161.26,
+          "target": "instance_load",
+          "instance_id": "6867",
+          "client_timestamp": 1778141161260,
+          "metadata": {
+            "instance_id": "6867",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141170.322,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "6867",
+          "client_timestamp": 1778141170322,
+          "metadata": {
+            "x": 744,
+            "y": 993
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141170.324,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "6867",
+          "client_timestamp": 1778141170324,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141170.826,
+          "target": "instance:6867",
+          "instance_id": "6867",
+          "client_timestamp": 1778141170826,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141174.705,
+          "target": "next",
+          "instance_id": "6867",
+          "client_timestamp": 1778141174705,
+          "metadata": {
+            "from_instance": "6867",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141174.705,
+          "target": "instance:6867",
+          "instance_id": "6867",
+          "client_timestamp": 1778141174705,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141170.3636532,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "11641": {
+      "instance_id": "11641",
+      "session_start": 1778141180.2674837,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141175.233,
+          "target": "instance_load",
+          "instance_id": "11641",
+          "client_timestamp": 1778141175233,
+          "metadata": {
+            "instance_id": "11641",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141183.575,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "11641",
+          "client_timestamp": 1778141183575,
+          "metadata": {
+            "x": 789,
+            "y": 996
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141183.577,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "11641",
+          "client_timestamp": 1778141183577,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141184.078,
+          "target": "instance:11641",
+          "instance_id": "11641",
+          "client_timestamp": 1778141184078,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141184.161,
+          "target": "textbox:comment",
+          "instance_id": "11641",
+          "client_timestamp": 1778141184161,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141184.291,
+          "target": "textbox:comment",
+          "instance_id": "11641",
+          "client_timestamp": 1778141184291,
+          "metadata": {
+            "x": 1157,
+            "y": 1015
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141188.774,
+          "target": "schema:comment",
+          "instance_id": "11641",
+          "client_timestamp": 1778141188774,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141189.28,
+          "target": "instance:11641",
+          "instance_id": "11641",
+          "client_timestamp": 1778141189280,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141198.452,
+          "target": "textbox:comment",
+          "instance_id": "11641",
+          "client_timestamp": 1778141198452,
+          "metadata": {
+            "duration_ms": 14291
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141198.534,
+          "target": "jump_to_unannotated_prev",
+          "instance_id": "11641",
+          "client_timestamp": 1778141198534,
+          "metadata": {
+            "from_instance": "11641",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141198.534,
+          "target": "instance:11641",
+          "instance_id": "11641",
+          "client_timestamp": 1778141198534,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141183.6051493,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141188.8054585,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 14291
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "1631": {
+      "instance_id": "1631",
+      "session_start": 1778141202.8889112,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141198.989,
+          "target": "instance_load",
+          "instance_id": "1631",
+          "client_timestamp": 1778141198989,
+          "metadata": {
+            "instance_id": "1631",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141201.233,
+          "target": "jump_to_unannotated",
+          "instance_id": "1631",
+          "client_timestamp": 1778141201233,
+          "metadata": {
+            "from_instance": "1631",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141201.233,
+          "target": "instance:1631",
+          "instance_id": "1631",
+          "client_timestamp": 1778141201233,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141202.685,
+          "target": "jump_to_unannotated_prev",
+          "instance_id": "1631",
+          "client_timestamp": 1778141202685,
+          "metadata": {
+            "from_instance": "1631",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141202.685,
+          "target": "instance:1631",
+          "instance_id": "1631",
+          "client_timestamp": 1778141202685,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141228.746,
+          "target": "instance_load",
+          "instance_id": "1631",
+          "client_timestamp": 1778141228746,
+          "metadata": {
+            "instance_id": "1631",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141240.022,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "1631",
+          "client_timestamp": 1778141240022,
+          "metadata": {
+            "x": 807,
+            "y": 1011
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141240.023,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "1631",
+          "client_timestamp": 1778141240023,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141240.525,
+          "target": "instance:1631",
+          "instance_id": "1631",
+          "client_timestamp": 1778141240525,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141248.503,
+          "target": "textbox:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141248503,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141248.571,
+          "target": "textbox:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141248571,
+          "metadata": {
+            "x": 1188,
+            "y": 1005
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141251.89,
+          "target": "schema:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141251890,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "Unrelated ",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141252.395,
+          "target": "instance:1631",
+          "instance_id": "1631",
+          "client_timestamp": 1778141252395,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141260.515,
+          "target": "textbox:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141260515,
+          "metadata": {
+            "x": 971,
+            "y": 1001
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141263.71,
+          "target": "schema:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141263710,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "Unrelated ",
+            "new_value": "warning Unrelated ",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141264.215,
+          "target": "instance:1631",
+          "instance_id": "1631",
+          "client_timestamp": 1778141264215,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141274.77,
+          "target": "textbox:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141274770,
+          "metadata": {
+            "duration_ms": 26267
+          }
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141357.726,
+          "target": "textbox:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141357726,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141358.389,
+          "target": "textbox:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141358389,
+          "metadata": {
+            "x": 921,
+            "y": 1002
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141361.511,
+          "target": "textbox:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141361511,
+          "metadata": {
+            "duration_ms": 3785
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141361.632,
+          "target": "schema:comment",
+          "instance_id": "1631",
+          "client_timestamp": 1778141361632,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": "warning Unrelated ",
+            "new_value": "unrelated image",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141361.84,
+          "target": "next",
+          "instance_id": "1631",
+          "client_timestamp": 1778141361840,
+          "metadata": {
+            "from_instance": "1631",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141361.84,
+          "target": "instance:1631",
+          "instance_id": "1631",
+          "client_timestamp": 1778141361840,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141362.435,
+          "target": "instance_load",
+          "instance_id": "1631",
+          "client_timestamp": 1778141362435,
+          "metadata": {
+            "instance_id": "1631",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141366.96,
+          "target": "next",
+          "instance_id": "1631",
+          "client_timestamp": 1778141366960,
+          "metadata": {
+            "from_instance": "1631",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141366.96,
+          "target": "instance:1631",
+          "instance_id": "1631",
+          "client_timestamp": 1778141366960,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141367.485,
+          "target": "instance_load",
+          "instance_id": "1631",
+          "client_timestamp": 1778141367485,
+          "metadata": {
+            "instance_id": "1631",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141368.96,
+          "target": "next",
+          "instance_id": "1631",
+          "client_timestamp": 1778141368960,
+          "metadata": {
+            "from_instance": "1631",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141368.96,
+          "target": "instance:1631",
+          "instance_id": "1631",
+          "client_timestamp": 1778141368960,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141369.519,
+          "target": "instance_load",
+          "instance_id": "1631",
+          "client_timestamp": 1778141369519,
+          "metadata": {
+            "instance_id": "1631",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141371.314,
+          "target": "jump_to_unannotated",
+          "instance_id": "1631",
+          "client_timestamp": 1778141371314,
+          "metadata": {
+            "from_instance": "1631",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141371.314,
+          "target": "instance:1631",
+          "instance_id": "1631",
+          "client_timestamp": 1778141371314,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141240.053698,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141251.9195924,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "Unrelated ",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141263.7397141,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "Unrelated ",
+          "new_value": "warning Unrelated ",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141361.6634967,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": "warning Unrelated ",
+          "new_value": "unrelated image",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 30052
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "7786": {
+      "instance_id": "7786",
+      "session_start": 1778141208.170152,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141203.139,
+          "target": "instance_load",
+          "instance_id": "7786",
+          "client_timestamp": 1778141203139,
+          "metadata": {
+            "instance_id": "7786",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141226.728,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "7786",
+          "client_timestamp": 1778141226728,
+          "metadata": {
+            "x": 808,
+            "y": 1013
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141226.728,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "7786",
+          "client_timestamp": 1778141226728,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141227.23,
+          "target": "instance:7786",
+          "instance_id": "7786",
+          "client_timestamp": 1778141227230,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141228.097,
+          "target": "next",
+          "instance_id": "7786",
+          "client_timestamp": 1778141228097,
+          "metadata": {
+            "from_instance": "7786",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141228.097,
+          "target": "instance:7786",
+          "instance_id": "7786",
+          "client_timestamp": 1778141228097,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141226.7671616,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "4761": {
+      "instance_id": "4761",
+      "session_start": 1778141376.7921112,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141371.757,
+          "target": "instance_load",
+          "instance_id": "4761",
+          "client_timestamp": 1778141371757,
+          "metadata": {
+            "instance_id": "4761",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141384.511,
+          "target": "textbox:comment",
+          "instance_id": "4761",
+          "client_timestamp": 1778141384511,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141384.6,
+          "target": "textbox:comment",
+          "instance_id": "4761",
+          "client_timestamp": 1778141384600,
+          "metadata": {
+            "x": 928,
+            "y": 1006
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141385.326,
+          "target": "textbox:comment",
+          "instance_id": "4761",
+          "client_timestamp": 1778141385326,
+          "metadata": {
+            "duration_ms": 815
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141385.386,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "4761",
+          "client_timestamp": 1778141385386,
+          "metadata": {
+            "x": 768,
+            "y": 1002
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141385.387,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "4761",
+          "client_timestamp": 1778141385387,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141385.891,
+          "target": "instance:4761",
+          "instance_id": "4761",
+          "client_timestamp": 1778141385891,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141386.369,
+          "target": "next",
+          "instance_id": "4761",
+          "client_timestamp": 1778141386369,
+          "metadata": {
+            "from_instance": "4761",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141386.369,
+          "target": "instance:4761",
+          "instance_id": "4761",
+          "client_timestamp": 1778141386369,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141385.417263,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 815
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "297": {
+      "instance_id": "297",
+      "session_start": 1778141391.9648142,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141386.931,
+          "target": "instance_load",
+          "instance_id": "297",
+          "client_timestamp": 1778141386931,
+          "metadata": {
+            "instance_id": "297",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141416.617,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "297",
+          "client_timestamp": 1778141416617,
+          "metadata": {
+            "x": 676,
+            "y": 1004
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141416.618,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "297",
+          "client_timestamp": 1778141416618,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141417.121,
+          "target": "instance:297",
+          "instance_id": "297",
+          "client_timestamp": 1778141417121,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141418.308,
+          "target": "textbox:comment",
+          "instance_id": "297",
+          "client_timestamp": 1778141418308,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141418.383,
+          "target": "textbox:comment",
+          "instance_id": "297",
+          "client_timestamp": 1778141418383,
+          "metadata": {
+            "x": 1132,
+            "y": 987
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141421.45,
+          "target": "schema:comment",
+          "instance_id": "297",
+          "client_timestamp": 1778141421450,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "En zoomant",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141421.953,
+          "target": "instance:297",
+          "instance_id": "297",
+          "client_timestamp": 1778141421953,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141424.063,
+          "target": "textbox:comment",
+          "instance_id": "297",
+          "client_timestamp": 1778141424063,
+          "metadata": {
+            "duration_ms": 5755
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141424.636,
+          "target": "next",
+          "instance_id": "297",
+          "client_timestamp": 1778141424636,
+          "metadata": {
+            "from_instance": "297",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141424.638,
+          "target": "instance:297",
+          "instance_id": "297",
+          "client_timestamp": 1778141424638,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141416.6560786,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141421.4821904,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "En zoomant",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 5755
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "11383": {
+      "instance_id": "11383",
+      "session_start": 1778141430.217607,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141425.184,
+          "target": "instance_load",
+          "instance_id": "11383",
+          "client_timestamp": 1778141425184,
+          "metadata": {
+            "instance_id": "11383",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141441.827,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "11383",
+          "client_timestamp": 1778141441827,
+          "metadata": {
+            "x": 756,
+            "y": 995
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141441.827,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "11383",
+          "client_timestamp": 1778141441827,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141442.329,
+          "target": "instance:11383",
+          "instance_id": "11383",
+          "client_timestamp": 1778141442329,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141447.964,
+          "target": "next",
+          "instance_id": "11383",
+          "client_timestamp": 1778141447964,
+          "metadata": {
+            "from_instance": "11383",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141447.964,
+          "target": "instance:11383",
+          "instance_id": "11383",
+          "client_timestamp": 1778141447964,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141441.8563836,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "3972": {
+      "instance_id": "3972",
+      "session_start": 1778141453.563873,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141448.522,
+          "target": "instance_load",
+          "instance_id": "3972",
+          "client_timestamp": 1778141448522,
+          "metadata": {
+            "instance_id": "3972",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141468.158,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "3972",
+          "client_timestamp": 1778141468158,
+          "metadata": {
+            "x": 640,
+            "y": 996
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141468.161,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "3972",
+          "client_timestamp": 1778141468161,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141468.663,
+          "target": "instance:3972",
+          "instance_id": "3972",
+          "client_timestamp": 1778141468663,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141468.971,
+          "target": "next",
+          "instance_id": "3972",
+          "client_timestamp": 1778141468971,
+          "metadata": {
+            "from_instance": "3972",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141468.971,
+          "target": "instance:3972",
+          "instance_id": "3972",
+          "client_timestamp": 1778141468971,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141468.1916165,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "7564": {
+      "instance_id": "7564",
+      "session_start": 1778141474.5725603,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141469.538,
+          "target": "instance_load",
+          "instance_id": "7564",
+          "client_timestamp": 1778141469538,
+          "metadata": {
+            "instance_id": "7564",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141476.809,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "7564",
+          "client_timestamp": 1778141476809,
+          "metadata": {
+            "x": 666,
+            "y": 997
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141476.809,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "7564",
+          "client_timestamp": 1778141476809,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141477.316,
+          "target": "instance:7564",
+          "instance_id": "7564",
+          "client_timestamp": 1778141477316,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141488.332,
+          "target": "next",
+          "instance_id": "7564",
+          "client_timestamp": 1778141488332,
+          "metadata": {
+            "from_instance": "7564",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141488.332,
+          "target": "instance:7564",
+          "instance_id": "7564",
+          "client_timestamp": 1778141488332,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141476.8387861,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "7274": {
+      "instance_id": "7274",
+      "session_start": 1778141493.9441397,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141488.894,
+          "target": "instance_load",
+          "instance_id": "7274",
+          "client_timestamp": 1778141488894,
+          "metadata": {
+            "instance_id": "7274",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141502.371,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "7274",
+          "client_timestamp": 1778141502371,
+          "metadata": {
+            "x": 679,
+            "y": 988
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141502.371,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "7274",
+          "client_timestamp": 1778141502371,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141502.873,
+          "target": "instance:7274",
+          "instance_id": "7274",
+          "client_timestamp": 1778141502873,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141513.593,
+          "target": "next",
+          "instance_id": "7274",
+          "client_timestamp": 1778141513593,
+          "metadata": {
+            "from_instance": "7274",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141513.593,
+          "target": "instance:7274",
+          "instance_id": "7274",
+          "client_timestamp": 1778141513593,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141502.4030344,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "9988": {
+      "instance_id": "9988",
+      "session_start": 1778141519.1824982,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141514.15,
+          "target": "instance_load",
+          "instance_id": "9988",
+          "client_timestamp": 1778141514150,
+          "metadata": {
+            "instance_id": "9988",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141519.298,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "9988",
+          "client_timestamp": 1778141519298,
+          "metadata": {
+            "x": 603,
+            "y": 1011
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141519.3,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "9988",
+          "client_timestamp": 1778141519300,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141519.805,
+          "target": "instance:9988",
+          "instance_id": "9988",
+          "client_timestamp": 1778141519805,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141520.213,
+          "target": "next",
+          "instance_id": "9988",
+          "client_timestamp": 1778141520213,
+          "metadata": {
+            "from_instance": "9988",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141520.213,
+          "target": "instance:9988",
+          "instance_id": "9988",
+          "client_timestamp": 1778141520213,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141519.3292568,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "4565": {
+      "instance_id": "4565",
+      "session_start": 1778141525.800051,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141520.767,
+          "target": "instance_load",
+          "instance_id": "4565",
+          "client_timestamp": 1778141520767,
+          "metadata": {
+            "instance_id": "4565",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141536.773,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "4565",
+          "client_timestamp": 1778141536773,
+          "metadata": {
+            "x": 638,
+            "y": 1007
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141536.773,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "4565",
+          "client_timestamp": 1778141536773,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141537.279,
+          "target": "instance:4565",
+          "instance_id": "4565",
+          "client_timestamp": 1778141537279,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141546.259,
+          "target": "next",
+          "instance_id": "4565",
+          "client_timestamp": 1778141546259,
+          "metadata": {
+            "from_instance": "4565",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141546.259,
+          "target": "instance:4565",
+          "instance_id": "4565",
+          "client_timestamp": 1778141546259,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141536.8048484,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "11214": {
+      "instance_id": "11214",
+      "session_start": 1778141551.8560133,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141546.821,
+          "target": "instance_load",
+          "instance_id": "11214",
+          "client_timestamp": 1778141546821,
+          "metadata": {
+            "instance_id": "11214",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141554.931,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "11214",
+          "client_timestamp": 1778141554931,
+          "metadata": {
+            "x": 770,
+            "y": 1005
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141554.931,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "11214",
+          "client_timestamp": 1778141554931,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141555.436,
+          "target": "instance:11214",
+          "instance_id": "11214",
+          "client_timestamp": 1778141555436,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141571.07,
+          "target": "next",
+          "instance_id": "11214",
+          "client_timestamp": 1778141571070,
+          "metadata": {
+            "from_instance": "11214",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141571.07,
+          "target": "instance:11214",
+          "instance_id": "11214",
+          "client_timestamp": 1778141571070,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141554.9623637,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "12606": {
+      "instance_id": "12606",
+      "session_start": 1778141576.699642,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141571.664,
+          "target": "instance_load",
+          "instance_id": "12606",
+          "client_timestamp": 1778141571664,
+          "metadata": {
+            "instance_id": "12606",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141611.963,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "12606",
+          "client_timestamp": 1778141611963,
+          "metadata": {
+            "x": 654,
+            "y": 995
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141611.963,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "12606",
+          "client_timestamp": 1778141611963,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141612.464,
+          "target": "instance:12606",
+          "instance_id": "12606",
+          "client_timestamp": 1778141612464,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141615.288,
+          "target": "next",
+          "instance_id": "12606",
+          "client_timestamp": 1778141615288,
+          "metadata": {
+            "from_instance": "12606",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141615.288,
+          "target": "instance:12606",
+          "instance_id": "12606",
+          "client_timestamp": 1778141615288,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141611.9980316,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "6649": {
+      "instance_id": "6649",
+      "session_start": 1778141620.8787057,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141615.845,
+          "target": "instance_load",
+          "instance_id": "6649",
+          "client_timestamp": 1778141615845,
+          "metadata": {
+            "instance_id": "6649",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141665.947,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "6649",
+          "client_timestamp": 1778141665947,
+          "metadata": {
+            "x": 560,
+            "y": 989
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141665.949,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "6649",
+          "client_timestamp": 1778141665949,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141666.45,
+          "target": "instance:6649",
+          "instance_id": "6649",
+          "client_timestamp": 1778141666450,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141667.614,
+          "target": "next",
+          "instance_id": "6649",
+          "client_timestamp": 1778141667614,
+          "metadata": {
+            "from_instance": "6649",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141667.614,
+          "target": "instance:6649",
+          "instance_id": "6649",
+          "client_timestamp": 1778141667614,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141665.9864879,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "4600": {
+      "instance_id": "4600",
+      "session_start": 1778141673.2052736,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141668.175,
+          "target": "instance_load",
+          "instance_id": "4600",
+          "client_timestamp": 1778141668175,
+          "metadata": {
+            "instance_id": "4600",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141674.001,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "4600",
+          "client_timestamp": 1778141674001,
+          "metadata": {
+            "x": 669,
+            "y": 988
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141674.002,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "4600",
+          "client_timestamp": 1778141674002,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141674.506,
+          "target": "instance:4600",
+          "instance_id": "4600",
+          "client_timestamp": 1778141674506,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141675.472,
+          "target": "textbox:comment",
+          "instance_id": "4600",
+          "client_timestamp": 1778141675472,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141675.532,
+          "target": "textbox:comment",
+          "instance_id": "4600",
+          "client_timestamp": 1778141675532,
+          "metadata": {
+            "x": 962,
+            "y": 1001
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141680.618,
+          "target": "textbox:comment",
+          "instance_id": "4600",
+          "client_timestamp": 1778141680618,
+          "metadata": {
+            "duration_ms": 5146
+          }
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141699.949,
+          "target": "textbox:comment",
+          "instance_id": "4600",
+          "client_timestamp": 1778141699949,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141700.346,
+          "target": "textbox:comment",
+          "instance_id": "4600",
+          "client_timestamp": 1778141700346,
+          "metadata": {
+            "duration_ms": 397
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141700.412,
+          "target": "next",
+          "instance_id": "4600",
+          "client_timestamp": 1778141700412,
+          "metadata": {
+            "from_instance": "4600",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141700.412,
+          "target": "instance:4600",
+          "instance_id": "4600",
+          "client_timestamp": 1778141700412,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141674.035887,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 5543
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "9089": {
+      "instance_id": "9089",
+      "session_start": 1778141706.0271041,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141700.993,
+          "target": "instance_load",
+          "instance_id": "9089",
+          "client_timestamp": 1778141700993,
+          "metadata": {
+            "instance_id": "9089",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141708.732,
+          "target": "next",
+          "instance_id": "9089",
+          "client_timestamp": 1778141708732,
+          "metadata": {
+            "from_instance": "9089",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141708.733,
+          "target": "instance:9089",
+          "instance_id": "9089",
+          "client_timestamp": 1778141708733,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141711.417,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "9089",
+          "client_timestamp": 1778141711417,
+          "metadata": {
+            "x": 700,
+            "y": 1000
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141711.418,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "9089",
+          "client_timestamp": 1778141711418,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141711.923,
+          "target": "instance:9089",
+          "instance_id": "9089",
+          "client_timestamp": 1778141711923,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141712.183,
+          "target": "next",
+          "instance_id": "9089",
+          "client_timestamp": 1778141712183,
+          "metadata": {
+            "from_instance": "9089",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141712.183,
+          "target": "instance:9089",
+          "instance_id": "9089",
+          "client_timestamp": 1778141712183,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141711.4506094,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "4824": {
+      "instance_id": "4824",
+      "session_start": 1778141717.7706203,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141712.738,
+          "target": "instance_load",
+          "instance_id": "4824",
+          "client_timestamp": 1778141712738,
+          "metadata": {
+            "instance_id": "4824",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141745.266,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "4824",
+          "client_timestamp": 1778141745266,
+          "metadata": {
+            "x": 718,
+            "y": 1010
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141745.268,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "4824",
+          "client_timestamp": 1778141745268,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141745.771,
+          "target": "instance:4824",
+          "instance_id": "4824",
+          "client_timestamp": 1778141745771,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141746.007,
+          "target": "textbox:comment",
+          "instance_id": "4824",
+          "client_timestamp": 1778141746007,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141746.065,
+          "target": "textbox:comment",
+          "instance_id": "4824",
+          "client_timestamp": 1778141746065,
+          "metadata": {
+            "x": 1083,
+            "y": 1005
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141747.948,
+          "target": "textbox:comment",
+          "instance_id": "4824",
+          "client_timestamp": 1778141747948,
+          "metadata": {
+            "duration_ms": 1941
+          }
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141754.862,
+          "target": "textbox:comment",
+          "instance_id": "4824",
+          "client_timestamp": 1778141754862,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141755.654,
+          "target": "textbox:comment",
+          "instance_id": "4824",
+          "client_timestamp": 1778141755654,
+          "metadata": {
+            "duration_ms": 792
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141756.254,
+          "target": "next",
+          "instance_id": "4824",
+          "client_timestamp": 1778141756254,
+          "metadata": {
+            "from_instance": "4824",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141756.254,
+          "target": "instance:4824",
+          "instance_id": "4824",
+          "client_timestamp": 1778141756254,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141745.2995803,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 2733
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "10254": {
+      "instance_id": "10254",
+      "session_start": 1778141761.837115,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141756.806,
+          "target": "instance_load",
+          "instance_id": "10254",
+          "client_timestamp": 1778141756806,
+          "metadata": {
+            "instance_id": "10254",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141802.809,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "10254",
+          "client_timestamp": 1778141802809,
+          "metadata": {
+            "x": 766,
+            "y": 994
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141802.811,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "10254",
+          "client_timestamp": 1778141802811,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141803.314,
+          "target": "instance:10254",
+          "instance_id": "10254",
+          "client_timestamp": 1778141803314,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141806.545,
+          "target": "next",
+          "instance_id": "10254",
+          "client_timestamp": 1778141806545,
+          "metadata": {
+            "from_instance": "10254",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141806.545,
+          "target": "instance:10254",
+          "instance_id": "10254",
+          "client_timestamp": 1778141806545,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141802.8481784,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "9991": {
+      "instance_id": "9991",
+      "session_start": 1778141812.1664548,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141807.127,
+          "target": "instance_load",
+          "instance_id": "9991",
+          "client_timestamp": 1778141807127,
+          "metadata": {
+            "instance_id": "9991",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141812.619,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "9991",
+          "client_timestamp": 1778141812619,
+          "metadata": {
+            "x": 627,
+            "y": 999
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141812.62,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "9991",
+          "client_timestamp": 1778141812620,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141813.122,
+          "target": "instance:9991",
+          "instance_id": "9991",
+          "client_timestamp": 1778141813122,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141813.414,
+          "target": "next",
+          "instance_id": "9991",
+          "client_timestamp": 1778141813414,
+          "metadata": {
+            "from_instance": "9991",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141813.414,
+          "target": "instance:9991",
+          "instance_id": "9991",
+          "client_timestamp": 1778141813414,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141812.6493583,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "4539": {
+      "instance_id": "4539",
+      "session_start": 1778141819.1281075,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141814.093,
+          "target": "instance_load",
+          "instance_id": "4539",
+          "client_timestamp": 1778141814093,
+          "metadata": {
+            "instance_id": "4539",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141824.201,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "4539",
+          "client_timestamp": 1778141824201,
+          "metadata": {
+            "x": 760,
+            "y": 998
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141824.201,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "4539",
+          "client_timestamp": 1778141824201,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141824.702,
+          "target": "instance:4539",
+          "instance_id": "4539",
+          "client_timestamp": 1778141824702,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141827.722,
+          "target": "next",
+          "instance_id": "4539",
+          "client_timestamp": 1778141827722,
+          "metadata": {
+            "from_instance": "4539",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141827.722,
+          "target": "instance:4539",
+          "instance_id": "4539",
+          "client_timestamp": 1778141827722,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141824.2311265,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "12043": {
+      "instance_id": "12043",
+      "session_start": 1778141833.3254576,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141828.289,
+          "target": "instance_load",
+          "instance_id": "12043",
+          "client_timestamp": 1778141828289,
+          "metadata": {
+            "instance_id": "12043",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141840.191,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "12043",
+          "client_timestamp": 1778141840191,
+          "metadata": {
+            "x": 765,
+            "y": 993
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141840.192,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "12043",
+          "client_timestamp": 1778141840192,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141840.698,
+          "target": "instance:12043",
+          "instance_id": "12043",
+          "client_timestamp": 1778141840698,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141841.543,
+          "target": "next",
+          "instance_id": "12043",
+          "client_timestamp": 1778141841543,
+          "metadata": {
+            "from_instance": "12043",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141841.543,
+          "target": "instance:12043",
+          "instance_id": "12043",
+          "client_timestamp": 1778141841543,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141840.2227693,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "8130": {
+      "instance_id": "8130",
+      "session_start": 1778141847.173094,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141842.134,
+          "target": "instance_load",
+          "instance_id": "8130",
+          "client_timestamp": 1778141842134,
+          "metadata": {
+            "instance_id": "8130",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141854.317,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "8130",
+          "client_timestamp": 1778141854317,
+          "metadata": {
+            "x": 595,
+            "y": 1000
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141854.319,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "8130",
+          "client_timestamp": 1778141854319,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141854.822,
+          "target": "instance:8130",
+          "instance_id": "8130",
+          "client_timestamp": 1778141854822,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141855.633,
+          "target": "next",
+          "instance_id": "8130",
+          "client_timestamp": 1778141855633,
+          "metadata": {
+            "from_instance": "8130",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141855.633,
+          "target": "instance:8130",
+          "instance_id": "8130",
+          "client_timestamp": 1778141855633,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141854.3504653,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "5525": {
+      "instance_id": "5525",
+      "session_start": 1778141861.1980944,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141856.161,
+          "target": "instance_load",
+          "instance_id": "5525",
+          "client_timestamp": 1778141856161,
+          "metadata": {
+            "instance_id": "5525",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141889.19,
+          "target": "next",
+          "instance_id": "5525",
+          "client_timestamp": 1778141889190,
+          "metadata": {
+            "from_instance": "5525",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141889.19,
+          "target": "instance:5525",
+          "instance_id": "5525",
+          "client_timestamp": 1778141889190,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141891.768,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "5525",
+          "client_timestamp": 1778141891768,
+          "metadata": {
+            "x": 752,
+            "y": 1006
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141891.769,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "5525",
+          "client_timestamp": 1778141891769,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141892.27,
+          "target": "instance:5525",
+          "instance_id": "5525",
+          "client_timestamp": 1778141892270,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141894.269,
+          "target": "label:entity_is_illustrated:u",
+          "instance_id": "5525",
+          "client_timestamp": 1778141894269,
+          "metadata": {
+            "x": 830,
+            "y": 1012
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141894.27,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "5525",
+          "client_timestamp": 1778141894270,
+          "metadata": {
+            "label": "UNCERTAIN",
+            "action": "select",
+            "new_value": "u",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141894.775,
+          "target": "instance:5525",
+          "instance_id": "5525",
+          "client_timestamp": 1778141894775,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141896.079,
+          "target": "textbox:comment",
+          "instance_id": "5525",
+          "client_timestamp": 1778141896079,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141896.167,
+          "target": "textbox:comment",
+          "instance_id": "5525",
+          "client_timestamp": 1778141896167,
+          "metadata": {
+            "x": 1014,
+            "y": 1012
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141898.596,
+          "target": "schema:comment",
+          "instance_id": "5525",
+          "client_timestamp": 1778141898596,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "BUG",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141898.988,
+          "target": "textbox:comment",
+          "instance_id": "5525",
+          "client_timestamp": 1778141898988,
+          "metadata": {
+            "duration_ms": 2909
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141899.035,
+          "target": "next",
+          "instance_id": "5525",
+          "client_timestamp": 1778141899035,
+          "metadata": {
+            "from_instance": "5525",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141899.035,
+          "target": "instance:5525",
+          "instance_id": "5525",
+          "client_timestamp": 1778141899035,
+          "metadata": {}
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141899.097,
+          "target": "instance:5525",
+          "instance_id": "5525",
+          "client_timestamp": 1778141899097,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141891.79992,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141894.301391,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "UNCERTAIN",
+          "action": "select",
+          "old_value": null,
+          "new_value": "u",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141898.6307094,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "BUG",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 2909
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "6192": {
+      "instance_id": "6192",
+      "session_start": 1778141904.6058161,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141899.573,
+          "target": "instance_load",
+          "instance_id": "6192",
+          "client_timestamp": 1778141899573,
+          "metadata": {
+            "instance_id": "6192",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141908.578,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "6192",
+          "client_timestamp": 1778141908578,
+          "metadata": {
+            "x": 733,
+            "y": 1008
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141908.58,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "6192",
+          "client_timestamp": 1778141908580,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141909.084,
+          "target": "instance:6192",
+          "instance_id": "6192",
+          "client_timestamp": 1778141909084,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141909.269,
+          "target": "textbox:comment",
+          "instance_id": "6192",
+          "client_timestamp": 1778141909269,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141909.324,
+          "target": "textbox:comment",
+          "instance_id": "6192",
+          "client_timestamp": 1778141909324,
+          "metadata": {
+            "x": 1007,
+            "y": 991
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141912.927,
+          "target": "schema:comment",
+          "instance_id": "6192",
+          "client_timestamp": 1778141912927,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "Unrelated image",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141913.429,
+          "target": "instance:6192",
+          "instance_id": "6192",
+          "client_timestamp": 1778141913429,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141913.945,
+          "target": "textbox:comment",
+          "instance_id": "6192",
+          "client_timestamp": 1778141913945,
+          "metadata": {
+            "duration_ms": 4676
+          }
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141925.154,
+          "target": "textbox:comment",
+          "instance_id": "6192",
+          "client_timestamp": 1778141925154,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141925.551,
+          "target": "textbox:comment",
+          "instance_id": "6192",
+          "client_timestamp": 1778141925551,
+          "metadata": {
+            "duration_ms": 397
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141925.6,
+          "target": "next",
+          "instance_id": "6192",
+          "client_timestamp": 1778141925600,
+          "metadata": {
+            "from_instance": "6192",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141925.6,
+          "target": "instance:6192",
+          "instance_id": "6192",
+          "client_timestamp": 1778141925600,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141908.608896,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141912.9560728,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "Unrelated image",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 5073
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "5596": {
+      "instance_id": "5596",
+      "session_start": 1778141931.2151175,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141926.175,
+          "target": "instance_load",
+          "instance_id": "5596",
+          "client_timestamp": 1778141926175,
+          "metadata": {
+            "instance_id": "5596",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141952.599,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "5596",
+          "client_timestamp": 1778141952599,
+          "metadata": {
+            "x": 751,
+            "y": 1003
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141952.6,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "5596",
+          "client_timestamp": 1778141952600,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141953.105,
+          "target": "instance:5596",
+          "instance_id": "5596",
+          "client_timestamp": 1778141953105,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778141953.301,
+          "target": "textbox:comment",
+          "instance_id": "5596",
+          "client_timestamp": 1778141953301,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141953.394,
+          "target": "textbox:comment",
+          "instance_id": "5596",
+          "client_timestamp": 1778141953394,
+          "metadata": {
+            "x": 998,
+            "y": 1008
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141958.961,
+          "target": "schema:comment",
+          "instance_id": "5596",
+          "client_timestamp": 1778141958961,
+          "metadata": {
+            "label": "COMMENT",
+            "action": "update",
+            "old_value": null,
+            "new_value": "too abstract",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141959.468,
+          "target": "instance:5596",
+          "instance_id": "5596",
+          "client_timestamp": 1778141959468,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778141961.082,
+          "target": "textbox:comment",
+          "instance_id": "5596",
+          "client_timestamp": 1778141961082,
+          "metadata": {
+            "duration_ms": 7781
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141961.617,
+          "target": "next",
+          "instance_id": "5596",
+          "client_timestamp": 1778141961617,
+          "metadata": {
+            "from_instance": "5596",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141961.617,
+          "target": "instance:5596",
+          "instance_id": "5596",
+          "client_timestamp": 1778141961617,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141952.6292534,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        },
+        {
+          "timestamp": 1778141958.9905753,
+          "schema_name": "comment",
+          "label_name": "COMMENT",
+          "action": "update",
+          "old_value": null,
+          "new_value": "too abstract",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 7781
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "5755": {
+      "instance_id": "5755",
+      "session_start": 1778141967.2285268,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141962.19,
+          "target": "instance_load",
+          "instance_id": "5755",
+          "client_timestamp": 1778141962190,
+          "metadata": {
+            "instance_id": "5755",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141975.858,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "5755",
+          "client_timestamp": 1778141975858,
+          "metadata": {
+            "x": 608,
+            "y": 1017
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141975.858,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "5755",
+          "client_timestamp": 1778141975858,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141976.363,
+          "target": "instance:5755",
+          "instance_id": "5755",
+          "client_timestamp": 1778141976363,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141977.738,
+          "target": "next",
+          "instance_id": "5755",
+          "client_timestamp": 1778141977738,
+          "metadata": {
+            "from_instance": "5755",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141977.738,
+          "target": "instance:5755",
+          "instance_id": "5755",
+          "client_timestamp": 1778141977738,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141975.886369,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "2388": {
+      "instance_id": "2388",
+      "session_start": 1778141983.357338,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778141978.322,
+          "target": "instance_load",
+          "instance_id": "2388",
+          "client_timestamp": 1778141978322,
+          "metadata": {
+            "instance_id": "2388",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778141985.145,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "2388",
+          "client_timestamp": 1778141985145,
+          "metadata": {
+            "x": 579,
+            "y": 1003
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778141985.145,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "2388",
+          "client_timestamp": 1778141985145,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778141985.647,
+          "target": "instance:2388",
+          "instance_id": "2388",
+          "client_timestamp": 1778141985647,
+          "metadata": {}
+        },
+        {
+          "event_type": "focus_in",
+          "timestamp": 1778142000.742,
+          "target": "textbox:comment",
+          "instance_id": "2388",
+          "client_timestamp": 1778142000742,
+          "metadata": {}
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142000.832,
+          "target": "textbox:comment",
+          "instance_id": "2388",
+          "client_timestamp": 1778142000832,
+          "metadata": {
+            "x": 1157,
+            "y": 1012
+          }
+        },
+        {
+          "event_type": "focus_out",
+          "timestamp": 1778142010.07,
+          "target": "textbox:comment",
+          "instance_id": "2388",
+          "client_timestamp": 1778142010070,
+          "metadata": {
+            "duration_ms": 9328
+          }
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142010.187,
+          "target": "next",
+          "instance_id": "2388",
+          "client_timestamp": 1778142010187,
+          "metadata": {
+            "from_instance": "2388",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142010.187,
+          "target": "instance:2388",
+          "instance_id": "2388",
+          "client_timestamp": 1778142010187,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778141985.1748102,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {
+        "textbox:comment": 9328
+      },
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "422": {
+      "instance_id": "422",
+      "session_start": 1778142015.7577963,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142010.724,
+          "target": "instance_load",
+          "instance_id": "422",
+          "client_timestamp": 1778142010724,
+          "metadata": {
+            "instance_id": "422",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142026.527,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "422",
+          "client_timestamp": 1778142026527,
+          "metadata": {
+            "x": 763,
+            "y": 1006
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142026.528,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "422",
+          "client_timestamp": 1778142026528,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142027.028,
+          "target": "instance:422",
+          "instance_id": "422",
+          "client_timestamp": 1778142027028,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142027.446,
+          "target": "next",
+          "instance_id": "422",
+          "client_timestamp": 1778142027446,
+          "metadata": {
+            "from_instance": "422",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142027.446,
+          "target": "instance:422",
+          "instance_id": "422",
+          "client_timestamp": 1778142027446,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142026.5624745,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "3010": {
+      "instance_id": "3010",
+      "session_start": 1778142033.0801685,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142028.045,
+          "target": "instance_load",
+          "instance_id": "3010",
+          "client_timestamp": 1778142028045,
+          "metadata": {
+            "instance_id": "3010",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142037.866,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "3010",
+          "client_timestamp": 1778142037866,
+          "metadata": {
+            "x": 732,
+            "y": 996
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142037.867,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "3010",
+          "client_timestamp": 1778142037867,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142038.372,
+          "target": "instance:3010",
+          "instance_id": "3010",
+          "client_timestamp": 1778142038372,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142047.639,
+          "target": "next",
+          "instance_id": "3010",
+          "client_timestamp": 1778142047639,
+          "metadata": {
+            "from_instance": "3010",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142047.639,
+          "target": "instance:3010",
+          "instance_id": "3010",
+          "client_timestamp": 1778142047639,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142037.897848,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "2550": {
+      "instance_id": "2550",
+      "session_start": 1778142053.2864025,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142048.243,
+          "target": "instance_load",
+          "instance_id": "2550",
+          "client_timestamp": 1778142048243,
+          "metadata": {
+            "instance_id": "2550",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142061.362,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "2550",
+          "client_timestamp": 1778142061362,
+          "metadata": {
+            "x": 678,
+            "y": 1012
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142061.364,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "2550",
+          "client_timestamp": 1778142061364,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142061.866,
+          "target": "instance:2550",
+          "instance_id": "2550",
+          "client_timestamp": 1778142061866,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142076.166,
+          "target": "next",
+          "instance_id": "2550",
+          "client_timestamp": 1778142076166,
+          "metadata": {
+            "from_instance": "2550",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142076.166,
+          "target": "instance:2550",
+          "instance_id": "2550",
+          "client_timestamp": 1778142076166,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142061.3952808,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "7701": {
+      "instance_id": "7701",
+      "session_start": 1778142081.774036,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142076.731,
+          "target": "instance_load",
+          "instance_id": "7701",
+          "client_timestamp": 1778142076731,
+          "metadata": {
+            "instance_id": "7701",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142081.855,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "7701",
+          "client_timestamp": 1778142081855,
+          "metadata": {
+            "x": 604,
+            "y": 1012
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142081.856,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "7701",
+          "client_timestamp": 1778142081856,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142082.36,
+          "target": "instance:7701",
+          "instance_id": "7701",
+          "client_timestamp": 1778142082360,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142083.055,
+          "target": "next",
+          "instance_id": "7701",
+          "client_timestamp": 1778142083055,
+          "metadata": {
+            "from_instance": "7701",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142083.055,
+          "target": "instance:7701",
+          "instance_id": "7701",
+          "client_timestamp": 1778142083055,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142081.8847537,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "3886": {
+      "instance_id": "3886",
+      "session_start": 1778142086.9030638,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142083.714,
+          "target": "instance_load",
+          "instance_id": "3886",
+          "client_timestamp": 1778142083714,
+          "metadata": {
+            "instance_id": "3886",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142086.873,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "3886",
+          "client_timestamp": 1778142086873,
+          "metadata": {
+            "x": 702,
+            "y": 1010
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142086.874,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "3886",
+          "client_timestamp": 1778142086874,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142087.376,
+          "target": "instance:3886",
+          "instance_id": "3886",
+          "client_timestamp": 1778142087376,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142087.839,
+          "target": "next",
+          "instance_id": "3886",
+          "client_timestamp": 1778142087839,
+          "metadata": {
+            "from_instance": "3886",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142087.839,
+          "target": "instance:3886",
+          "instance_id": "3886",
+          "client_timestamp": 1778142087839,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142086.9030735,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "6323": {
+      "instance_id": "6323",
+      "session_start": 1778142093.4073496,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142088.373,
+          "target": "instance_load",
+          "instance_id": "6323",
+          "client_timestamp": 1778142088373,
+          "metadata": {
+            "instance_id": "6323",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142107.983,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "6323",
+          "client_timestamp": 1778142107983,
+          "metadata": {
+            "x": 587,
+            "y": 1008
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142107.983,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "6323",
+          "client_timestamp": 1778142107983,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142108.484,
+          "target": "instance:6323",
+          "instance_id": "6323",
+          "client_timestamp": 1778142108484,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142109.8,
+          "target": "next",
+          "instance_id": "6323",
+          "client_timestamp": 1778142109800,
+          "metadata": {
+            "from_instance": "6323",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142109.8,
+          "target": "instance:6323",
+          "instance_id": "6323",
+          "client_timestamp": 1778142109800,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142108.0141823,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "11549": {
+      "instance_id": "11549",
+      "session_start": 1778142115.5635052,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142110.53,
+          "target": "instance_load",
+          "instance_id": "11549",
+          "client_timestamp": 1778142110530,
+          "metadata": {
+            "instance_id": "11549",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142117.321,
+          "target": "label:entity_is_illustrated:y",
+          "instance_id": "11549",
+          "client_timestamp": 1778142117321,
+          "metadata": {
+            "x": 681,
+            "y": 997
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142117.322,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "11549",
+          "client_timestamp": 1778142117322,
+          "metadata": {
+            "label": "YES",
+            "action": "select",
+            "old_value": null,
+            "new_value": "y",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142117.826,
+          "target": "instance:11549",
+          "instance_id": "11549",
+          "client_timestamp": 1778142117826,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142120.139,
+          "target": "next",
+          "instance_id": "11549",
+          "client_timestamp": 1778142120139,
+          "metadata": {
+            "from_instance": "11549",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142120.139,
+          "target": "instance:11549",
+          "instance_id": "11549",
+          "client_timestamp": 1778142120139,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142117.352311,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "YES",
+          "action": "select",
+          "old_value": null,
+          "new_value": "y",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "2108": {
+      "instance_id": "2108",
+      "session_start": 1778142125.8410459,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142120.793,
+          "target": "instance_load",
+          "instance_id": "2108",
+          "client_timestamp": 1778142120793,
+          "metadata": {
+            "instance_id": "2108",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142133.812,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "2108",
+          "client_timestamp": 1778142133812,
+          "metadata": {
+            "x": 769,
+            "y": 994
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142133.814,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "2108",
+          "client_timestamp": 1778142133814,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142134.318,
+          "target": "instance:2108",
+          "instance_id": "2108",
+          "client_timestamp": 1778142134318,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142138.864,
+          "target": "next",
+          "instance_id": "2108",
+          "client_timestamp": 1778142138864,
+          "metadata": {
+            "from_instance": "2108",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142138.864,
+          "target": "instance:2108",
+          "instance_id": "2108",
+          "client_timestamp": 1778142138864,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142133.8457391,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "1649": {
+      "instance_id": "1649",
+      "session_start": 1778142144.4687223,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142139.424,
+          "target": "instance_load",
+          "instance_id": "1649",
+          "client_timestamp": 1778142139424,
+          "metadata": {
+            "instance_id": "1649",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142147.786,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "1649",
+          "client_timestamp": 1778142147786,
+          "metadata": {
+            "x": 802,
+            "y": 1001
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142147.788,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "1649",
+          "client_timestamp": 1778142147788,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142148.293,
+          "target": "instance:1649",
+          "instance_id": "1649",
+          "client_timestamp": 1778142148293,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142153.838,
+          "target": "next",
+          "instance_id": "1649",
+          "client_timestamp": 1778142153838,
+          "metadata": {
+            "from_instance": "1649",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142153.838,
+          "target": "instance:1649",
+          "instance_id": "1649",
+          "client_timestamp": 1778142153838,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142147.8233223,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "5604": {
+      "instance_id": "5604",
+      "session_start": 1778142159.442395,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142154.406,
+          "target": "instance_load",
+          "instance_id": "5604",
+          "client_timestamp": 1778142154406,
+          "metadata": {
+            "instance_id": "5604",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142160.291,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "5604",
+          "client_timestamp": 1778142160291,
+          "metadata": {
+            "x": 735,
+            "y": 1010
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142160.292,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "5604",
+          "client_timestamp": 1778142160292,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142160.794,
+          "target": "instance:5604",
+          "instance_id": "5604",
+          "client_timestamp": 1778142160794,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142163.96,
+          "target": "next",
+          "instance_id": "5604",
+          "client_timestamp": 1778142163960,
+          "metadata": {
+            "from_instance": "5604",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142163.96,
+          "target": "instance:5604",
+          "instance_id": "5604",
+          "client_timestamp": 1778142163960,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142160.3233902,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "3774": {
+      "instance_id": "3774",
+      "session_start": 1778142169.5866356,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142164.556,
+          "target": "instance_load",
+          "instance_id": "3774",
+          "client_timestamp": 1778142164556,
+          "metadata": {
+            "instance_id": "3774",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142190.905,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "3774",
+          "client_timestamp": 1778142190905,
+          "metadata": {
+            "x": 759,
+            "y": 996
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142190.906,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "3774",
+          "client_timestamp": 1778142190906,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142191.409,
+          "target": "instance:3774",
+          "instance_id": "3774",
+          "client_timestamp": 1778142191409,
+          "metadata": {}
+        },
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142192.288,
+          "target": "next",
+          "instance_id": "3774",
+          "client_timestamp": 1778142192288,
+          "metadata": {
+            "from_instance": "3774",
+            "to_instance": null
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142192.288,
+          "target": "instance:3774",
+          "instance_id": "3774",
+          "client_timestamp": 1778142192288,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142190.9354486,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    },
+    "4042": {
+      "instance_id": "4042",
+      "session_start": 1778142197.924553,
+      "session_end": null,
+      "total_time_ms": 0,
+      "interactions": [
+        {
+          "event_type": "navigation",
+          "timestamp": 1778142192.887,
+          "target": "instance_load",
+          "instance_id": "4042",
+          "client_timestamp": 1778142192887,
+          "metadata": {
+            "instance_id": "4042",
+            "from_instance": null
+          }
+        },
+        {
+          "event_type": "click",
+          "timestamp": 1778142201.526,
+          "target": "label:entity_is_illustrated:n",
+          "instance_id": "4042",
+          "client_timestamp": 1778142201526,
+          "metadata": {
+            "x": 729,
+            "y": 999
+          }
+        },
+        {
+          "event_type": "annotation_change",
+          "timestamp": 1778142201.527,
+          "target": "schema:entity_is_illustrated",
+          "instance_id": "4042",
+          "client_timestamp": 1778142201527,
+          "metadata": {
+            "label": "NO",
+            "action": "select",
+            "old_value": null,
+            "new_value": "n",
+            "source": "user"
+          }
+        },
+        {
+          "event_type": "save",
+          "timestamp": 1778142202.027,
+          "target": "instance:4042",
+          "instance_id": "4042",
+          "client_timestamp": 1778142202027,
+          "metadata": {}
+        }
+      ],
+      "ai_usage": [],
+      "annotation_changes": [
+        {
+          "timestamp": 1778142201.5557566,
+          "schema_name": "entity_is_illustrated",
+          "label_name": "NO",
+          "action": "select",
+          "old_value": null,
+          "new_value": "n",
+          "source": "user"
+        }
+      ],
+      "navigation_history": [],
+      "focus_time_by_element": {},
+      "scroll_depth_max": 0.0,
+      "keyword_highlights_shown": [],
+      "chat_history": []
+    }
+  },
+  "instance_id_to_label_to_value": {
+    "10649": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "627": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "5463": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        ""
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "10296": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "11755": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "3065": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        "D\u00e9duction indirecte"
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "UNCERTAIN"
+        },
+        "u"
+      ]
+    ],
+    "5218": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        "D\u00e9duction contrastive"
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "2446": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        "D\u00e9duction contrastive"
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "10236": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "8113": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "6867": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "11641": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        ""
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "7786": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "1631": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        "unrelated image"
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "4761": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "297": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        "En zoomant"
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "11383": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "3972": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "7564": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "7274": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "9988": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "4565": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "11214": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "12606": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "6649": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "4600": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "9089": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "4824": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "10254": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "9991": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "4539": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "12043": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "8130": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "5525": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        "BUG"
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "UNCERTAIN"
+        },
+        "u"
+      ]
+    ],
+    "6192": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        "Unrelated image"
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "5596": [
+      [
+        {
+          "schema": "comment",
+          "name": "COMMENT"
+        },
+        "too abstract"
+      ],
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "5755": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "2388": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "422": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "3010": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "2550": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "7701": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "3886": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "6323": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "11549": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "YES"
+        },
+        "y"
+      ]
+    ],
+    "2108": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "1649": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "5604": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "3774": [
+      [
+        {
+          "schema": "entity_is_illustrated",
+          "name": "NO"
+        },
+        "n"
+      ]
+    ],
+    "4042": []
+  },
+  "instance_id_to_span_to_value": {},
+  "phase_to_page_to_label_to_value": {
+    "done": {
+      "null": [
+        [
+          {
+            "schema": "entity_is_illustrated",
+            "name": "NO"
+          },
+          "n"
+        ]
+      ]
+    }
+  },
+  "phase_to_page_to_span_to_value": {},
+  "training_state": {
+    "completed_questions": {},
+    "total_correct": 0,
+    "total_attempts": 0,
+    "total_mistakes": 0,
+    "passed": false,
+    "failed": false,
+    "current_question_index": 0,
+    "training_instances": [],
+    "show_feedback": false,
+    "feedback_message": "",
+    "allow_retry": false,
+    "max_mistakes": -1,
+    "max_mistakes_per_question": -1,
+    "category_scores": {}
+  },
+  "qualified_categories": [],
+  "category_qualification_scores": {},
+  "instance_id_to_keyword_highlight_state": {
+    "10649": {
+      "highlights": [],
+      "seed": 223287627,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "627": {
+      "highlights": [],
+      "seed": 2186588572,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "5463": {
+      "highlights": [],
+      "seed": 2327555379,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "10296": {
+      "highlights": [],
+      "seed": 1031011097,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "11755": {
+      "highlights": [],
+      "seed": 545491126,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "3065": {
+      "highlights": [],
+      "seed": 4139644510,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "5218": {
+      "highlights": [],
+      "seed": 1515478557,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "2446": {
+      "highlights": [],
+      "seed": 2913214777,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "10236": {
+      "highlights": [],
+      "seed": 3820703078,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "8113": {
+      "highlights": [],
+      "seed": 1919222678,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "6867": {
+      "highlights": [],
+      "seed": 1613814865,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "11641": {
+      "highlights": [],
+      "seed": 3856175114,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "1631": {
+      "highlights": [],
+      "seed": 3758954887,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "7786": {
+      "highlights": [],
+      "seed": 4099514539,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "4761": {
+      "highlights": [],
+      "seed": 1120809400,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "297": {
+      "highlights": [],
+      "seed": 2376056572,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "11383": {
+      "highlights": [],
+      "seed": 782572887,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "3972": {
+      "highlights": [],
+      "seed": 3090959757,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "7564": {
+      "highlights": [],
+      "seed": 1219607398,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "7274": {
+      "highlights": [],
+      "seed": 3705502148,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "9988": {
+      "highlights": [],
+      "seed": 3282723692,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "4565": {
+      "highlights": [],
+      "seed": 118602,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "11214": {
+      "highlights": [],
+      "seed": 1703042214,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "12606": {
+      "highlights": [],
+      "seed": 1843762559,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "6649": {
+      "highlights": [],
+      "seed": 2580867110,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "4600": {
+      "highlights": [],
+      "seed": 2990157348,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "9089": {
+      "highlights": [],
+      "seed": 3061752615,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "4824": {
+      "highlights": [],
+      "seed": 3239011362,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "10254": {
+      "highlights": [],
+      "seed": 906599765,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "9991": {
+      "highlights": [],
+      "seed": 1751511253,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "4539": {
+      "highlights": [],
+      "seed": 3443908179,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "12043": {
+      "highlights": [],
+      "seed": 3934111917,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "8130": {
+      "highlights": [],
+      "seed": 2793060682,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "5525": {
+      "highlights": [],
+      "seed": 2845419131,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "6192": {
+      "highlights": [],
+      "seed": 247402004,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "5596": {
+      "highlights": [],
+      "seed": 1639103639,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "5755": {
+      "highlights": [],
+      "seed": 4036302239,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "2388": {
+      "highlights": [],
+      "seed": 590645665,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "422": {
+      "highlights": [],
+      "seed": 847791756,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "3010": {
+      "highlights": [],
+      "seed": 2220028849,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "2550": {
+      "highlights": [],
+      "seed": 410841216,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "7701": {
+      "highlights": [],
+      "seed": 2246544789,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "3886": {
+      "highlights": [],
+      "seed": 2987855934,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "6323": {
+      "highlights": [],
+      "seed": 3718284337,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "11549": {
+      "highlights": [],
+      "seed": 1323425503,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "2108": {
+      "highlights": [],
+      "seed": 2795488618,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "1649": {
+      "highlights": [],
+      "seed": 3279819219,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "5604": {
+      "highlights": [],
+      "seed": 1081589395,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "3774": {
+      "highlights": [],
+      "seed": 1588514420,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    },
+    "4042": {
+      "highlights": [],
+      "seed": 2838058459,
+      "settings": {
+        "keyword_probability": 1.0,
+        "random_word_probability": 0.0
+      }
+    }
+  },
+  "instance_id_to_link_to_value": {},
+  "instance_id_to_event_to_value": {}
+}

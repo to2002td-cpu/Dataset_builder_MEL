@@ -7,4 +7,4 @@
 
 cd /home/tderrien/Dataset_builder_MEL
 source .venv/bin/activate
-wikiambig scrape --config configs/scrape/default.yaml -s s6,s7
+python -m wikiambig.cli scrape -c configs/scrape/default.yaml -s s4b,s5,s7

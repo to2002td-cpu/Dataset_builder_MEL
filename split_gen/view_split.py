@@ -9,9 +9,9 @@ Each instance shows the disambiguation task:
   - The answer entity (text ∩ visual) is highlighted in red.
 
 Usage:
-    python split_gen/view_split.py output/split_10_text/instances.jsonl
-    python split_gen/view_split.py output/split_10_text/instances.jsonl --kb kb.jsonl
-    python split_gen/view_split.py output/split_10_text/instances.jsonl --sample 300 --open
+    python split_gen/view_split.py output/pilot/instances.jsonl
+    python split_gen/view_split.py output/pilot/instances.jsonl --kb kb.jsonl
+    python split_gen/view_split.py output/pilot/instances.jsonl --sample 300 --open
 """
 
 from __future__ import annotations

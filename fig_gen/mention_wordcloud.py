@@ -6,9 +6,9 @@ Left panel:  word cloud of the words appearing in mentions.
 Right panel: top-N words as a horizontal bar chart with exact counts.
 
 Usage:
-    python fig_gen/mention_wordcloud.py output/split_10_text/instances.jsonl
-    python fig_gen/mention_wordcloud.py output/split_10_text/instances.jsonl --out out.pdf
-    python fig_gen/mention_wordcloud.py output/split_10_text/instances.jsonl --unique
+    python fig_gen/mention_wordcloud.py output/pilot/instances.jsonl
+    python fig_gen/mention_wordcloud.py output/pilot/instances.jsonl --out out.pdf
+    python fig_gen/mention_wordcloud.py output/pilot/instances.jsonl --unique
 """
 from __future__ import annotations
 
@@ -76,8 +76,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("instances", type=Path, nargs="?",
-                    default=Path("output/split_10_text/instances.jsonl"),
-                    help="instances.jsonl (default: output/split_10_text/instances.jsonl)")
+                    default=Path("output/pilot/instances.jsonl"),
+                    help="instances.jsonl (default: output/pilot/instances.jsonl)")
     ap.add_argument("--out", type=Path, default=Path("output/figures/mention_wordcloud.pdf"),
                     help="output figure path (default: output/figures/mention_wordcloud.pdf)")
     ap.add_argument("--top", type=int, default=25,

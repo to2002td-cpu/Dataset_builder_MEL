@@ -13,10 +13,10 @@ Task definition:
 Filtering thresholds live in configs/split_gen/.
 
 Usage:
-    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/
-    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ \\
+    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/pilot/
+    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/pilot/ \\
         --config configs/split_gen/default.yaml
-    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ \\
+    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/pilot/ \\
         --workers 8
 """
 

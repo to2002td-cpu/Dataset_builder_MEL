@@ -7,9 +7,9 @@ charts only — no fancy/compound visualisations) covering the KB,
 candidate pools, images, mentions and answer entities.
 
 Usage:
-    python fig_gen/stats_extended.py output/split_10_text/instances.jsonl
-    python fig_gen/stats_extended.py output/split_10_text/instances.jsonl --kb kb.jsonl
-    python fig_gen/stats_extended.py output/split_10_text/instances.jsonl --out out.pdf
+    python fig_gen/stats_extended.py output/pilot/instances.jsonl
+    python fig_gen/stats_extended.py output/pilot/instances.jsonl --kb kb.jsonl
+    python fig_gen/stats_extended.py output/pilot/instances.jsonl --out out.pdf
 """
 from __future__ import annotations
 

@@ -3,9 +3,9 @@
 Dataset statistics for the final MEL dataset.
 
 Usage:
-    python fig_gen/stats.py output/split_10_text/instances.jsonl
-    python fig_gen/stats.py output/split_10_text/instances.jsonl --kb output/split_10_text/kb.jsonl
-    python fig_gen/stats.py output/split_10_text/instances.jsonl --out output/figures/stats.pdf
+    python fig_gen/stats.py output/pilot/instances.jsonl
+    python fig_gen/stats.py output/pilot/instances.jsonl --kb output/pilot/kb.jsonl
+    python fig_gen/stats.py output/pilot/instances.jsonl --out output/figures/stats.pdf
 """
 from __future__ import annotations
 

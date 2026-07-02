@@ -2,12 +2,10 @@ entity:
   types: [PERS, ORG, LOC]
   intro: true                # every KB entity must have a text description
   image: true                # every KB entity must have an infobox portrait
+  exclude_instance_of:       []
 
 categories:
   include:                   # page must be in at least one of these categories
-    - "Category:Human name disambiguation pages"
-    - "Category:Disambiguation pages with surname-holder lists"
-    - "Category:Disambiguation pages with given-name-holder lists"
     - "Category:Place name disambiguation pages"
   exclude: []
 
@@ -35,4 +33,14 @@ candidates:
   max_visual: 3                              # cap degenerate over-shared images
   require_answer_type_shared: false          # answer's type must not be unique among text candidates
   require_unique_candidate_infoboxes: true   # no two text candidates may share the same infobox portrait
-  forbidden_properties: [P131, P361, P706, P974, P403, P885,P610, P4552,P138]
+  forbidden_properties: ["P31",    # instance of
+    "P279",   # subclass of
+    "P131",   # located in the administrative territorial entity
+    "P150",   # contains administrative territorial entity
+    "P361",   # part of
+    "P527",   # has part(s)
+    "P706",   # located on physical feature
+    "P1383",  # contains settlement
+    "P276",   # location
+    "P669",   # located on street
+]

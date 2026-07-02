@@ -133,3 +133,66 @@ def prefetch_qids(
         futs = {ex.submit(_fetch_batch, batch, forbidden_props): batch for batch in batches}
         for fut in tqdm(as_completed(futs), total=len(futs), desc="Prefetch SPARQL"):
             fut.result()
+
+
+# ---------------------------------------------------------------------------
+# instance-of / subclass-of class membership (KB entity exclusion filter)
+# ---------------------------------------------------------------------------
+
+def _fetch_instanceof_batch(qids: list[str], classes: list[str]) -> set[str]:
+    """
+    Return the subset of *qids* that are an instance or subclass of any class in
+    *classes*, i.e. that satisfy  ?item wdt:P31/wdt:P279* ?class  for some
+    ?class in the set. One batched SPARQL query per call.
+    """
+    items_str = " ".join(f"wd:{q}" for q in qids)
+    classes_str = " ".join(f"wd:{c}" for c in classes)
+    query = f"""SELECT DISTINCT ?item WHERE {{
+  VALUES ?item {{ {items_str} }}
+  VALUES ?class {{ {classes_str} }}
+  ?item wdt:P31/wdt:P279* ?class
+}}"""
+
+    matched: set[str] = set()
+    try:
+        resp = _session().get(
+            SPARQL_ENDPOINT,
+            params={"query": query, "format": "json"},
+            headers={"Accept": "application/sparql-results+json"},
+            timeout=90,
+        )
+        resp.raise_for_status()
+        for row in resp.json()["results"]["bindings"]:
+            matched.add(row["item"]["value"].split("/")[-1])
+    except Exception:
+        with _stats_lock:
+            _stats["errors"] += 1
+
+    with _stats_lock:
+        _stats["requests"] += 1
+
+    return matched
+
+
+def fetch_instanceof_matches(
+    all_qids: list[str],
+    classes: list[str],
+    max_workers: int = 5,
+) -> set[str]:
+    """
+    Return every QID in *all_qids* that is an instance/subclass (P31/P279*) of at
+    least one Wikidata class in *classes*. Batched SPARQL + threading.
+
+    Used by make_split's ``entity.exclude_instance_of`` filter to drop
+    administrative territorial entities (states, regions, …) from the KB.
+    """
+    if not classes or not all_qids:
+        return set()
+
+    batches = [all_qids[i:i + BATCH_SIZE] for i in range(0, len(all_qids), BATCH_SIZE)]
+    matched: set[str] = set()
+    with ThreadPoolExecutor(max_workers=max_workers) as ex:
+        futs = {ex.submit(_fetch_instanceof_batch, batch, classes): batch for batch in batches}
+        for fut in tqdm(as_completed(futs), total=len(futs), desc="Exclude instance-of"):
+            matched |= fut.result()
+    return matched

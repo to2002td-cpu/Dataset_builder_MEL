@@ -32,7 +32,12 @@ from typing import Iterator
 import yaml
 from tqdm import tqdm
 
-from p_scrapping import fetch_related_qids, prefetch_qids, get_stats as get_sparql_stats
+from p_scrapping import (
+    fetch_related_qids,
+    prefetch_qids,
+    fetch_instanceof_matches,
+    get_stats as get_sparql_stats,
+)
 
 try:
     import orjson
@@ -63,6 +68,7 @@ _RE_STARTS_NUM = re.compile(r"^\s*\d")
 @dataclass(frozen=True)
 class Config:
     entity_types:              frozenset
+    entity_exclude_instance_of: list[str]  # drop KB entities that are P31/P279* of any of these classes (e.g. states, regions)
     require_intro:             bool
     require_image:             bool
     image_mime:                str
@@ -89,6 +95,7 @@ class Config:
         cands = raw["candidates"]
         return cls(
             entity_types               = frozenset(raw["entity"]["types"]),
+            entity_exclude_instance_of = list(raw["entity"].get("exclude_instance_of", [])),
             require_intro              = raw["entity"].get("intro", False),
             require_image              = raw["entity"].get("image", False),
             image_mime                 = raw["image"]["mime"],
@@ -392,6 +399,43 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
         kb_entities, image_pool, image_meta, mention_cache = _scan_sequential(
             input_path, cfg
         )
+
+    # ── Exclude-by-instance-of filter ────────────────────────────────────────
+    # Drop KB entities that are administrative territorial entities (states,
+    # regions, …) — configured as a list of Wikidata classes in
+    # entity.exclude_instance_of. One batched SPARQL query flags every matching
+    # QID (P31/P279* traversal); flagged entities are removed from the KB and
+    # from every mention's candidate pool. A mention whose pool then falls below
+    # the candidate-count floor is dropped entirely.
+    if cfg.entity_exclude_instance_of and kb_entities:
+        kb_qids = list(kb_entities)
+        print(f"\nExclude-by-instance-of: {len(kb_qids):,} KB QIDs, "
+              f"classes: {cfg.entity_exclude_instance_of}")
+        excluded = fetch_instanceof_matches(
+            kb_qids, cfg.entity_exclude_instance_of, max_workers=30
+        )
+        print(f"  Entities flagged:     {len(excluded):>10,}")
+
+        for qid in excluded:
+            kb_entities.pop(qid, None)
+
+        # Also strip flagged QIDs from the visual pools, so they can't appear as
+        # visual_candidates (dangling refs to a QID no longer in the KB) or
+        # inflate the visual-pool count.
+        for qids in image_pool.values():
+            qids -= excluded
+
+        before_m = len(mention_cache)
+        pruned: list = []
+        for mention, eurls in mention_cache:
+            kept = [(qid, urls) for qid, urls in eurls if qid not in excluded]
+            if keep_candidate_count(len(kept), cfg):
+                pruned.append((mention, kept))
+        mention_cache = pruned
+        print(f"  KB entities dropped:  {len(kb_qids) - len(kb_entities):>10,}")
+        print(f"  Mentions dropped:     {before_m - len(mention_cache):>10,}  "
+              f"(pool fell below floor)")
+        print(f"  Mentions remaining:   {len(mention_cache):>10,}")
 
     # ── Forbidden-property filter ────────────────────────────────────────────
     # Drop a mention if any two of its candidates are linked by a located-in /

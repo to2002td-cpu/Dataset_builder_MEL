@@ -163,7 +163,8 @@ def run(config: PipelineConfig) -> None:
     if commons_lists_path.exists():
         try:
             commons_lists = _load_json(commons_lists_path)
-            logger.info("S7: loaded Commons gallery image lists for %d entities", len(commons_lists))
+            logger.info("S7: loaded Commons gallery image lists for %d entities",
+                        len(commons_lists))
         except (ValueError, KeyError):
             pass
 
@@ -183,7 +184,8 @@ def run(config: PipelineConfig) -> None:
     if infobox_images_path.exists():
         try:
             entity_infobox_images = _load_json(infobox_images_path)
-            logger.info("S7: loaded %d Wikipedia infobox images from S4", len(entity_infobox_images))
+            logger.info("S7: loaded %d Wikipedia infobox images from S4",
+                        len(entity_infobox_images))
         except (ValueError, KeyError):
             pass
 

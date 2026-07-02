@@ -22,8 +22,7 @@ import random
 import webbrowser
 from pathlib import Path
 
-_HTML = """\
-<!DOCTYPE html>
+_HTML = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">

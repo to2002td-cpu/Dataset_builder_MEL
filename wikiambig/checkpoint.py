@@ -100,7 +100,7 @@ class Checkpoint:
             json.dump(payload, f, indent=2)
         os.replace(tmp, str(self._path))
 
-    def __enter__(self) -> "Checkpoint":
+    def __enter__(self) -> Checkpoint:
         return self
 
     def __exit__(self, *_: object) -> None:

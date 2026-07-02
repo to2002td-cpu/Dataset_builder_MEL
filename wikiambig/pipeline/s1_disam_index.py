@@ -10,7 +10,8 @@ instead of re-querying Wikipedia.
 Output format (one per line):
     {"title": "Barack (disambiguation)",
      "url": "https://en.wikipedia.org/wiki/Barack_(disambiguation)",
-     "categories": ["Category:Disambiguation pages", "Category:Human name disambiguation pages", ...]}
+     "categories": ["Category:Disambiguation pages",
+                    "Category:Human name disambiguation pages", ...]}
 """
 
 from __future__ import annotations

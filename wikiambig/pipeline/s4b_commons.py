@@ -18,6 +18,7 @@ Outputs: image_lists_commons.json     {QID: [filename, …]}
 
 from __future__ import annotations
 
+import contextlib
 import json
 import logging
 import time
@@ -55,17 +56,13 @@ def run(config: PipelineConfig) -> None:
 
     image_lists: dict[str, list[str]] = {}
     if images_path.exists():
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             image_lists = json.loads(images_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            pass
 
     commons_pages: dict[str, str | None] = {}
     if pages_path.exists():
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             commons_pages = json.loads(pages_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            pass
 
     rate = config.wikidata_rate_limit
     output_lock = Lock()

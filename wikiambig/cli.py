@@ -16,9 +16,12 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Optional
+from typing import TYPE_CHECKING
 
 import typer
+
+if TYPE_CHECKING:
+    from wikiambig.config import PipelineConfig
 
 app = typer.Typer(
     name="wikiambig",
@@ -27,7 +30,7 @@ app = typer.Typer(
 )
 
 
-def _load_config(config_path: Optional[Path]) -> "PipelineConfig":
+def _load_config(config_path: Path | None) -> PipelineConfig:
     from wikiambig.config import PipelineConfig
 
     if config_path:
@@ -49,17 +52,17 @@ def _setup_logging(level: str) -> None:
 
 @app.command()
 def scrape(
-    config: Optional[Path] = typer.Option(
+    config: Path | None = typer.Option(
         None, "--config", "-c", help="Path to config.yaml", exists=True
     ),
-    stages: Optional[str] = typer.Option(
+    stages: str | None = typer.Option(
         None,
         "--stages",
         "-s",
         help="Comma-separated stage list, e.g. s1,s2,s3. Default: all.",
     ),
-    data_dir: Optional[Path] = typer.Option(None, help="Override data_dir from config."),
-    output_dir: Optional[Path] = typer.Option(None, help="Override output_dir from config."),
+    data_dir: Path | None = typer.Option(None, help="Override data_dir from config."),
+    output_dir: Path | None = typer.Option(None, help="Override output_dir from config."),
 ) -> None:
     """Run pipeline stages (default: full pipeline s1→s7)."""
     cfg = _load_config(config)
@@ -88,9 +91,9 @@ def scrape(
 
 @app.command()
 def build(
-    config: Optional[Path] = typer.Option(None, "--config", "-c", exists=True),
-    data_dir: Optional[Path] = typer.Option(None),
-    output_dir: Optional[Path] = typer.Option(None),
+    config: Path | None = typer.Option(None, "--config", "-c", exists=True),
+    data_dir: Path | None = typer.Option(None),
+    output_dir: Path | None = typer.Option(None),
 ) -> None:
     """Run the offline assembly stage (S7) only."""
     cfg = _load_config(config)

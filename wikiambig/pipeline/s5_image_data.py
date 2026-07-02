@@ -13,18 +13,17 @@ Output: image_data.json — {filename: {url, used_by, width, height, mime, licen
 
 from __future__ import annotations
 
+import contextlib
 import json
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from pathlib import Path
 from threading import Lock
-from typing import Optional
 
 from tqdm import tqdm
 
-from wikiambig.api_clients.wikipedia import get_image_info_batch
 from wikiambig.api_clients.wikidata import get_titles_to_qids
+from wikiambig.api_clients.wikipedia import get_image_info_batch
 from wikiambig.checkpoint import Checkpoint
 from wikiambig.config import PipelineConfig
 from wikiambig.pipeline.utils import atomic_write, title_from_url
@@ -36,11 +35,11 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 # image cache: filename → {"url": str, "used_by": [QID, ...]} | None on failure
-_image_cache: dict[str, Optional[dict]] = {}
+_image_cache: dict[str, dict | None] = {}
 _image_cache_lock = Lock()
 
 # title→QID resolution cache
-_title_qid_cache: dict[str, Optional[str]] = {}
+_title_qid_cache: dict[str, str | None] = {}
 _title_cache_lock = Lock()
 
 
@@ -93,7 +92,7 @@ def _process_image_batch(
     all_titles = list({t for info in raw.values() for t in info["usage"]})
     title_to_qid = _resolve_titles(all_titles, batch_size=config.api_batch_size)
 
-    new_entries: dict[str, Optional[dict]] = {}
+    new_entries: dict[str, dict | None] = {}
     for fname, info in raw.items():
         url = info["url"]
         used_by = list(
@@ -146,10 +145,8 @@ def run(config: PipelineConfig) -> None:
     commons_lists_path = config.stage_path("image_lists_commons.json")
     commons_lists: dict[str, list[str]] = {}
     if commons_lists_path.exists():
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             commons_lists = json.loads(commons_lists_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            pass
 
     all_filenames = sorted(
         {f for fnames in image_lists.values() for f in fnames}

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import threading
 import time
-from typing import Any, Optional
+from typing import Any
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -180,7 +180,7 @@ def get_entities_data_and_types(qids: list[str]) -> dict[str, dict[str, Any]]:
             roots[qid].add(ROOT_MAP[row["root"]["value"].split("/")[-1]])
 
     for qid, tags in roots.items():
-        matched: Optional[str] = None
+        matched: str | None = None
         for p in TYPE_PRIORITY:
             if p in tags:
                 matched = p

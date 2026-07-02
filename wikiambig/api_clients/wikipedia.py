@@ -100,7 +100,9 @@ def wiki_get(params: dict[str, Any], timeout: int = 30) -> dict[str, Any]:
 # S1: category member listing
 # ---------------------------------------------------------------------------
 
-def get_category_members(category: str, limit: int = 500, cmtype: str = "page") -> list[dict[str, Any]]:
+def get_category_members(
+    category: str, limit: int = 500, cmtype: str = "page"
+) -> list[dict[str, Any]]:
     """
     Yield all members of a Wikipedia category.
 
@@ -174,7 +176,7 @@ def get_wikitext_batch(titles: list[str]) -> dict[str, str]:
         page_title = page.get("title", "")
         original = resolved.get(page_title, page_title)
         revisions = page.get("revisions", [])
-        if revisions:
+        if revisions:  # noqa: SIM108 — kept explicit for readability
             wikitext = revisions[0].get("slots", {}).get("main", {}).get("*", "")
         else:
             wikitext = ""
@@ -321,10 +323,13 @@ def get_wiki_entity_data_batch(page_titles: list[str]) -> dict[str, dict]:
     (``piprop=name``) — the image actually displayed in the en.wikipedia
     infobox, as opposed to Wikidata's (possibly different) P18 claim.
 
-    Returns ``{original_title: {"intro": str, "images": [filename, …], "infobox_image": str | None}}``.
+    Returns ``{original_title: {"intro": str, "images": [filename, …],
+    "infobox_image": str | None}}``.
     """
     decoded: dict[str, str] = {unquote(t).replace("_", " "): t for t in page_titles}
-    result: dict[str, dict] = {t: {"intro": "", "images": [], "infobox_image": None} for t in page_titles}
+    result: dict[str, dict] = {
+        t: {"intro": "", "images": [], "infobox_image": None} for t in page_titles
+    }
 
     base_params: dict[str, Any] = {
         "action": "query",

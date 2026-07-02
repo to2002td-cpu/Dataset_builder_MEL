@@ -136,7 +136,7 @@ def compute_metrics(preds: list[int | None], labels: list[int],
     n = len(labels)
     metrics = {
         "n": n,
-        "n_correct": sum(p == l for p, l in zip(preds, labels)),
+        "n_correct": sum(p == y for p, y in zip(preds, labels, strict=True)),
         "n_unparsed": sum(p is None for p in preds),
         "n_none": sum(p == -1 for p in preds),
     }

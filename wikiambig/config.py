@@ -9,6 +9,7 @@ import yaml
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource
 
+
 class PipelineConfig(BaseSettings):
     """
     All pipeline settings in one place.
@@ -59,7 +60,7 @@ class PipelineConfig(BaseSettings):
         return self.output_dir / filename
 
     @classmethod
-    def from_yaml(cls, path: str | Path) -> "PipelineConfig":
+    def from_yaml(cls, path: str | Path) -> PipelineConfig:
         path = Path(path)
         if not path.exists():
             raise FileNotFoundError(f"Config file not found: {path}")

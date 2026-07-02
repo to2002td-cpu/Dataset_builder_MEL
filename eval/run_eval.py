@@ -21,11 +21,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
-from tqdm import tqdm
-
 from models.model import load_model
-from utils import (compute_metrics, compute_ranking_metrics, fetch_image,
-                   format_prompt, parse_number, parse_ranking)
+from tqdm import tqdm
+from utils import (
+    compute_metrics,
+    compute_ranking_metrics,
+    fetch_image,
+    format_prompt,
+    parse_number,
+    parse_ranking,
+)
 
 _ROOT = Path(__file__).resolve().parent.parent
 _RESULTS_ROOT = Path(__file__).resolve().parent / "results"

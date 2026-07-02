@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 try:
     import orjson as _json
@@ -28,14 +28,14 @@ class Image(BaseModel):
     n_used_by: int = 0
     is_infobox: bool = False
     """True when this image is the Wikipedia infobox image of its parent entity."""
-    width: Optional[int] = None
-    height: Optional[int] = None
+    width: int | None = None
+    height: int | None = None
     mime: str = ""
     license: str = ""
     """Short license name from Commons extmetadata, e.g. "CC BY-SA 4.0"; "" when unrecorded."""
 
     @model_validator(mode="after")
-    def _sync_count(self) -> "Image":
+    def _sync_count(self) -> Image:
         if self.n_used_by == 0 and self.used_by:
             object.__setattr__(self, "n_used_by", len(self.used_by))
         return self
@@ -51,7 +51,7 @@ class Entity(BaseModel):
     """Full first paragraph of the Wikipedia article, verbatim; empty when not fetched."""
     type: str = "OTHER"
     """Coarse semantic type: PERS | ORG | LOC | OTHER."""
-    infobox_img: Optional[str] = None
+    infobox_img: str | None = None
     """Special:FilePath URL of the image shown in the en.wikipedia infobox
     (PageImages-derived); None when absent."""
     url_wikipedia: str
@@ -83,7 +83,7 @@ class MentionEntry(BaseModel):
     neither modality alone can disambiguate, but together they can."""
 
     @model_validator(mode="after")
-    def _sync_counts(self) -> "MentionEntry":
+    def _sync_counts(self) -> MentionEntry:
         if self.n_entities == 0 and self.ambiguities:
             object.__setattr__(self, "n_entities", len(self.ambiguities))
         return self
@@ -131,7 +131,7 @@ class Dataset:
         tmp.rename(path)
 
     @classmethod
-    def load(cls, path: str | Path, kb_path: str | Path | None = None) -> "Dataset":
+    def load(cls, path: str | Path, kb_path: str | Path | None = None) -> Dataset:
         """
         Load from dataset.jsonl (or dataset.json for legacy files).
 

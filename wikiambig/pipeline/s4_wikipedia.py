@@ -9,11 +9,13 @@ the number of Wikipedia requests compared to separate passes.
 Inputs:  entity_data.json
 Outputs: entity_intros.json         {QID: "full first paragraph, verbatim, or ''"}
          image_lists.json            {QID: [filename, …]}
-         entity_infobox_images.json  {QID: "https://en.wikipedia.org/wiki/Special:FilePath/<file>" | None}
+         entity_infobox_images.json
+             {QID: "https://en.wikipedia.org/wiki/Special:FilePath/<file>" | None}
 """
 
 from __future__ import annotations
 
+import contextlib
 import json
 import logging
 import time
@@ -55,30 +57,26 @@ def run(config: PipelineConfig) -> None:
 
     entity_intros: dict[str, str] = {}
     if intros_path.exists():
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             entity_intros = json.loads(intros_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            pass
 
     image_lists: dict[str, list[str]] = {}
     if images_path.exists():
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             image_lists = json.loads(images_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            pass
 
     entity_infobox_images: dict[str, str | None] = {}
     if infobox_path.exists():
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             entity_infobox_images = json.loads(infobox_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            pass
 
     batch_size = 50  # MediaWiki hard limit for extracts + images
     rate = config.wikipedia_rate_limit
     output_lock = Lock()
 
-    def _fetch_batch(batch_qids: list[str]) -> tuple[dict[str, str], dict[str, list[str]], dict[str, str | None]]:
+    def _fetch_batch(
+        batch_qids: list[str],
+    ) -> tuple[dict[str, str], dict[str, list[str]], dict[str, str | None]]:
         titles = [qid_to_title[q] for q in batch_qids]
         wiki_result = get_wiki_entity_data_batch(titles)
         time.sleep(rate)

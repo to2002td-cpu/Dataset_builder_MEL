@@ -14,8 +14,10 @@ Filtering thresholds live in configs/split_gen/.
 
 Usage:
     python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/
-    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ --config configs/split_gen/default.yaml
-    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ --workers 8
+    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ \\
+        --config configs/split_gen/default.yaml
+    python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_text/ \\
+        --workers 8
 """
 
 from __future__ import annotations
@@ -27,15 +29,15 @@ import urllib.parse
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator
 
 import yaml
 from tqdm import tqdm
-
 from wikidata_enrich import (
+    fetch_instanceof_matches,
     fetch_related_qids,
     prefetch_qids,
-    fetch_instanceof_matches,
+)
+from wikidata_enrich import (
     get_stats as get_sparql_stats,
 )
 
@@ -68,7 +70,8 @@ _RE_STARTS_NUM = re.compile(r"^\s*\d")
 @dataclass(frozen=True)
 class Config:
     entity_types:              frozenset
-    entity_exclude_instance_of: list[str]  # drop KB entities that are P31/P279* of any of these classes (e.g. states, regions)
+    # drop KB entities that are P31/P279* of any of these classes (e.g. states)
+    entity_exclude_instance_of: list[str]
     require_intro:             bool
     require_image:             bool
     image_mime:                str
@@ -79,17 +82,19 @@ class Config:
     mention_min_used_by:       int   # min entities sharing the mention (text candidate pool size)
     mention_max_used_by:       int   # max entities sharing the mention (0 = unlimited)
     require_answer_type_shared: bool  # answer's type must appear ≥1× among other text candidates
-    require_unique_candidate_infoboxes: bool  # no two text candidates may share the same infobox portrait
-    visual_min:                int    # min KB entities sharing the query image (visual candidate pool size)
+    # no two text candidates may share the same infobox portrait
+    require_unique_candidate_infoboxes: bool
+    visual_min:                int    # min KB entities sharing the query image
     visual_max:                int    # max KB entities sharing the query image (0 = unlimited)
-    forbidden_properties:      list[str]  # drop mention if any candidate pair is linked by these Wikidata P-IDs
+    # drop mention if any candidate pair is linked by these Wikidata P-IDs
+    forbidden_properties:      list[str]
     banwords:                  set[str]
     category_include:          frozenset
     category_exclude:          frozenset
     drop_if_start_with_num:    bool
 
     @classmethod
-    def load(cls, path: Path) -> "Config":
+    def load(cls, path: Path) -> Config:
         raw = yaml.safe_load(path.read_text(encoding="utf-8"))
         categories = raw.get("categories", {})
         cands = raw["candidates"]
@@ -106,7 +111,8 @@ class Config:
             mention_min_used_by        = raw["mention"].get("min_used_by", 2),
             mention_max_used_by        = raw["mention"].get("max_used_by", 0),
             require_answer_type_shared      = cands.get("require_answer_type_shared", False),
-            require_unique_candidate_infoboxes = cands.get("require_unique_candidate_infoboxes", False),
+            require_unique_candidate_infoboxes = cands.get(
+                "require_unique_candidate_infoboxes", False),
             visual_min                      = cands.get("min_visual", 2),
             visual_max                      = cands.get("max_visual", 0),
             forbidden_properties            = cands.get("forbidden_properties", []),
@@ -170,9 +176,7 @@ def keep_categories(categories: list[str], cfg: Config) -> bool:
     cats = set(categories)
     if cfg.category_include and not (cats & cfg.category_include):
         return False
-    if cfg.category_exclude and (cats & cfg.category_exclude):
-        return False
-    return True
+    return not (cfg.category_exclude and (cats & cfg.category_exclude))
 
 
 def keep_forbidden_properties(qids: list[str], cfg: Config) -> bool:
@@ -310,40 +314,39 @@ def _scan_sequential(input_path: Path, cfg: Config) -> tuple[dict, dict, dict, l
     mention_cache: list                  = []
 
     with tqdm(total=input_path.stat().st_size, desc="Scanning",
-              unit="B", unit_scale=True, unit_divisor=1024) as bar:
-        with input_path.open("rb") as f:
-            for line in f:
-                bar.update(len(line))
-                if line.isspace():
-                    continue
-                m = _loads(line)
-                mention = m["mention"]
-                if not keep_mention(mention, cfg):
-                    continue
-                if not keep_categories(m.get("categories", []), cfg):
-                    continue
-                pool = [e for e in m["ambiguities"] if keep_entity(e, cfg)]
-                if not keep_candidate_count(len(pool), cfg):
-                    continue
+              unit="B", unit_scale=True, unit_divisor=1024) as bar, input_path.open("rb") as f:
+        for line in f:
+            bar.update(len(line))
+            if line.isspace():
+                continue
+            m = _loads(line)
+            mention = m["mention"]
+            if not keep_mention(mention, cfg):
+                continue
+            if not keep_categories(m.get("categories", []), cfg):
+                continue
+            pool = [e for e in m["ambiguities"] if keep_entity(e, cfg)]
+            if not keep_candidate_count(len(pool), cfg):
+                continue
 
-                entity_urls: list[tuple[str, list[str]]] = []
-                for e in pool:
-                    qid = e["qid"]
-                    if qid not in kb_entities:
-                        kb_entities[qid] = {k: e.get(k) for k in _KB_FIELDS}
-                    urls: list[str] = []
-                    for img in e.get("page_imglist") or ():
-                        if img.get("is_infobox", False):
-                            continue
-                        url = img.get("url")
-                        if not url:
-                            continue
-                        urls.append(url)
-                        image_pool.setdefault(url, set()).add(qid)
-                        if url not in image_meta:
-                            image_meta[url] = {k: img.get(k) for k in _IMG_FIELDS}
-                    entity_urls.append((qid, urls))
-                mention_cache.append((mention, entity_urls))
+            entity_urls: list[tuple[str, list[str]]] = []
+            for e in pool:
+                qid = e["qid"]
+                if qid not in kb_entities:
+                    kb_entities[qid] = {k: e.get(k) for k in _KB_FIELDS}
+                urls: list[str] = []
+                for img in e.get("page_imglist") or ():
+                    if img.get("is_infobox", False):
+                        continue
+                    url = img.get("url")
+                    if not url:
+                        continue
+                    urls.append(url)
+                    image_pool.setdefault(url, set()).add(qid)
+                    if url not in image_meta:
+                        image_meta[url] = {k: img.get(k) for k in _IMG_FIELDS}
+                entity_urls.append((qid, urls))
+            mention_cache.append((mention, entity_urls))
 
     return kb_entities, image_pool, image_meta, mention_cache
 
@@ -515,7 +518,8 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
             # If any two text candidates share the same infobox portrait, the KB
             # is visually degenerate for this mention: two entities would look
             # identical, making visual disambiguation impossible.
-            if cfg.require_unique_candidate_infoboxes and _has_shared_infobox(pool_qids, kb_entities):
+            if (cfg.require_unique_candidate_infoboxes
+                    and _has_shared_infobox(pool_qids, kb_entities)):
                 n_rej_shared_infobox += 1
                 continue
 
@@ -543,7 +547,8 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
                     # Same rule as for text candidates, applied to the visual pool:
                     # if two entities sharing this image also share an infobox
                     # portrait, they are visually indistinguishable here.
-                    if cfg.require_unique_candidate_infoboxes and _has_shared_infobox(visual_qids, kb_entities):
+                    if (cfg.require_unique_candidate_infoboxes
+                            and _has_shared_infobox(visual_qids, kb_entities)):
                         n_rej_shared_infobox_visual += 1
                         continue
 
@@ -584,17 +589,21 @@ def build(input_path: Path, output_dir: Path, cfg: Config, n_workers: int = 1) -
     total = (n_written + n_rej_visual + n_rej_shared_infobox_visual
              + n_rej_intersection + n_rej_type_not_shared)
     w = max(total, 1)
-    print(f"\nInstance generation cascade:")
+    print("\nInstance generation cascade:")
     print(f"  (mention, image) candidates:      {total:>10,}")
     if cfg.require_unique_candidate_infoboxes:
         print(f"  – shared infobox (mentions):      {n_rej_shared_infobox:>10,}  (mention-level)")
-    print(f"  – visual pool out of [{cfg.visual_min},{cfg.visual_max or '∞'}]:        {n_rej_visual:>10,}  ({100*n_rej_visual/w:.1f}%)")
+    print(f"  – visual pool out of [{cfg.visual_min},{cfg.visual_max or '∞'}]:        "
+          f"{n_rej_visual:>10,}  ({100*n_rej_visual/w:.1f}%)")
     if cfg.require_unique_candidate_infoboxes:
-        print(f"  – shared infobox (visual pool):   {n_rej_shared_infobox_visual:>10,}  ({100*n_rej_shared_infobox_visual/w:.1f}%)")
-    print(f"  – intersection ≠ 1:               {n_rej_intersection:>10,}  ({100*n_rej_intersection/w:.1f}%)")
+        print(f"  – shared infobox (visual pool):   {n_rej_shared_infobox_visual:>10,}  "
+              f"({100*n_rej_shared_infobox_visual/w:.1f}%)")
+    print(f"  – intersection ≠ 1:               {n_rej_intersection:>10,}  "
+          f"({100*n_rej_intersection/w:.1f}%)")
     if cfg.require_answer_type_shared:
-        print(f"  – answer type unique in text:     {n_rej_type_not_shared:>10,}  ({100*n_rej_type_not_shared/w:.1f}%)")
-    print(f"  ─────────────────────────────────────────────────────")
+        print(f"  – answer type unique in text:     {n_rej_type_not_shared:>10,}  "
+              f"({100*n_rej_type_not_shared/w:.1f}%)")
+    print("  ─────────────────────────────────────────────────────")
     print(f"  Instances written:                {n_written:>10,}  → {instances_path}")
 
 
@@ -602,11 +611,13 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("input",      type=Path, help="dataset.jsonl (scrape output)")
-    ap.add_argument("output_dir", type=Path, help="split output directory (e.g. output/split_10_text/)")
+    ap.add_argument("output_dir", type=Path,
+                    help="split output directory (e.g. output/split_10_text/)")
     ap.add_argument("--config",   type=Path, default=_DEFAULT_CONFIG,
                     help=f"filter thresholds YAML (default: {_DEFAULT_CONFIG})")
     ap.add_argument("--workers",  type=int, default=None,
-                    help="parallel scan workers (default: cpu_count; use 1 for sequential with progress bar)")
+                    help="parallel scan workers (default: cpu_count; "
+                         "use 1 for sequential with progress bar)")
     args = ap.parse_args()
 
     if not args.input.exists():

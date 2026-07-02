@@ -27,8 +27,8 @@ import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
-from tqdm import tqdm
 from requests.adapters import HTTPAdapter
+from tqdm import tqdm
 from urllib3.util.retry import Retry
 
 SPARQL_ENDPOINT = "https://query.wikidata.org/sparql"

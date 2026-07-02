@@ -42,8 +42,8 @@ except ImportError:
 
 def _iter_jsonl(path: Path):
     with tqdm(total=path.stat().st_size, desc="Reading",
-              unit="B", unit_scale=True, unit_divisor=1024, file=sys.stderr) as bar:
-        with path.open("rb") as f:
+              unit="B", unit_scale=True, unit_divisor=1024,
+              file=sys.stderr) as bar, path.open("rb") as f:
             for line in f:
                 bar.update(len(line))
                 if not line.isspace():

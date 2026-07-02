@@ -10,7 +10,7 @@ Each instance shows the disambiguation task:
 
 Usage:
     python split_gen/view_split.py output/split_10_text/instances.jsonl
-    python split_gen/view_split.py output/split_10_text/instances.jsonl --kb output/split_10_text/kb.jsonl
+    python split_gen/view_split.py output/split_10_text/instances.jsonl --kb kb.jsonl
     python split_gen/view_split.py output/split_10_text/instances.jsonl --sample 300 --open
 """
 

@@ -14,34 +14,11 @@ from collections import Counter
 from pathlib import Path
 from statistics import mean, median
 
-import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
 import numpy as np
-
+from plots import BAR_KW, bar_counts, pct_bars, set_panel_title
 from utils import COLORS, apply_style, ecdf, fmt_count, iter_jsonl, save_figure
-
-
-def _label_bars(ax, bars, total, fontsize=7):
-    ymax = ax.get_ylim()[1]
-    for b in bars:
-        h = b.get_height()
-        if h == 0:
-            continue
-        ax.text(b.get_x() + b.get_width() / 2, h + ymax * 0.012,
-                f"{int(h):,}\n({100*h/total:.0f}%)",
-                ha="center", va="bottom", fontsize=fontsize, color="#333")
-
-
-def _bar(ax, labels, vals, face, edge, title, ylabel=None, total=None):
-    bars = ax.bar(labels, vals, color=face, edgecolor=edge,
-                  linewidth=2.0, hatch="//", zorder=3, width=0.55)
-    if total is not None:
-        _label_bars(ax, bars, total)
-    ax.set_title(title, fontsize=11, fontweight="bold", pad=6)
-    if ylabel:
-        ax.set_ylabel(ylabel)
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
-    return bars
 
 
 def main():
@@ -108,13 +85,14 @@ def main():
     print(f"  {'Total instances':<30} {N:>9,}")
     print(f"  {'Unique surface forms':<30} {n_unique_mentions:>9,}")
     print(f"  {'Unique answer entities':<30} {n_unique_answers:>9,}")
-    print(f"  {'Instances/mention  μ / max':<30} {mean(inst_per_mention):>5.1f}  /  {max(inst_per_mention)}")
+    print(f"  {'Instances/mention  μ / max':<30} "
+          f"{mean(inst_per_mention):>5.1f}  /  {max(inst_per_mention)}")
     print(f"  {'Text candidates  μ / med':<30} {mean(n_text):>5.1f}  /  {median(n_text):.0f}")
     print(f"  {'Visual candidates  μ / med':<30} {mean(n_vis):>5.1f}  /  {median(n_vis):.0f}")
     print(f"  {'Image n_used_by  μ / med':<30} {mean(n_ub):>5.1f}  /  {median(n_ub):.0f}")
     print(f"  {'Image width   μ / med px':<30} {mean(img_w):>5.0f}  /  {median(img_w):.0f}")
     print(f"  {'Image height  μ / med px':<30} {mean(img_h):>5.0f}  /  {median(img_h):.0f}")
-    print(f"  Answer type:")
+    print("  Answer type:")
     for t in ["PERS", "ORG", "LOC"]:
         c = answer_types.get(t, 0)
         print(f"    {'— '+t:<28} {c:>9,}  ({100*c/N:.0f}%)")
@@ -145,8 +123,8 @@ def main():
     # ── (A) KB entity types ───────────────────────────────────
     ax = fig.add_subplot(gs[0, 0])
     vals = [kb_types.get(t, 0) for t in types]
-    _bar(ax, types, vals, COLORS["blue_face"], COLORS["blue_edge"],
-         "KB — Entity types", ylabel="Entities", total=n_kb)
+    bar_counts(ax, types, vals, COLORS["blue_face"], COLORS["blue_edge"],
+               "KB — Entity types", ylabel="Entities", total=n_kb)
     ax.set_ylim(0, max(vals) * 1.4)
 
     # ── (B) KB completeness ───────────────────────────────────
@@ -154,15 +132,8 @@ def main():
     fields = ["Intro", "Desc", "Infobox", "Wiki URL"]
     fvals  = [kb_pct_intro, kb_pct_desc, kb_pct_infobox, kb_pct_wiki]
     faces  = [COLORS["blue_face"], COLORS["pink_face"], COLORS["green_face"], COLORS["purple_face"]]
-    bars = ax.bar(fields, fvals, color=faces, edgecolor=COLORS["gray_edge"],
-                  linewidth=2.0, hatch="//", zorder=3, width=0.55)
-    for b, v in zip(bars, fvals):
-        ax.text(b.get_x() + b.get_width() / 2, v + 2, f"{v:.0f}%",
-                ha="center", va="bottom", fontsize=9, color="#333")
-    ax.set_ylim(0, 115)
-    ax.set_yticks([0, 25, 50, 75, 100])
-    ax.set_title("KB — Entity completeness", fontsize=11, fontweight="bold", pad=6)
-    ax.set_ylabel("% of KB entities")
+    pct_bars(ax, fields, fvals, faces, COLORS["gray_edge"],
+             "KB — Entity completeness", ylabel="% of KB entities")
 
     # ── (C) CDF — text vs. visual candidate set size ──────────
     ax = fig.add_subplot(gs[1, 0])
@@ -192,7 +163,7 @@ def main():
     ax.set_ylim(0, 1.05)
     ax.set_xlabel("# candidates")
     ax.set_ylabel("Cumulative fraction")
-    ax.set_title("Candidate set size — CDF", fontsize=11, fontweight="bold", pad=6)
+    set_panel_title(ax, "Candidate set size — CDF", fontsize=11)
     ax.legend(loc="lower right")
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x:.0%}"))
 
@@ -201,14 +172,13 @@ def main():
     ub_counter = Counter(n_ub)
     xs = sorted(ub_counter.keys())
     ys = [ub_counter[x] for x in xs]
-    bars = ax.bar(xs, ys, color=COLORS["green_face"], edgecolor=COLORS["green_edge"],
-                  linewidth=2.0, hatch="//", zorder=3, width=0.7)
+    ax.bar(xs, ys, color=COLORS["green_face"], edgecolor=COLORS["green_edge"],
+           width=0.7, **BAR_KW)
     ax.plot(xs, ys, "o-", color=COLORS["green_edge"], linewidth=1.6,
             markersize=4, zorder=4)
     ax.set_xlabel("n_used_by")
     ax.set_ylabel("Instances")
-    ax.set_title(f"Image article reuse  (μ={mean(n_ub):.1f})",
-                 fontsize=11, fontweight="bold", pad=6)
+    set_panel_title(ax, f"Image article reuse  (μ={mean(n_ub):.1f})", fontsize=11)
     ax.yaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
 
     # ── (E) Top surface forms ─────────────────────────────────
@@ -218,23 +188,22 @@ def main():
     mvals   = [c for _, c in reversed(top)]
     bars = ax.barh(mlabels, mvals,
                    color=COLORS["orange_face"], edgecolor=COLORS["orange_edge"],
-                   linewidth=1.8, hatch="//", zorder=3, height=0.65)
+                   height=0.65, **{**BAR_KW, "linewidth": 1.8})
     xmax = max(mvals) * 1.18
-    for b, v in zip(bars, mvals):
+    for b, v in zip(bars, mvals, strict=True):
         ax.text(v + xmax * 0.01, b.get_y() + b.get_height() / 2,
                 str(v), va="center", fontsize=8, color="#333")
     ax.set_xlim(0, xmax)
     ax.set_xlabel("# instances")
-    ax.set_title(f"Top {top_n} surface forms by instance count",
-                 fontsize=11, fontweight="bold", pad=6)
+    set_panel_title(ax, f"Top {top_n} surface forms by instance count", fontsize=11)
     ax.xaxis.set_major_formatter(plt.FuncFormatter(fmt_count))
     ax.tick_params(axis="y", labelsize=9)
 
     # ── (F) Answer entity types ───────────────────────────────
     ax = fig.add_subplot(gs[2, 1])
     avals = [answer_types.get(t, 0) for t in types]
-    _bar(ax, types, avals, COLORS["orange_face"], COLORS["orange_edge"],
-         "Answer entity types", ylabel="Instances", total=N)
+    bar_counts(ax, types, avals, COLORS["orange_face"], COLORS["orange_edge"],
+               "Answer entity types", ylabel="Instances", total=N)
     ax.set_ylim(0, max(avals, default=1) * 1.4)
 
     save_figure(fig, out)

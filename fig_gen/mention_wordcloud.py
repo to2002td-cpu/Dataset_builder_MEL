@@ -7,8 +7,8 @@ Right panel: top-N words as a horizontal bar chart with exact counts.
 
 Usage:
     python fig_gen/mention_wordcloud.py output/split_10_text/instances.jsonl
-    python fig_gen/mention_wordcloud.py output/split_10_text/instances.jsonl --out output/figures/mention_wordcloud.pdf
-    python fig_gen/mention_wordcloud.py output/split_10_text/instances.jsonl --unique   # count each distinct mention once
+    python fig_gen/mention_wordcloud.py output/split_10_text/instances.jsonl --out out.pdf
+    python fig_gen/mention_wordcloud.py output/split_10_text/instances.jsonl --unique
 """
 from __future__ import annotations
 
@@ -18,9 +18,9 @@ from collections import Counter
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-from wordcloud import STOPWORDS, WordCloud
-
+from plots import barh_counts, set_panel_title
 from utils import COLORS, PALETTE, apply_style, iter_jsonl, save_figure
+from wordcloud import STOPWORDS, WordCloud
 
 _WORD_RE = re.compile(r"[^\W\d_]+", re.UNICODE)  # alphabetic runs only
 
@@ -59,24 +59,14 @@ def plot(counts: Counter, n_mentions: int, out_path: Path, top_n: int, unique: b
     ax_cloud.axis("off")
     ax_cloud.grid(False)
     scope = "unique mentions" if unique else "mentions"
-    ax_cloud.set_title(f"Words in {scope} ({n_mentions:,} {scope}, "
-                       f"{len(counts):,} distinct words)",
-                       fontsize=10.5, fontweight="bold", pad=6)
+    set_panel_title(ax_cloud, f"Words in {scope} ({n_mentions:,} {scope}, "
+                              f"{len(counts):,} distinct words)")
 
     # ── Top-N bar chart ───────────────────────────────────────────────────────
     top = counts.most_common(top_n)
-    labels = [w for w, _ in reversed(top)]
-    vals   = [c for _, c in reversed(top)]
-    bars = ax_bar.barh(labels, vals, color=COLORS["blue_face"], edgecolor=COLORS["blue_edge"],
-                       linewidth=1.8, hatch="//", zorder=3, height=0.65)
-    xmax = max(vals) * 1.18 if vals else 1
-    ax_bar.set_xlim(0, xmax)
-    for b, v in zip(bars, vals):
-        ax_bar.text(v + xmax * 0.012, b.get_y() + b.get_height() / 2,
-                    f"{v:,}", va="center", fontsize=7.5, color="#333")
-    ax_bar.set_xlabel("Occurrences")
-    ax_bar.set_title(f"Top {len(top)} words", fontsize=10.5, fontweight="bold", pad=6)
-    ax_bar.tick_params(axis="y", labelsize=8)
+    barh_counts(ax_bar, [w for w, _ in top], [c for _, c in top],
+                COLORS["blue_face"], COLORS["blue_edge"],
+                f"Top {len(top)} words", xlabel="Occurrences")
 
     fig.tight_layout()
     save_figure(fig, out_path)

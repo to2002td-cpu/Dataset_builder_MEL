@@ -1,12 +1,14 @@
 """
-Shared style and helpers for all paper figures.
+Shared style, formatting, and IO for all figures.
 
-Every fig_gen script imports its style from here so all figures in the paper
-share the same fonts, grid, colors, and number formatting — never set
-rcParams or hex colors inline in a figure script.
+Every figure in the repo (fig_gen scripts and the annotation analysis) imports
+its style from here so all charts share the same fonts, grid, colors, and
+number formatting — never set rcParams or hex colors inline. Reusable chart
+builders (bars, histograms, heatmaps) live in plots.py, next to this module.
 
 Usage (from any script in fig_gen/):
     from utils import COLORS, PALETTE, apply_style, ecdf, fmt_count, iter_jsonl, save_figure
+    from plots import bar_counts, hist, heatmap
 
     apply_style()                      # once, before building the figure
     ax.bar(..., color=COLORS["blue_face"], edgecolor=COLORS["blue_edge"])
@@ -16,8 +18,8 @@ Usage (from any script in fig_gen/):
 from __future__ import annotations
 
 import json
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 import matplotlib.pyplot as plt
 import numpy as np

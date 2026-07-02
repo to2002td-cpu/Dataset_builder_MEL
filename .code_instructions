@@ -7,22 +7,24 @@ that experiments for the paper stay reproducible and traceable.
 
 Each top-level directory is one stage of the workflow, in order:
 
-| Directory    | Stage                                                  | Entry point(s)                  |
-|--------------|--------------------------------------------------------|---------------------------------|
-| `wikiambig/` | Scrape Wikipedia/Wikidata → raw dataset (installable)  | `wikiambig scrape` / `build`    |
-| `split_gen/` | Filter raw dataset → a named split (instances + KB)    | `make_split.py`, `view_split.py`|
-| `fig_gen/`   | Statistics and paper figures from a split              | `stats.py`, `stats_extended.py`, `mention_wordcloud.py` |
-| `eval/`      | Model evaluation on a split                            | `run_eval.py`                   |
-| `configs/`   | All run parameters (YAML), one subdirectory per stage  | —                               |
-| `tools/`     | One-off exploration/maintenance helpers                | —                               |
+| Directory     | Stage                                                  | Entry point(s)                  |
+|---------------|--------------------------------------------------------|---------------------------------|
+| `wikiambig/`  | Scrape Wikipedia/Wikidata → raw dataset (installable)  | `wikiambig scrape` / `build`    |
+| `split_gen/`  | Filter raw dataset → a named split (instances + KB)    | `make_split.py`, `view_split.py`|
+| `fig_gen/`    | Statistics and paper figures from a split              | `stats.py`, `stats_extended.py`, `mention_wordcloud.py` |
+| `eval/`       | Model evaluation on a split                            | `run_eval.py`                   |
+| `annotation/` | Human annotation campaign analysis (modules + notebook)| `analysis_mel1.ipynb`           |
+| `configs/`    | All run parameters (YAML), one subdirectory per stage  | —                               |
 
 All generated artifacts live under a single `output/` directory (never
 committed, see §4):
 
-- `output/scrape_data/`   — intermediate scrape checkpoints (stages S1–S6)
+- `output/scrape_data/`   — intermediate scrape checkpoints (stages S1–S6, incl. S4b)
 - `output/raw_dataset/`   — raw assembled dataset (stage S7): dataset.jsonl,
-  entity_kb.json, manifest.json
+  entity_kb.jsonl, manifest.json
 - `output/split_<name>/`  — splits (instances + KB)
+- `output/annot_output/`  — annotation campaign data (`data/`) and per-annotator
+  states (`annot/<user>/user_state.json`)
 - `output/figures/`       — figures and viewers
 
 New code goes into the stage directory it belongs to. Do not create new
@@ -91,11 +93,14 @@ top-level directories without updating this file and the README.
 - Naming: `snake_case` modules and functions, `CapWords` classes,
   `_leading_underscore` for module-private helpers, `UPPER_CASE` constants.
 - Fail fast on bad inputs with `raise SystemExit(f"...")` in scripts.
-- Figures: every `fig_gen/` script takes its look from `fig_gen/utils.py` —
-  `apply_style()` once before plotting, colors from `COLORS`/`PALETTE`,
-  ticks via `fmt_count`, output via `save_figure`. Never set rcParams or
-  hex colors inline; add new shared colors/helpers to `utils.py` so all
-  paper figures stay consistent.
+- Figures: every figure in the repo (fig_gen scripts *and* the annotation
+  analysis) takes its look from `fig_gen/utils.py` (style, colors, formatting,
+  IO) and `fig_gen/plots.py` (axes-level chart builders: bars, histograms,
+  heatmaps) — `apply_style()` once before plotting, colors from
+  `COLORS`/`PALETTE`, ticks via `fmt_count`, output via `save_figure`.
+  Never set rcParams or hex colors inline and never use seaborn; add new
+  shared colors to `utils.py` and new chart shapes to `plots.py` so all
+  figures stay consistent.
 - Comments explain *why* (a constraint or design decision), not *what* the
   next line does. No commented-out code.
 
@@ -110,3 +115,7 @@ Use these terms consistently in code, configs, docs, and the paper:
 - **split** — a filtered dataset produced by `split_gen/make_split.py`
 - **raw dataset** — unfiltered scrape output (`output/raw_dataset/`)
 - **text/visual candidates** — entities sharing the mention / the image
+- **annotator** — a human labeler of an annotation campaign
+- **label** — an annotator's answer for one instance (`YES` / `NO` / `UNCERTAIN`)
+- **master table** — one row per annotated instance: labels + vote aggregates
+  (built by `annotation/loading.py::build_master`)

@@ -9,9 +9,9 @@ Works with any file that has a `categories` field per line:
   dataset.jsonl       — final assembled dataset
 
 Usage:
-    python split_gen/category_stats.py output/raw_dataset/disam_index.jsonl
+    python split_gen/category_stats.py output/scrape_data/disam_index.jsonl
     python split_gen/category_stats.py output/raw_dataset/dataset.jsonl --min-count 10
-    python split_gen/category_stats.py output/raw_dataset/disam_index.jsonl --tsv > cats.tsv
+    python split_gen/category_stats.py output/scrape_data/disam_index.jsonl --tsv > cats.tsv
 """
 
 from __future__ import annotations

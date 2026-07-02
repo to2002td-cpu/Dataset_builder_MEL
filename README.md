@@ -20,10 +20,13 @@ Each top-level directory is one stage of the workflow, configured from the match
 |---|---|---|
 | `wikiambig/` | Scrape Wikipedia/Wikidata → raw dataset (installable package, `wikiambig` CLI) | `configs/scrape/` |
 | `split_gen/` | Filter the raw dataset into a named split (`instances.jsonl` + `kb.jsonl`) | `configs/split_gen/` |
-| `fig_gen/` | Statistics and paper figures from a split | — |
+| `fig_gen/` | Statistics and paper figures from a split (shared style: `utils.py` + `plots.py`) | — |
 | `eval/` | Model evaluation on a split | `configs/eval/` (one file per experiment) |
+| `annotation/` | Human annotation campaign analysis (modules + `analysis_mel1.ipynb`) | — |
 
-All generated artifacts go to `output/`: scrape checkpoints in `output/scrape_data/`, the unfiltered assembled dataset in `output/raw_dataset/`, then splits (`output/split_<name>/`) and figures (`output/figures/`); it is never committed. Coding conventions live in [`.code_instructions`](.code_instructions).
+`oar.sh` and `oar_eval.sh` submit the scrape resp. the evaluation to an OAR cluster.
+
+All generated artifacts go to `output/`: scrape checkpoints in `output/scrape_data/`, the unfiltered assembled dataset in `output/raw_dataset/`, then splits (`output/split_<name>/`), annotation campaign data (`output/annot_output/`), and figures (`output/figures/`); it is never committed. Coding conventions live in [`.code_instructions`](.code_instructions).
 
 ---
 
@@ -62,17 +65,17 @@ Formally, the task is: given `(mention, image)`, retrieve `answer` from the know
 
 ## Dataset Statistics
 
-The following figures are from the June 2026 snapshot.
+The following figures are from the 2026-06-23 snapshot (`output/raw_dataset/manifest.json`).
 
 ### Raw pipeline output (`output/raw_dataset/`)
 
 | Metric | Count |
 |---|---|
-| Disambiguation mentions | 138,306 |
-| KB entities | 2,198,397 |
-| Unique images | 1,094,733 |
+| Disambiguation mentions | 274,360 |
+| KB entities | 2,926,713 |
+| Unique images | 2,150,444 |
 
-### Final MEL split (`output/split_<name>/`)
+### Example MEL split (`output/split_<name>/`, June 2026 filters)
 
 | Metric | Count |
 |---|---|
@@ -93,7 +96,7 @@ The following figures are from the June 2026 snapshot.
 
 ## Pipeline Architecture
 
-The pipeline runs in seven sequential stages. Each stage writes its output atomically to `output/scrape_data/` before the next stage reads it; any stage can be re-run independently.
+The pipeline runs in eight stages (see `wikiambig/pipeline/__init__.py::ALL_STAGES`). Each stage writes its output atomically to `output/scrape_data/` before the next stage reads it; any stage can be re-run independently.
 
 ```
 Wikipedia categories
@@ -114,6 +117,11 @@ Wikipedia categories
    S4 — Wikipedia intro + images    entity_intros.json · image_lists.json
         │
         ▼
+   S4b — Commons gallery images     image_lists_commons.json · entity_commons_pages.json
+   (second image source: files on
+    the entity's Commons gallery)
+        │
+        ▼
    S5 — Image metadata              image_data.json
    (URL, dimensions, license,
     used_by QID list)
@@ -122,7 +130,12 @@ Wikipedia categories
    S6 — Visual entity enrichment    (extends entity_data for used_by QIDs)
         │
         ▼
-   S7 — Assembly (offline)          dataset.jsonl · entity_kb.json · manifest.json
+   S4 + S4b — second pass           (intros, infobox and Commons images for the
+   (checkpointed: only fetches       visual-only entities S6 just added)
+    the newly-added QIDs)
+        │
+        ▼
+   S7 — Assembly (offline)          dataset.jsonl · entity_kb.jsonl · manifest.json
 ```
 
 After S7, run `split_gen/make_split.py` to apply quality filters and produce a split's `instances.jsonl` and `kb.jsonl`.
@@ -170,8 +183,11 @@ python split_gen/make_split.py output/raw_dataset/dataset.jsonl output/split_10_
 ### 4. Inspect statistics
 
 ```bash
-python fig_gen/stats.py output/split_10_text/instances.jsonl
+python fig_gen/stats.py output/split_10_text/instances.jsonl                    # 6-panel summary
 python fig_gen/stats.py output/split_10_text/instances.jsonl --out output/figures/stats.pdf
+python fig_gen/stats_extended.py output/split_10_text/instances.jsonl           # 16-panel deep dive
+python fig_gen/mention_wordcloud.py output/split_10_text/instances.jsonl        # mention word cloud
+python split_gen/category_stats.py output/scrape_data/disam_index.jsonl         # audit disambiguation categories
 ```
 
 ### 5. Browse instances visually
@@ -189,6 +205,10 @@ python eval/run_eval.py --config configs/eval/qwen_contrastive_10_text.yaml
 ```
 
 Each experiment is one YAML file in `configs/eval/`, named `<model>_<prompt>_<split>.yaml`; results land in `eval/results/<config_stem>/`.
+
+### 7. Analyze human annotations
+
+Open `annotation/analysis_mel1.ipynb` (or run `jupyter nbconvert --execute` on it). It reads `output/annot_output/` — campaign items in `data/`, one `annot/<user>/user_state.json` per annotator — and reports agreement (Cohen's κ), per-annotator bias, per-category breakdowns, extreme cases, and decision-time statistics. The analysis code lives in `annotation/{loading,stats,display,plots}.py` and is generic over the number of annotators.
 
 ---
 
@@ -232,12 +252,16 @@ Split filtering thresholds live in `configs/split_gen/default.yaml`, evaluation 
 | `output/scrape_data/entity_data.json` | Wikidata name, description, Wikipedia URL, infobox image per QID |
 | `output/scrape_data/entity_types.json` | Coarse entity type (`PERS` / `ORG` / `LOC` / `null`) per QID |
 | `output/scrape_data/image_lists.json` | Per-entity list of image filenames on their Wikipedia article |
+| `output/scrape_data/image_lists_commons.json` | Per-entity list of image filenames on their Commons gallery (S4b) |
+| `output/scrape_data/entity_commons_pages.json` | Per-entity Commons gallery page title, or `null` (S4b) |
 | `output/scrape_data/image_data.json` | Per-image URL, dimensions, MIME, license, `used_by` QID list |
 | `output/raw_dataset/dataset.jsonl` | Assembled dataset (one `MentionEntry` per line) |
-| `output/raw_dataset/entity_kb.json` | Full entity knowledge base keyed by QID |
+| `output/raw_dataset/entity_kb.jsonl` | Full entity knowledge base (one entity per line, keyed by QID) |
 | `output/raw_dataset/manifest.json` | Pipeline version, assembly timestamp, and headline counts |
 | `output/split_<name>/instances.jsonl` | Filtered MEL instances of a split |
 | `output/split_<name>/kb.jsonl` | Filtered entity KB of a split |
+| `output/annot_output/data/` | Annotation campaign items (`items.jsonl`, `instances.jsonl`, `kb.jsonl`) |
+| `output/annot_output/annot/<user>/user_state.json` | One annotator's labels and behavioral logs |
 
 ---
 

@@ -1,19 +1,24 @@
 """
-Fetch, for a set of QIDs, the QIDs they are directly linked to by any of a
-given list of Wikidata properties.
+Wikidata SPARQL enrichment for the split filters in make_split.py:
+forbidden-property relations and instance-of class membership.
 
-Used by the candidate "forbidden properties" filter in make_split.py: a mention
-whose candidate pool contains two entities linked by a located-in / part-of
-property (e.g. "New York City" P131 "New York" state) is irresolvable and dropped.
+Relations — fetch, for a set of QIDs, the QIDs they are directly linked to by
+any of a given list of Wikidata properties. Used by the candidate "forbidden
+properties" filter: a mention whose candidate pool contains two entities linked
+by a located-in / part-of property (e.g. "New York City" P131 "New York" state)
+is irresolvable and dropped. Only the *forward* direction (?item ?p ?related)
+is queried. That is sufficient for pairwise detection: the filter iterates over
+every candidate, so an edge A ?p B between two candidates is caught from
+whichever endpoint stores the truthy claim. Avoiding the reverse direction
+keeps the per-QID result set small (a place's parents, not its thousands of
+children).
 
-Only the *forward* direction (?item ?p ?related) is queried. That is sufficient
-for pairwise detection: the filter iterates over every candidate, so an edge
-A ?p B between two candidates is caught from whichever endpoint stores the
-truthy claim. Avoiding the reverse direction keeps the per-QID result set small
-(a place's parents, not its thousands of children).
+Instance-of — fetch which of a set of QIDs satisfy P31/P279* membership of
+given Wikidata classes. Used by the entity ``exclude_instance_of`` filter
+(e.g. drop administrative territorial entities from the KB).
 
-Uses batched SPARQL SELECT queries (multiple QIDs per request) with caching
-and threading.
+Both use batched SPARQL SELECT queries (multiple QIDs per request) with
+caching and threading.
 """
 
 from __future__ import annotations

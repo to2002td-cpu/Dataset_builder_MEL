@@ -1,4 +1,4 @@
-data_dir: ./output/scrape_data     # intermediate stage files (S1–S6 checkpoints)
+data_dir: ./output/scrape_data     # intermediate stage files (S1–S6 + S4b checkpoints)
 output_dir: ./output/raw_dataset   # raw assembled dataset (S7)
 
 wikipedia_rate_limit: 0.5

@@ -1,12 +1,15 @@
-# Baseline split filters — local only, no network lookups. Parameters fall into
-# three jobs: scope (entity, categories), quality/noise removal (image, mention),
-# and validity (candidates).
+# Baseline split filters — documents the full schema read by make_split.py.
+# Parameters fall into three jobs: scope (entity, categories), quality/noise
+# removal (image, mention), and validity (candidates). Network lookups
+# (SPARQL) only happen when exclude_instance_of or forbidden_properties are
+# non-empty.
 
 # ── Scope ──────────────────────────────────────────────────────────────────
 entity:
   types: [PERS, ORG, LOC]
   intro: true               # every KB entity must have a text description
   image: true               # every KB entity must have an infobox portrait
+  exclude_instance_of: []   # drop KB entities that are P31/P279* of these classes
 
 categories:
   include: []               # if non-empty, page must be in at least one of these categories
@@ -28,7 +31,8 @@ mention:
 
 # ── Validity ─────────────────────────────────────────────────────────────────
 candidates:
+  min_visual: 2             # query image shared by ≥2 KB entities (visual ambiguity)
+  max_visual: 0             # cap degenerate over-shared images (0 = unlimited)
   require_answer_type_shared: false          # answer's type must not be unique among text candidates
   require_unique_candidate_infoboxes: false  # no two text candidates may share the same infobox portrait
-  excluded_classes: []
-  containment_properties: []
+  forbidden_properties: []  # drop mention if two candidates are linked by any of these P-IDs

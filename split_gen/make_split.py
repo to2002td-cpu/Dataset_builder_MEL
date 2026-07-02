@@ -32,7 +32,7 @@ from typing import Iterator
 import yaml
 from tqdm import tqdm
 
-from p_scrapping import (
+from wikidata_enrich import (
     fetch_related_qids,
     prefetch_qids,
     fetch_instanceof_matches,
